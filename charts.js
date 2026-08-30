@@ -15,12 +15,12 @@ function destroyChart(canvasId) {
 }
 
 function getChartColors() {
-    const isDark = document.body && document.body.classList.contains('dark-theme');
+    const isLight = document.body && document.body.classList.contains('light-theme');
     const colors = {
-        textColor: isDark ? '#e2e8f0' : '#000000',
-        subTextColor: isDark ? '#94a3b8' : '#000000',
-        gridColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.18)',
-        angleGridColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.25)'
+        textColor: isLight ? '#0f172a' : '#e2e8f0',
+        subTextColor: isLight ? '#475569' : '#94a3b8',
+        gridColor: isLight ? 'rgba(15,23,42,0.12)' : 'rgba(255,255,255,0.08)',
+        angleGridColor: isLight ? 'rgba(15,23,42,0.22)' : 'rgba(255,255,255,0.15)'
     };
     if (typeof Chart !== 'undefined' && Chart.defaults) {
         Chart.defaults.color = colors.textColor;

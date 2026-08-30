@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tính Lịch Thanh Toán – Vinhomes Sài Gòn Park</title>
     <meta name="description"
-        content="Bảng tính toán lịch thanh toán và chiết khấu khi mua nhà phố tại dự án Vinhomes Sài Gòn Park (CSBH V08 Mới Nhất)">
+        content="Ứng dụng tính toán lịch thanh toán và chiết khấu khi mua căn hộ tại dự án Vinhomes Sài Gòn Park (CSBH V08 Mới Nhất)">
 
     <!-- CDNs -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -977,12 +977,15 @@
                 body.light-theme .thap-bieu-tuong-day {
                     display: block !important;
                 }
+
                 body.light-theme .thap-bieu-tuong-night {
                     display: none !important;
                 }
+
                 body.light-theme .thap-bieu-tuong-day-badge {
                     display: inline-block !important;
                 }
+
                 body.light-theme .thap-bieu-tuong-night-badge {
                     display: none !important;
                 }
@@ -990,24 +993,30 @@
                 body:not(.light-theme) .thap-bieu-tuong-day {
                     display: none !important;
                 }
+
                 body:not(.light-theme) .thap-bieu-tuong-night {
                     display: block !important;
                 }
+
                 body:not(.light-theme) .thap-bieu-tuong-day-badge {
                     display: none !important;
                 }
+
                 body:not(.light-theme) .thap-bieu-tuong-night-badge {
                     display: inline-block !important;
                 }
             </style>
+            <!-- Dedicated Mobile Responsive & Performance Stylesheet -->
+            <link rel="stylesheet" href="mobile.css?v=20260830">
 
             <!-- Quick Anchor Navigation Bar -->
             <div class="d-flex align-items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-thin"
                 style="white-space: nowrap;">
                 <a href="#sec-tong-quan" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
                         class="bi bi-images me-1"></i>Tổng Quan Phối Cảnh</a>
-                <a href="#sec-thap-bieu-tuong" class="btn btn-sm fw-bold rounded-pill quick-nav-btn" style="border: 1px solid #ffd166 !important;"><i
-                        class="bi bi-building me-1" style="color:#ffd166;"></i>Tháp Biểu Tượng</a>
+                <a href="#sec-thap-bieu-tuong" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"
+                    style="border: 1px solid #ffd166 !important;"><i class="bi bi-building me-1"
+                        style="color:#ffd166;"></i>Tháp Biểu Tượng</a>
                 <a href="#sec-hero" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
                         class="bi bi-map me-1"></i>Mặt Bằng Tổng Thể</a>
                 <a href="#sec-pdf-map" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
@@ -1035,7 +1044,7 @@
                 <!-- Hàng 1: 1 ảnh to nhất -->
                 <div class="mb-3">
                     <img src="assets/TỔNG QUAN DỰ ÁN/1787973009633_59065042594565031_4258139849654498913_2c1a6e420b0aaec1778530a081a48081.jpg"
-                        loading="eager" decoding="async"
+                        loading="lazy" decoding="async"
                         class="img-fluid w-100 rounded-4 shadow-sm hover-lift cursor-pointer"
                         style="height: auto; object-fit: contain; transition: transform 0.4s ease;"
                         onclick="openGallery(this, 'Phối Cảnh Tổng Quan Dự Án')">
@@ -1045,57 +1054,57 @@
                 <div class="row g-3">
                     <div class="col-6 col-md-4"><img
                             src="assets/TỔNG QUAN DỰ ÁN/1787973009563_59065042594565031_4258139849654498913_1571659df3d47f5468285769abffa031.jpg"
-                            loading="eager" decoding="async"
+                            loading="lazy" decoding="async"
                             class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                             style="aspect-ratio: 1/1; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
                             onclick="openGallery(this, 'Phối Cảnh Đô Thị')"></div>
                     <div class="col-6 col-md-4"><img
                             src="assets/TỔNG QUAN DỰ ÁN/1787973009589_59065042594565031_4258139849654498913_27247f91e90e4c9e708073b20710cc1a.jpg"
-                            loading="eager" decoding="async"
+                            loading="lazy" decoding="async"
                             class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                             style="aspect-ratio: 1/1; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
                             onclick="openGallery(this, 'Phối Cảnh Đô Thị')"></div>
                     <div class="col-6 col-md-4"><img
                             src="assets/TỔNG QUAN DỰ ÁN/1787973009604_59065042594565031_4258139849654498913_1eeef27a631075cbf203361f8481b05f.jpg"
-                            loading="eager" decoding="async"
+                            loading="lazy" decoding="async"
                             class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                             style="aspect-ratio: 1/1; object-fit: cover; object-position: center top; border: 1.5px solid rgba(255,209,102,0.25);"
                             onclick="openGallery(this, 'Phối Cảnh Đô Thị')"></div>
 
                     <div class="col-6 col-md-4"><img
                             src="assets/TỔNG QUAN DỰ ÁN/1787973009689_59065042594565031_4258139849654498913_da43506a6947d0af83e4707c2af6f2d2.jpg"
-                            loading="eager" decoding="async"
+                            loading="lazy" decoding="async"
                             class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                             style="aspect-ratio: 1/1; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
                             onclick="openGallery(this, 'Phối Cảnh Đô Thị')"></div>
                     <div class="col-6 col-md-4"><img
                             src="assets/TỔNG QUAN DỰ ÁN/1787973009702_59065042594565031_4258139849654498913_bedf1f300f406c265ab341e827509286.jpg"
-                            loading="eager" decoding="async"
+                            loading="lazy" decoding="async"
                             class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                             style="aspect-ratio: 1/1; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
                             onclick="openGallery(this, 'Phối Cảnh Đô Thị')"></div>
                     <div class="col-6 col-md-4"><img
                             src="assets/TỔNG QUAN DỰ ÁN/1787973009715_59065042594565031_4258139849654498913_4e252565f98d4938d26e1e6a6add7643.jpg"
-                            loading="eager" decoding="async"
+                            loading="lazy" decoding="async"
                             class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                             style="aspect-ratio: 1/1; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
                             onclick="openGallery(this, 'Phối Cảnh Đô Thị')"></div>
 
                     <div class="col-6 col-md-4"><img
                             src="assets/TỔNG QUAN DỰ ÁN/1787973009649_59065042594565031_4258139849654498913_013833b1712e7804c00a69f4a13bf8e7.jpg"
-                            loading="eager" decoding="async"
+                            loading="lazy" decoding="async"
                             class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                             style="aspect-ratio: 1/1; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
                             onclick="openGallery(this, 'Phối Cảnh Đô Thị')"></div>
                     <div class="col-6 col-md-4"><img
                             src="assets/TỔNG QUAN DỰ ÁN/1787973009663_59065042594565031_4258139849654498913_5a6c83684301387ba31c0d21f1034ecb.jpg"
-                            loading="eager" decoding="async"
+                            loading="lazy" decoding="async"
                             class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                             style="aspect-ratio: 1/1; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
                             onclick="openGallery(this, 'Phối Cảnh Đô Thị')"></div>
                     <div class="col-6 col-md-4"><img
                             src="assets/TỔNG QUAN DỰ ÁN/1787973009676_59065042594565031_4258139849654498913_35b838145ad8a387ea3396a596aacdfa.jpg"
-                            loading="eager" decoding="async"
+                            loading="lazy" decoding="async"
                             class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                             style="aspect-ratio: 1/1; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
                             onclick="openGallery(this, 'Phối Cảnh Đô Thị')"></div>
@@ -1104,85 +1113,99 @@
                 <!-- Hàng 4 ảnh infographic triết lý 3 xanh sinh thái -->
                 <div class="mt-4 pt-2 border-top border-secondary border-opacity-25">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <span class="badge" style="background:rgba(255,209,102,0.15); color:#ffd166; font-size:0.82rem; font-weight:700; border: 1px solid rgba(255,209,102,0.3);">
+                        <span class="badge"
+                            style="background:rgba(255,209,102,0.15); color:#ffd166; font-size:0.82rem; font-weight:700; border: 1px solid rgba(255,209,102,0.3);">
                             <i class="bi bi-tree-fill me-1"></i> TRIẾT LÝ THIẾT KẾ &amp; HỆ SINH THÁI 3 XANH
                         </span>
                     </div>
                     <div class="row g-3">
                         <div class="col-6 col-md-3">
-                            <img src="assets/abc/abc-1.png" loading="eager" decoding="async"
+                            <img src="assets/abc/abc-1.png" loading="lazy" decoding="async"
                                 class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                 style="aspect-ratio: 16/9; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
-                                onclick="openGallery(this, 'Đô Thị Trong Đảo - Đảo Trong Đô Thị')" alt="Đô Thị Trong Đảo - Đảo Trong Đô Thị">
+                                onclick="openGallery(this, 'Đô Thị Trong Đảo - Đảo Trong Đô Thị')"
+                                alt="Đô Thị Trong Đảo - Đảo Trong Đô Thị">
                         </div>
                         <div class="col-6 col-md-3">
-                            <img src="assets/abc/abc-2.png" loading="eager" decoding="async"
+                            <img src="assets/abc/abc-2.png" loading="lazy" decoding="async"
                                 class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                 style="aspect-ratio: 16/9; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
-                                onclick="openGallery(this, '3 Xanh Sinh Thái - Xanh Trong Quy Mô')" alt="3 Xanh Sinh Thái - Xanh Trong Quy Mô">
+                                onclick="openGallery(this, '3 Xanh Sinh Thái - Xanh Trong Quy Mô')"
+                                alt="3 Xanh Sinh Thái - Xanh Trong Quy Mô">
                         </div>
                         <div class="col-6 col-md-3">
-                            <img src="assets/abc/abc-3.png" loading="eager" decoding="async"
+                            <img src="assets/abc/abc-3.png" loading="lazy" decoding="async"
                                 class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                 style="aspect-ratio: 16/9; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
-                                onclick="openGallery(this, '3 Xanh Sinh Thái - Xanh Trong Kết Nối')" alt="3 Xanh Sinh Thái - Xanh Trong Kết Nối">
+                                onclick="openGallery(this, '3 Xanh Sinh Thái - Xanh Trong Kết Nối')"
+                                alt="3 Xanh Sinh Thái - Xanh Trong Kết Nối">
                         </div>
                         <div class="col-6 col-md-3">
-                            <img src="assets/abc/abc-4.png" loading="eager" decoding="async"
+                            <img src="assets/abc/abc-4.png" loading="lazy" decoding="async"
                                 class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                 style="aspect-ratio: 16/9; object-fit: cover; border: 1.5px solid rgba(255,209,102,0.25);"
-                                onclick="openGallery(this, '3 Xanh Sinh Thái - Xanh Trong Trải Nghiệm')" alt="3 Xanh Sinh Thái - Xanh Trong Trải Nghiệm">
+                                onclick="openGallery(this, '3 Xanh Sinh Thái - Xanh Trong Trải Nghiệm')"
+                                alt="3 Xanh Sinh Thái - Xanh Trong Trải Nghiệm">
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- 1.5 THÁP BIỂU TƯỢNG DỰ ÁN (CHUYỂN ĐỔI ẢNH THEO GIAO DIỆN SÁNG / TỐI) -->
-            <div id="sec-thap-bieu-tuong" class="card-custom sec-card-theme mb-5 p-4 p-md-5" style="border-left: 6px solid #ffd166;">
+            <div id="sec-thap-bieu-tuong" class="card-custom sec-card-theme mb-5 p-4 p-md-5"
+                style="border-left: 6px solid #ffd166;">
                 <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
                     <div>
-                        <span class="badge mb-2" style="background:#ffd166; color:#0d2e26; font-size:0.85rem; font-weight:800; padding: 6px 12px;">
+                        <span class="badge mb-2"
+                            style="background:#ffd166; color:#0d2e26; font-size:0.85rem; font-weight:800; padding: 6px 12px;">
                             <i class="bi bi-building me-1"></i> BIỂU TƯỢNG KIẾN TRÚC ĐÔ THỊ
                         </span>
-                        <h3 class="fw-bold mb-1" style="font-size:1.6rem; font-family:'Plus Jakarta Sans', 'Inter', sans-serif; text-transform: uppercase;">
-                            <i class="bi bi-geo-fill me-2" style="color:#ffd166;"></i>Tháp Biểu Tượng Vinhomes Sài Gòn Park
+                        <h3 class="fw-bold mb-1"
+                            style="font-size:1.6rem; font-family:'Plus Jakarta Sans', 'Inter', sans-serif; text-transform: uppercase;">
+                            <i class="bi bi-geo-fill me-2" style="color:#ffd166;"></i>Tháp Biểu Tượng Vinhomes Sài Gòn
+                            Park
                         </h3>
                         <div class="sub-text" style="font-size:0.95rem;">
-                            Ngọn tháp biểu tượng kiêu hãnh - Điểm nhấn cảnh quan độc bản đổi màu linh hoạt theo thời gian
+                            Ngọn tháp biểu tượng kiêu hãnh - Điểm nhấn cảnh quan độc bản đổi màu linh hoạt theo thời
+                            gian
                         </div>
                     </div>
-                    
+
                     <!-- Mode Indicator Badge -->
                     <div class="sub-text" style="font-size:0.88rem;">
-                        <span class="thap-bieu-tuong-day-badge badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="display:none;">
+                        <span
+                            class="thap-bieu-tuong-day-badge badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold"
+                            style="display:none;">
                             <i class="bi bi-sun-fill me-1"></i> Khung cảnh Ban Ngày ☀️
                         </span>
-                        <span class="thap-bieu-tuong-night-badge badge px-3 py-2 rounded-pill fw-bold" style="background:#1e1b4b; color:#a5b4fc; border:1px solid #6366f1;">
+                        <span class="thap-bieu-tuong-night-badge badge px-3 py-2 rounded-pill fw-bold"
+                            style="background:#1e1b4b; color:#a5b4fc; border:1px solid #6366f1;">
                             <i class="bi bi-moon-stars-fill me-1"></i> Khung cảnh Ban Đêm 🌙
                         </span>
                     </div>
                 </div>
 
                 <!-- Khung Ảnh Tháp Biểu Tượng Tự Động Chuyển Theo Theme -->
-                <div class="position-relative overflow-hidden rounded-4 shadow-lg border cursor-pointer hover-lift text-center" style="border-color: rgba(255,209,102,0.4) !important; background:#000;">
+                <div class="position-relative overflow-hidden rounded-4 shadow-lg border cursor-pointer hover-lift text-center"
+                    style="border-color: rgba(255,209,102,0.4) !important; background:#000;">
                     <!-- Ảnh Ban Ngày (Hiển thị khi ở Giao diện Sáng) -->
-                    <img class="img-fluid w-100 thap-bieu-tuong-day rounded-4" 
-                        src="assets/Tháp biểu tượng/thap-bieu-tuong-ban-ngay.jpg" 
-                        loading="eager" decoding="async"
-                        alt="Tháp biểu tượng ban ngày" 
+                    <img class="img-fluid w-100 thap-bieu-tuong-day rounded-4"
+                        src="assets/Tháp biểu tượng/thap-bieu-tuong-ban-ngay.jpg" loading="lazy" decoding="async"
+                        alt="Tháp biểu tượng ban ngày"
                         style="width:100%; max-height:680px; object-fit:cover; display:none; transition: all 0.4s ease;"
                         onclick="openGallery(this, 'Tháp Biểu Tượng Vinhomes Sài Gòn Park (Ban Ngày)')">
-                    
+
                     <!-- Ảnh Ban Đêm (Hiển thị khi ở Giao diện Tối) -->
-                    <img class="img-fluid w-100 thap-bieu-tuong-night rounded-4" 
-                        src="assets/Tháp biểu tượng/thap-bieu-tuong-ban-dem.jpg" 
-                        loading="eager" decoding="async"
-                        alt="Tháp biểu tượng ban đêm" 
+                    <img class="img-fluid w-100 thap-bieu-tuong-night rounded-4"
+                        src="assets/Tháp biểu tượng/thap-bieu-tuong-ban-dem.jpg" loading="lazy" decoding="async"
+                        alt="Tháp biểu tượng ban đêm"
                         style="width:100%; max-height:680px; object-fit:cover; display:block; transition: all 0.4s ease;"
                         onclick="openGallery(this, 'Tháp Biểu Tượng Vinhomes Sài Gòn Park (Ban Đêm)')">
-                    
-                    <div class="position-absolute bottom-0 start-0 w-100 p-4 text-start" style="background: linear-gradient(to top, rgba(5,20,16,0.95), transparent); pointer-events:none;">
-                        <span class="badge mb-1" style="background:#ffd166; color:#0d2e26; font-weight:800;"><i class="bi bi-zoom-in me-1"></i>BẤM ĐỂ PHÓNG TO HD</span>
+
+                    <div class="position-absolute bottom-0 start-0 w-100 p-4 text-start"
+                        style="background: linear-gradient(to top, rgba(5,20,16,0.95), transparent); pointer-events:none;">
+                        <span class="badge mb-1" style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
+                                class="bi bi-zoom-in me-1"></i>BẤM ĐỂ PHÓNG TO HD</span>
                         <div class="fw-bold text-white fs-5">Tháp Biểu Tượng Đô Thị Tri Thức Vinhomes Sài Gòn Park</div>
                     </div>
                 </div>
@@ -1192,7 +1215,7 @@
             <div id="sec-hero" class="mb-5 position-relative overflow-hidden rounded-4 shadow-lg border cursor-pointer"
                 style="border: 2px solid #ffd166 !important; box-shadow: 0 15px 40px rgba(0,0,0,0.4) !important;"
                 onclick="openGallery(this.querySelector('img'), 'Mặt Bằng Tổng Thể Vinhomes Sài Gòn Park')">
-                <img src="assets/mat-bang-vinhomes-saigon-park-hoc-mon-3.jpg" loading="eager" decoding="async"
+                <img src="assets/mat-bang-vinhomes-saigon-park-hoc-mon-3.jpg" loading="lazy" decoding="async"
                     class="img-fluid w-100 hover-lift" alt="Mặt Bằng Tổng Thể Vinhomes Sài Gòn Park"
                     style="width: 100%; height: auto; display: block; object-fit: contain;">
                 <div class="position-absolute bottom-0 start-0 w-100 p-4 p-md-5"
@@ -1213,46 +1236,61 @@
             </div>
 
             <!-- 2.05 TRÌNH XEM SOI CĂN PDF PHÂN LÔ 4K VECTOR -->
-            <div id="sec-pdf-map" class="card-custom sec-card-theme mb-5 p-4 p-md-5" style="border-left: 6px solid #ffd166;">
+            <div id="sec-pdf-map" class="card-custom sec-card-theme mb-5 p-4 p-md-5"
+                style="border-left: 6px solid #ffd166;">
                 <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
                     <div>
-                        <span class="badge mb-2" style="background:#ffd166; color:#0d2e26; font-size:0.85rem; font-weight:800; padding: 6px 14px;">
+                        <span class="badge mb-2"
+                            style="background:#ffd166; color:#0d2e26; font-size:0.85rem; font-weight:800; padding: 6px 14px;">
                             <i class="bi bi-search me-1"></i> TRA CỨU SOI VỊ TRÍ TỪNG CĂN HỘ (BẢN PDF VECTOR 4K)
                         </span>
-                        <h3 class="fw-bold mb-1" style="font-size:1.6rem; font-family:'Plus Jakarta Sans', 'Inter', sans-serif; text-transform: uppercase;">
-                            <i class="bi bi-file-earmark-pdf-fill me-2" style="color:#ffd166;"></i>Sơ Đồ Quy Hoạch Phân Lô Soi Căn Chi Tiết (VHSP.pdf)
+                        <h3 class="fw-bold mb-1"
+                            style="font-size:1.6rem; font-family:'Plus Jakarta Sans', 'Inter', sans-serif; text-transform: uppercase;">
+                            <i class="bi bi-file-earmark-pdf-fill me-2" style="color:#ffd166;"></i>Sơ Đồ Quy Hoạch Phân
+                            Lô Soi Căn Chi Tiết (VHSP.pdf)
                         </h3>
                         <div class="sub-text" style="font-size:0.95rem;">
-                            Bản đồ quy hoạch sắc nét Vector cho phép phóng to (Zoom in) 500%+ để soi rõ vị trí từng mã căn hộ, thửa đất &amp; diện tích thực tế
+                            Bản đồ quy hoạch sắc nét Vector cho phép phóng to (Zoom in) 500%+ để soi rõ vị trí từng mã
+                            căn hộ, thửa đất &amp; diện tích thực tế
                         </div>
                     </div>
-                    
+
                     <!-- Các Nút Thao Tác Nhanh -->
                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <a href="assets/VHSP.pdf" download="MatBangPhanLo_VinhomesSaigonPark.pdf" class="btn btn-sm btn-outline-warning fw-bold px-3 py-2" style="border-radius:8px;">
+                        <a href="assets/VHSP.pdf" download="MatBangPhanLo_VinhomesSaigonPark.pdf"
+                            class="btn btn-sm btn-outline-warning fw-bold px-3 py-2" style="border-radius:8px;">
                             <i class="bi bi-download me-1"></i> Tải File PDF Gốc (7.7 MB)
                         </a>
                     </div>
                 </div>
 
                 <!-- Khung Trình Xem PDF On-Demand (Tối Ưu 100% Tốc Độ & Mượt Mà) -->
-                <div id="pdfViewerContainer" class="position-relative overflow-hidden rounded-4 shadow-lg border text-center d-flex flex-column align-items-center justify-content-center" 
+                <div id="pdfViewerContainer"
+                    class="position-relative overflow-hidden rounded-4 shadow-lg border text-center d-flex flex-column align-items-center justify-content-center"
                     style="border:2px solid #ffd166 !important; background:linear-gradient(145deg, #051410 0%, #0d2e26 100%); min-height:420px; padding:30px;">
-                    
-                    <!-- Cover Image Background với Overlay -->
-                    <div class="position-absolute top-0 start-0 w-100 h-100 opacity-25" 
-                        style="background:url('assets/mat-bang-vinhomes-saigon-park-hoc-mon-3.jpg') center/cover no-repeat; filter: blur(2px);"></div>
 
-                    <div class="position-relative z-2 p-4 rounded-4" style="background:rgba(5,20,16,0.88); border:1px solid rgba(255,209,102,0.3); backdrop-filter:blur(8px); max-width:650px;">
-                        <i class="bi bi-file-earmark-pdf-fill mb-3" style="font-size:3.5rem; color:#ffd166; display:block; filter:drop-shadow(0 4px 15px rgba(255,209,102,0.6));"></i>
-                        <h4 class="fw-bold text-white mb-2" style="font-size:1.35rem;">Sơ Đồ Quy Hoạch Phân Lô Chi Tiết (Bản PDF 4K Vector)</h4>
-                        <p class="sub-text small mb-4" style="color:#cbd5e1;">Bản đồ dung lượng 7.7 MB vector siêu nét. Chọn nút bên dưới để xem trực tiếp hoặc mở cửa sổ mới soi căn mượt mà 100%.</p>
-                        
+                    <!-- Cover Image Background với Overlay -->
+                    <div class="position-absolute top-0 start-0 w-100 h-100 opacity-25"
+                        style="background:url('assets/mat-bang-vinhomes-saigon-park-hoc-mon-3.jpg') center/cover no-repeat; filter: blur(2px);">
+                    </div>
+
+                    <div class="position-relative z-2 p-4 rounded-4"
+                        style="background:rgba(5,20,16,0.88); border:1px solid rgba(255,209,102,0.3); backdrop-filter:blur(8px); max-width:650px;">
+                        <i class="bi bi-file-earmark-pdf-fill mb-3"
+                            style="font-size:3.5rem; color:#ffd166; display:block; filter:drop-shadow(0 4px 15px rgba(255,209,102,0.6));"></i>
+                        <h4 class="fw-bold text-white mb-2" style="font-size:1.35rem;">Sơ Đồ Quy Hoạch Phân Lô Chi Tiết
+                            (Bản PDF 4K Vector)</h4>
+                        <p class="sub-text small mb-4" style="color:#cbd5e1;">Bản đồ dung lượng 7.7 MB vector siêu nét.
+                            Chọn nút bên dưới để xem trực tiếp hoặc mở cửa sổ mới soi căn mượt mà 100%.</p>
+
                         <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
-                            <button type="button" onclick="loadPdfViewer()" class="btn btn-warning fw-bold px-4 py-2 text-dark shadow-lg" style="border-radius:10px;">
+                            <button type="button" onclick="loadPdfViewer()"
+                                class="btn btn-warning fw-bold px-4 py-2 text-dark shadow-lg"
+                                style="border-radius:10px;">
                                 <i class="bi bi-play-circle-fill me-2"></i>Kích Hoạt Trình Xem PDF Ngay Trên Trang
                             </button>
-                            <a href="assets/VHSP.pdf" target="_blank" class="btn btn-outline-warning fw-bold px-4 py-2" style="border-radius:10px;">
+                            <a href="assets/VHSP.pdf" target="_blank" class="btn btn-outline-warning fw-bold px-4 py-2"
+                                style="border-radius:10px;">
                                 <i class="bi bi-arrows-fullscreen me-2"></i>Mở Cửa Sổ Mới Mượt Nhất
                             </a>
                         </div>
@@ -1260,120 +1298,160 @@
                 </div>
 
                 <div class="mt-3 text-center opacity-75 small">
-                    <i class="bi bi-info-circle me-1"></i>Gợi ý: Bấm <strong>"Kích Hoạt Trình Xem PDF"</strong> để nạp bản đồ soi căn khi cần. Giúp ứng dụng giữ được tốc độ siêu nhanh và mượt mà.
+                    <i class="bi bi-info-circle me-1"></i>Gợi ý: Bấm <strong>"Kích Hoạt Trình Xem PDF"</strong> để nạp
+                    bản đồ soi căn khi cần. Giúp ứng dụng giữ được tốc độ siêu nhanh và mượt mà.
                 </div>
             </div>
 
             <!-- 2.1 MẶT BẰNG CHI TIẾT CÁC PHÂN KHU CÔNG VIÊN DỰ ÁN -->
-            <div id="sec-mat-bang-phan-khu" class="card-custom sec-card-theme mb-5 p-4 p-md-5" style="border-left: 6px solid #ffd166;">
+            <div id="sec-mat-bang-phan-khu" class="card-custom sec-card-theme mb-5 p-4 p-md-5"
+                style="border-left: 6px solid #ffd166;">
                 <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
                     <div>
-                        <span class="badge mb-2" style="background:#ffd166; color:#0d2e26; font-size:0.85rem; font-weight:800; padding: 6px 12px;">
+                        <span class="badge mb-2"
+                            style="background:#ffd166; color:#0d2e26; font-size:0.85rem; font-weight:800; padding: 6px 12px;">
                             <i class="bi bi-diagram-3-fill me-1"></i> QUY HOẠCH PHÂN KHU CÔNG VIÊN
                         </span>
-                        <h3 class="fw-bold mb-1" style="font-size:1.6rem; font-family:'Plus Jakarta Sans', 'Inter', sans-serif; text-transform: uppercase;">
-                            <i class="bi bi-map-fill me-2" style="color:#ffd166;"></i>Mặt Bằng Chi Tiết Các Phân Khu Công Viên
+                        <h3 class="fw-bold mb-1"
+                            style="font-size:1.6rem; font-family:'Plus Jakarta Sans', 'Inter', sans-serif; text-transform: uppercase;">
+                            <i class="bi bi-map-fill me-2" style="color:#ffd166;"></i>Mặt Bằng Chi Tiết Các Phân Khu
+                            Công Viên
                         </h3>
                         <div class="sub-text" style="font-size:0.95rem;">
                             Sơ đồ thiết kế quy hoạch 5 công viên đại đô thị chủ đề chính tại Vinhomes Sài Gòn Park
                         </div>
                     </div>
-                    <div class="sub-text" style="font-size:0.88rem;"><i class="bi bi-info-circle me-1"></i>Bấm vào hình ảnh để xem sơ đồ phóng to HD</div>
+                    <div class="sub-text" style="font-size:0.88rem;"><i class="bi bi-info-circle me-1"></i>Bấm vào hình
+                        ảnh để xem sơ đồ phóng to HD</div>
                 </div>
 
                 <div class="row g-3 align-items-stretch mb-4">
                     <!-- Preview Ảnh To Tràn Viền 100% -->
                     <div class="col-12 col-lg-7">
-                        <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center" style="padding: 0; min-height:380px; border-color: rgba(255,209,102,0.4) !important; background:#000;">
-                            <img id="sec-mat-bang-phan-khu-main-img" 
-                                src="assets/mat-bang-phan-khu/mat-bang-cong-vien-tri-thuc-ivy-park-vinhomes-saigon-park-hoc-mon.jpg" 
-                                loading="eager" decoding="async" 
-                                class="img-fluid w-100 h-100 hover-lift cursor-pointer rounded-4" 
-                                style="width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.2s ease, transform 0.3s ease;" 
-                                onclick="openGallery(this, 'Mặt Bằng Phân Khu Công Viên')" 
+                        <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center"
+                            style="padding: 0; min-height:380px; border-color: rgba(255,209,102,0.4) !important; background:#000;">
+                            <img id="sec-mat-bang-phan-khu-main-img"
+                                src="assets/mat-bang-phan-khu/mat-bang-cong-vien-tri-thuc-ivy-park-vinhomes-saigon-park-hoc-mon.jpg"
+                                loading="lazy" decoding="async"
+                                class="img-fluid w-100 h-100 hover-lift cursor-pointer rounded-4"
+                                style="width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.2s ease, transform 0.3s ease;"
+                                onclick="openGallery(this, 'Mặt Bằng Phân Khu Công Viên')"
                                 alt="Mặt Bằng Phân Khu Công Viên">
-                            <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start" style="background: linear-gradient(to top, rgba(5,20,16,0.95), transparent); pointer-events:none;">
-                                <span class="badge mb-1" style="background:#ffd166; color:#0d2e26; font-weight:800;"><i class="bi bi-zoom-in me-1"></i>CLICK ĐỂ PHÓNG TO HD</span>
-                                <div id="sec-mat-bang-phan-khu-caption" style="color:white; font-size:0.95rem; font-weight:700;">Khu 1: Mặt Bằng Công Viên Tri Thức Ivy Park</div>
+                            <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start"
+                                style="background: linear-gradient(to top, rgba(5,20,16,0.95), transparent); pointer-events:none;">
+                                <span class="badge mb-1" style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
+                                        class="bi bi-zoom-in me-1"></i>CLICK ĐỂ PHÓNG TO HD</span>
+                                <div id="sec-mat-bang-phan-khu-caption"
+                                    style="color:white; font-size:0.95rem; font-weight:700;">Khu 1: Mặt Bằng Công Viên
+                                    Tri Thức Ivy Park</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Danh sách 5 Phân khu bên phải có Tên Khu -->
-                    <div class="col-12 col-lg-5 d-flex flex-column gap-2 overflow-y-auto scrollbar-thin" style="max-height: 540px;">
-                        
+                    <div class="col-12 col-lg-5 d-flex flex-column gap-2 overflow-y-auto scrollbar-thin"
+                        style="max-height: 540px;">
+
                         <!-- 1. Ivy Park -->
-                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer" 
+                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: #ffd166 !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-tri-thuc-ivy-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 1: Mặt Bằng Công Viên Tri Thức Ivy Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-tri-thuc-ivy-park-vinhomes-saigon-park-hoc-mon.jpg" 
-                                class="rounded-2" style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid #ffd166;" alt="Ivy Park">
+                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-tri-thuc-ivy-park-vinhomes-saigon-park-hoc-mon.jpg"
+                                class="rounded-2"
+                                style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid #ffd166;"
+                                alt="Ivy Park">
                             <div>
                                 <div class="d-flex align-items-center gap-1 mb-1">
-                                    <span class="badge" style="background:#ffd166; color:#0d2e26; font-size:0.75rem; font-weight:800; padding:3px 6px;">KHU 1</span>
-                                    <span class="fw-bold text-warning" style="font-size:0.92rem;">Công Viên Tri Thức Ivy Park</span>
+                                    <span class="badge"
+                                        style="background:#ffd166; color:#0d2e26; font-size:0.75rem; font-weight:800; padding:3px 6px;">KHU
+                                        1</span>
+                                    <span class="fw-bold text-warning" style="font-size:0.92rem;">Công Viên Tri Thức Ivy
+                                        Park</span>
                                 </div>
-                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ mặt bằng phân khu tri thức & giáo dục</div>
+                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ mặt bằng phân khu tri
+                                    thức & giáo dục</div>
                             </div>
                         </div>
 
                         <!-- 2. Laguna Park -->
-                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer" 
+                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: rgba(255,209,102,0.2) !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-bien-xanh-laguna-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 3: Mặt Bằng Công Viên Biển Xanh Laguna Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-bien-xanh-laguna-park-vinhomes-saigon-park-hoc-mon.jpg" 
-                                class="rounded-2" style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);" alt="Laguna Park">
+                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-bien-xanh-laguna-park-vinhomes-saigon-park-hoc-mon.jpg"
+                                class="rounded-2"
+                                style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);"
+                                alt="Laguna Park">
                             <div>
                                 <div class="d-flex align-items-center gap-1 mb-1">
-                                    <span class="badge" style="background:rgba(255,209,102,0.2); color:#ffd166; font-size:0.75rem; font-weight:800; padding:3px 6px; border:1px solid rgba(255,209,102,0.4);">KHU 3</span>
-                                    <span class="fw-bold" style="font-size:0.92rem;">Công Viên Biển Xanh Laguna Park</span>
+                                    <span class="badge"
+                                        style="background:rgba(255,209,102,0.2); color:#ffd166; font-size:0.75rem; font-weight:800; padding:3px 6px; border:1px solid rgba(255,209,102,0.4);">KHU
+                                        3</span>
+                                    <span class="fw-bold" style="font-size:0.92rem;">Công Viên Biển Xanh Laguna
+                                        Park</span>
                                 </div>
-                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ quy hoạch công viên biển & cảnh quan nước</div>
+                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ quy hoạch công viên biển
+                                    & cảnh quan nước</div>
                             </div>
                         </div>
 
                         <!-- 3. Zen Park -->
-                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer" 
+                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: rgba(255,209,102,0.2) !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-thien-zen-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 2: Mặt Bằng Công Viên Thiền Zen Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-thien-zen-park-vinhomes-saigon-park-hoc-mon.jpg" 
-                                class="rounded-2" style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);" alt="Zen Park">
+                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-thien-zen-park-vinhomes-saigon-park-hoc-mon.jpg"
+                                class="rounded-2"
+                                style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);"
+                                alt="Zen Park">
                             <div>
                                 <div class="d-flex align-items-center gap-1 mb-1">
-                                    <span class="badge" style="background:rgba(255,209,102,0.2); color:#ffd166; font-size:0.75rem; font-weight:800; padding:3px 6px; border:1px solid rgba(255,209,102,0.4);">KHU 2</span>
+                                    <span class="badge"
+                                        style="background:rgba(255,209,102,0.2); color:#ffd166; font-size:0.75rem; font-weight:800; padding:3px 6px; border:1px solid rgba(255,209,102,0.4);">KHU
+                                        2</span>
                                     <span class="fw-bold" style="font-size:0.92rem;">Công Viên Thiền Zen Park</span>
                                 </div>
-                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ công viên thiền định phong cách Nhật Bản</div>
+                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ công viên thiền định
+                                    phong cách Nhật Bản</div>
                             </div>
                         </div>
 
                         <!-- 4. Global Park -->
-                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer" 
+                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: rgba(255,209,102,0.2) !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-quoc-te-global-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 4: Mặt Bằng Công Viên Quốc Tế Global Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-quoc-te-global-park-vinhomes-saigon-park-hoc-mon.jpg" 
-                                class="rounded-2" style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);" alt="Global Park">
+                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-quoc-te-global-park-vinhomes-saigon-park-hoc-mon.jpg"
+                                class="rounded-2"
+                                style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);"
+                                alt="Global Park">
                             <div>
                                 <div class="d-flex align-items-center gap-1 mb-1">
-                                    <span class="badge" style="background:rgba(255,209,102,0.2); color:#ffd166; font-size:0.75rem; font-weight:800; padding:3px 6px; border:1px solid rgba(255,209,102,0.4);">KHU 4</span>
-                                    <span class="fw-bold" style="font-size:0.92rem;">Công Viên Quốc Tế Global Park</span>
+                                    <span class="badge"
+                                        style="background:rgba(255,209,102,0.2); color:#ffd166; font-size:0.75rem; font-weight:800; padding:3px 6px; border:1px solid rgba(255,209,102,0.4);">KHU
+                                        4</span>
+                                    <span class="fw-bold" style="font-size:0.92rem;">Công Viên Quốc Tế Global
+                                        Park</span>
                                 </div>
-                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ công viên quảng trường giao thương quốc tế</div>
+                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ công viên quảng trường
+                                    giao thương quốc tế</div>
                             </div>
                         </div>
 
                         <!-- 5. Golf Park -->
-                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer" 
+                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: rgba(255,209,102,0.2) !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-golf-golf-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 5: Mặt Bằng Công Viên Golf Golf Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-golf-golf-park-vinhomes-saigon-park-hoc-mon.jpg" 
-                                class="rounded-2" style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);" alt="Golf Park">
+                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-golf-golf-park-vinhomes-saigon-park-hoc-mon.jpg"
+                                class="rounded-2"
+                                style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);"
+                                alt="Golf Park">
                             <div>
                                 <div class="d-flex align-items-center gap-1 mb-1">
-                                    <span class="badge" style="background:rgba(255,209,102,0.2); color:#ffd166; font-size:0.75rem; font-weight:800; padding:3px 6px; border:1px solid rgba(255,209,102,0.4);">KHU 5</span>
+                                    <span class="badge"
+                                        style="background:rgba(255,209,102,0.2); color:#ffd166; font-size:0.75rem; font-weight:800; padding:3px 6px; border:1px solid rgba(255,209,102,0.4);">KHU
+                                        5</span>
                                     <span class="fw-bold" style="font-size:0.92rem;">Công Viên Golf Golf Park</span>
                                 </div>
-                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ công viên thể thao & sân tập golf</div>
+                                <div class="small opacity-75" style="font-size:0.78rem;">Sơ đồ công viên thể thao & sân
+                                    tập golf</div>
                             </div>
                         </div>
 
@@ -1383,33 +1461,46 @@
                 <!-- 6 Ô Ảnh Phụ Mặt Bằng Phân Khu (Hiển thị tĩnh, không phóng to) -->
                 <div class="row g-3">
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm" style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/1787975645349_59065042594565031_4258139849654498913_54dddb94e29ba423687875d4feaacfe1.jpg" class="img-fluid w-100" style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 1">
+                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
+                            style="border-color: rgba(255,209,102,0.3) !important;">
+                            <img src="assets/mat-bang-anh-phu/1787975645349_59065042594565031_4258139849654498913_54dddb94e29ba423687875d4feaacfe1.jpg"
+                                class="img-fluid w-100" style="height: 125px; object-fit: cover;"
+                                alt="Ảnh phụ mặt bằng 1">
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm" style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213317.png" class="img-fluid w-100" style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 2">
+                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
+                            style="border-color: rgba(255,209,102,0.3) !important;">
+                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213317.png" class="img-fluid w-100"
+                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 2">
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm" style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213328.png" class="img-fluid w-100" style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 3">
+                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
+                            style="border-color: rgba(255,209,102,0.3) !important;">
+                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213328.png" class="img-fluid w-100"
+                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 3">
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm" style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213715.png" class="img-fluid w-100" style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 4">
+                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
+                            style="border-color: rgba(255,209,102,0.3) !important;">
+                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213715.png" class="img-fluid w-100"
+                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 4">
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm" style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213913.png" class="img-fluid w-100" style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 5">
+                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
+                            style="border-color: rgba(255,209,102,0.3) !important;">
+                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213913.png" class="img-fluid w-100"
+                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 5">
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm" style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/a3-9-1787902988783.webp" class="img-fluid w-100" style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 6">
+                        <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
+                            style="border-color: rgba(255,209,102,0.3) !important;">
+                            <img src="assets/mat-bang-anh-phu/a3-9-1787902988783.webp" class="img-fluid w-100"
+                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 6">
                         </div>
                     </div>
                 </div>
@@ -1440,7 +1531,7 @@
                         <div class="overflow-hidden rounded-3 border position-relative cursor-pointer"
                             style="border-color: rgba(255,209,102,0.4) !important;"
                             onclick="openGallery(this.querySelector('img'), 'Sơ Đồ Vị Trí & Liên Kết Giao Thông Chiến Lược')">
-                            <img src="assets/vi-tri-vinhomes-saigon-park-9.jpg" loading="eager" decoding="async"
+                            <img src="assets/vi-tri-vinhomes-saigon-park-9.jpg" loading="lazy" decoding="async"
                                 class="img-fluid w-100 hover-lift"
                                 alt="Sơ Đồ Vị Trí &amp; Liên Kết Giao Thông Chiến Lược"
                                 style="width: 100%; height: auto; display: block; object-fit: contain;">
@@ -1450,7 +1541,7 @@
                         <div class="overflow-hidden rounded-3 border position-relative cursor-pointer"
                             style="border-color: rgba(255,209,102,0.4) !important;"
                             onclick="openGallery(this.querySelector('img'), 'Sơ Đồ Vị Trí & Liên Kết Giao Thông Chiến Lược')">
-                            <img src="assets/vi-tri-ket-noi-2.png" loading="eager" decoding="async"
+                            <img src="assets/vi-tri-ket-noi-2.png" loading="lazy" decoding="async"
                                 class="img-fluid w-100 hover-lift"
                                 alt="Sơ Đồ Vị Trí &amp; Liên Kết Giao Thông Chiến Lược"
                                 style="width: 100%; height: auto; display: block; object-fit: contain;">
@@ -1475,7 +1566,8 @@
                     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                         <div>
                             <h4 class="fw-bold mb-1" style="font-size:1.4rem;">
-                                <i class="bi bi-tree me-2" style="color:#ffd166;"></i>Công viên Botanical Park
+                                <i class="bi bi-tree me-2" style="color:#ffd166;"></i>Công viên Rừng Bách Thảo Botanical
+                                Park (27 ha)
                             </h4>
                         </div>
                     </div>
@@ -1487,17 +1579,17 @@
                                 style="padding: 8px; min-height:360px;">
                                 <img id="sec-tien-ich-botanical-main-img"
                                     src="assets/Công viên Botanical Park/1784779400953_1471936595886940955_g4376460951761607370_c6c1b76562cb22b646c07fd901b1a613.jpg"
-                                    loading="eager" decoding="async"
+                                    loading="lazy" decoding="async"
                                     class="img-fluid w-100 hover-lift cursor-pointer rounded-3"
                                     style="max-height: 520px; object-fit: contain; transition: opacity 0.2s ease, transform 0.3s ease;"
-                                    onclick="openGallery(this, 'Công viên Botanical Park')">
+                                    onclick="openGallery(this, 'Công viên Rừng Bách Thảo Botanical Park (27 ha)')">
                                 <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start"
                                     style="background: linear-gradient(to top, rgba(5,20,16,0.92), transparent); pointer-events:none;">
                                     <span class="badge mb-1"
                                         style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
                                             class="bi bi-eye-fill me-1"></i>XEM TRƯỚC</span>
-                                    <div style="color:white; font-size:0.88rem; font-weight:600;">Công viên Botanical
-                                        Park (Click để phóng to HD)</div>
+                                    <div style="color:white; font-size:0.88rem; font-weight:600;">Công viên Rừng Bách
+                                        Thảo Botanical Park (27 ha) (Click để phóng to HD)</div>
                                 </div>
                             </div>
                         </div>
@@ -1507,105 +1599,105 @@
                                 style="max-height: 520px; overflow-y: auto;">
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400953_1471936595886940955_g4376460951761607370_c6c1b76562cb22b646c07fd901b1a613.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 2px solid #ffd166; box-shadow: 0 0 10px rgba(255,209,102,0.5); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400955_1471936595886940955_g4376460951761607370_354e67188df8db037b4bd57c19405260.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400957_1471936595886940955_g4376460951761607370_c54280d6dd991beb67de006771093fde.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400959_1471936595886940955_g4376460951761607370_6291958356275fb92a163d1a5cb7af27.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400961_1471936595886940955_g4376460951761607370_35bc52b3fa769b9e467c58babd6169a0.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400963_1471936595886940955_g4376460951761607370_ff5dedddfabda03d6df4698243a0d237.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400965_1471936595886940955_g4376460951761607370_bdc14ae1c0b4eed65a9ad04c413fad08.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400967_1471936595886940955_g4376460951761607370_49bfa364bf6d3db57def1efa7fcb75ad.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400969_1471936595886940955_g4376460951761607370_80a93a1a5c107a256bda82a4a9bfd2b2.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400971_1471936595886940955_g4376460951761607370_a654527aa4ff146657eeb76564895a3e.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400973_1471936595886940955_g4376460951761607370_5393f73c9d7caaf1891140fe77fad982.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400975_1471936595886940955_g4376460951761607370_f5868016aec416c2eb8acfeaec9193da.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400977_1471936595886940955_g4376460951761607370_fd2f99c4fdc80118c4de7a60ab024a53.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779400979_1471936595886940955_g4376460951761607370_7169c8a8b917e0a976696430dc6e9fe8.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
                                 </div>
                                 <div class="col-4 col-sm-3 col-lg-4">
                                     <img src="assets/Công viên Botanical Park/1784779405946_1471936595886940955_g4376460951761607370_a5487adfd802c1b72d081e16635e732d.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 4/3; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-botanical-main-img', this)">
@@ -1620,7 +1712,8 @@
                     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                         <div>
                             <h4 class="fw-bold mb-1" style="font-size:1.4rem;">
-                                <i class="bi bi-flower1 me-2" style="color:#ffd166;"></i>Công viên Nhật Bản Zenpark
+                                <i class="bi bi-flower1 me-2" style="color:#ffd166;"></i>Công viên Nhật Bản Zenpark (3,1
+                                ha)
                             </h4>
                         </div>
                     </div>
@@ -1632,17 +1725,17 @@
                                 style="padding: 8px; min-height:360px;">
                                 <img id="sec-tien-ich-zenpark-main-img"
                                     src="assets/Công viên Nhật Bản Zenpark/1784778947070_1471936595886940955_g4376460951761607370_1f863cc874134bad6a6c21e6fe11f8f9.jpg"
-                                    loading="eager" decoding="async"
+                                    loading="lazy" decoding="async"
                                     class="img-fluid w-100 hover-lift cursor-pointer rounded-3"
                                     style="max-height: 520px; object-fit: contain; transition: opacity 0.2s ease, transform 0.3s ease;"
-                                    onclick="openGallery(this, 'Công viên Nhật Bản Zenpark')">
+                                    onclick="openGallery(this, 'Công viên Nhật Bản Zenpark (3,1 ha)')">
                                 <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start"
                                     style="background: linear-gradient(to top, rgba(5,20,16,0.92), transparent); pointer-events:none;">
                                     <span class="badge mb-1"
                                         style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
                                             class="bi bi-eye-fill me-1"></i>XEM TRƯỚC</span>
                                     <div style="color:white; font-size:0.88rem; font-weight:600;">Công viên Nhật Bản
-                                        Zenpark (Click để phóng to HD)</div>
+                                        Zenpark (3,1 ha) (Click để phóng to HD)</div>
                                 </div>
                             </div>
                         </div>
@@ -1652,35 +1745,35 @@
                                 style="max-height: 520px; overflow-y: auto;">
                                 <div class="col-6">
                                     <img src="assets/Công viên Nhật Bản Zenpark/1784778947070_1471936595886940955_g4376460951761607370_1f863cc874134bad6a6c21e6fe11f8f9.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 2px solid #ffd166; box-shadow: 0 0 10px rgba(255,209,102,0.5); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-zenpark-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Công viên Nhật Bản Zenpark/1784778947074_1471936595886940955_g4376460951761607370_1ba4ecea967839c53f70ff0b60ba1342.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-zenpark-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Công viên Nhật Bản Zenpark/1784778947078_1471936595886940955_g4376460951761607370_0d7b431209f34be39bdcd0babebb5bb8.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-zenpark-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Công viên Nhật Bản Zenpark/1784778947081_1471936595886940955_g4376460951761607370_908afe36a0a7a56211c4d66058fe1f22.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-zenpark-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Công viên Nhật Bản Zenpark/1784778947083_1471936595886940955_g4376460951761607370_dad0fd16e24468ed0d8763153b2c945b.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-zenpark-main-img', this)">
@@ -1690,12 +1783,13 @@
                     </div>
                 </div>
 
-                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Công viên nước Vinwonders -->
+                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Công viên nước Vinwonders Ocean Park (22 ha) -->
                 <div id="sec-tien-ich-vinwonders" class="card-custom sec-card-theme mb-5 p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                         <div>
                             <h4 class="fw-bold mb-1" style="font-size:1.4rem;">
-                                <i class="bi bi-water me-2" style="color:#ffd166;"></i>Công viên nước Vinwonders
+                                <i class="bi bi-water me-2" style="color:#ffd166;"></i>Công viên nước Vinwonders Ocean
+                                Park (22,7 ha)
                             </h4>
                         </div>
                     </div>
@@ -1707,17 +1801,17 @@
                                 style="padding: 8px; min-height:360px;">
                                 <img id="sec-tien-ich-vinwonders-main-img"
                                     src="assets/Công viên nước Vinwonders/1784779388727_1471936595886940955_g4376460951761607370_6979f81df46924b70d310c9b46efad66.jpg"
-                                    loading="eager" decoding="async"
+                                    loading="lazy" decoding="async"
                                     class="img-fluid w-100 hover-lift cursor-pointer rounded-3"
                                     style="max-height: 520px; object-fit: contain; transition: opacity 0.2s ease, transform 0.3s ease;"
-                                    onclick="openGallery(this, 'Công viên nước Vinwonders')">
+                                    onclick="openGallery(this, 'Công viên nước Vinwonders Ocean Park (22,7 ha)')">
                                 <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start"
                                     style="background: linear-gradient(to top, rgba(5,20,16,0.92), transparent); pointer-events:none;">
                                     <span class="badge mb-1"
                                         style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
                                             class="bi bi-eye-fill me-1"></i>XEM TRƯỚC</span>
                                     <div style="color:white; font-size:0.88rem; font-weight:600;">Công viên nước
-                                        Vinwonders (Click để phóng to HD)</div>
+                                        Vinwonders Ocean Park (22,7 ha) (Click để phóng to HD)</div>
                                 </div>
                             </div>
                         </div>
@@ -1727,28 +1821,28 @@
                                 style="max-height: 520px; overflow-y: auto;">
                                 <div class="col-6">
                                     <img src="assets/Công viên nước Vinwonders/1784779388727_1471936595886940955_g4376460951761607370_6979f81df46924b70d310c9b46efad66.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 2px solid #ffd166; box-shadow: 0 0 10px rgba(255,209,102,0.5); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-vinwonders-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Công viên nước Vinwonders/1784779388730_1471936595886940955_g4376460951761607370_ceeb7049f814cca6dcc315a2891b8585.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-vinwonders-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Công viên nước Vinwonders/1784779388733_1471936595886940955_g4376460951761607370_2139277127329df3af87dcc4c11263b1.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-vinwonders-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Công viên nước Vinwonders/1784779388735_1471936595886940955_g4376460951761607370_d72d478164e617af7e4b0975c26db148.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-vinwonders-main-img', this)">
@@ -1758,13 +1852,13 @@
                     </div>
                 </div>
 
-                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Làng Khởi Nghiệp - Saigon Startup Village 2.3ha -->
+                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Làng Khởi Nghiệp - Saigon Startup Village (2,3 ha) -->
                 <div id="sec-tien-ich-startup" class="card-custom sec-card-theme mb-5 p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                         <div>
                             <h4 class="fw-bold mb-1" style="font-size:1.4rem;">
                                 <i class="bi bi-building me-2" style="color:#ffd166;"></i>Làng Khởi Nghiệp - Saigon
-                                Startup Village 2.3ha
+                                Startup Village (2,3 ha)
                             </h4>
                         </div>
                     </div>
@@ -1776,17 +1870,17 @@
                                 style="padding: 8px; min-height:360px;">
                                 <img id="sec-tien-ich-startup-main-img"
                                     src="assets/Làng Khởi Nghiệp - Saigon Startup Village 2.3ha/1784778936025_1471936595886940955_g4376460951761607370_d178e5eca69c5dbd127a0638d61bd7b6.jpg"
-                                    loading="eager" decoding="async"
+                                    loading="lazy" decoding="async"
                                     class="img-fluid w-100 hover-lift cursor-pointer rounded-3"
                                     style="max-height: 520px; object-fit: contain; transition: opacity 0.2s ease, transform 0.3s ease;"
-                                    onclick="openGallery(this, 'Làng Khởi Nghiệp - Saigon Startup Village 2.3ha')">
+                                    onclick="openGallery(this, 'Làng Khởi Nghiệp - Saigon Startup Village (2,3 ha)')">
                                 <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start"
                                     style="background: linear-gradient(to top, rgba(5,20,16,0.92), transparent); pointer-events:none;">
                                     <span class="badge mb-1"
                                         style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
                                             class="bi bi-eye-fill me-1"></i>XEM TRƯỚC</span>
                                     <div style="color:white; font-size:0.88rem; font-weight:600;">Làng Khởi Nghiệp -
-                                        Saigon Startup Village 2.3ha (Click để phóng to HD)</div>
+                                        Saigon Startup Village (2,3 ha) (Click để phóng to HD)</div>
                                 </div>
                             </div>
                         </div>
@@ -1796,21 +1890,21 @@
                                 style="max-height: 520px; overflow-y: auto;">
                                 <div class="col-6">
                                     <img src="assets/Làng Khởi Nghiệp - Saigon Startup Village 2.3ha/1784778936025_1471936595886940955_g4376460951761607370_d178e5eca69c5dbd127a0638d61bd7b6.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 2px solid #ffd166; box-shadow: 0 0 10px rgba(255,209,102,0.5); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-startup-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Làng Khởi Nghiệp - Saigon Startup Village 2.3ha/1784778936031_1471936595886940955_g4376460951761607370_2b2f40ed4b8ea0afb65149ec2cd612d4.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-startup-main-img', this)">
                                 </div>
                                 <div class="col-12">
                                     <img src="assets/Làng Khởi Nghiệp - Saigon Startup Village 2.3ha/1784778936036_1471936595886940955_g4376460951761607370_1156897c6afdc889e2f989483d001ed8.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/9; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-startup-main-img', this)">
@@ -1820,13 +1914,13 @@
                     </div>
                 </div>
 
-                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Phối cảnh làng thời trang Trendy Fashion Town 2,3ha -->
+                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Làng Thời Trang Trendy Fashion Town (2,3 ha) -->
                 <div id="sec-tien-ich-fashion" class="card-custom sec-card-theme mb-5 p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                         <div>
                             <h4 class="fw-bold mb-1" style="font-size:1.4rem;">
-                                <i class="bi bi-shop me-2" style="color:#ffd166;"></i>Phối cảnh làng thời trang Trendy
-                                Fashion Town 2,3ha
+                                <i class="bi bi-shop me-2" style="color:#ffd166;"></i>Làng Thời Trang Trendy Fashion
+                                Town (2,3 ha)
                             </h4>
                         </div>
                     </div>
@@ -1838,17 +1932,17 @@
                                 style="padding: 8px; min-height:360px;">
                                 <img id="sec-tien-ich-fashion-main-img"
                                     src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908570_1471936595886940955_g4376460951761607370_c613c81ea174833f279a145506150ae2.jpg"
-                                    loading="eager" decoding="async"
+                                    loading="lazy" decoding="async"
                                     class="img-fluid w-100 hover-lift cursor-pointer rounded-3"
                                     style="max-height: 520px; object-fit: contain; transition: opacity 0.2s ease, transform 0.3s ease;"
-                                    onclick="openGallery(this, 'Phối cảnh làng thời trang Trendy Fashion Town 2,3ha')">
+                                    onclick="openGallery(this, 'Làng Thời Trang Trendy Fashion Town (2,3 ha)')">
                                 <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start"
                                     style="background: linear-gradient(to top, rgba(5,20,16,0.92), transparent); pointer-events:none;">
                                     <span class="badge mb-1"
                                         style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
                                             class="bi bi-eye-fill me-1"></i>XEM TRƯỚC</span>
-                                    <div style="color:white; font-size:0.88rem; font-weight:600;">Phối cảnh làng thời
-                                        trang Trendy Fashion Town 2,3ha (Click để phóng to HD)</div>
+                                    <div style="color:white; font-size:0.88rem; font-weight:600;">Làng Thời Trang Trendy
+                                        Fashion Town (2,3 ha) (Click để phóng to HD)</div>
                                 </div>
                             </div>
                         </div>
@@ -1858,28 +1952,28 @@
                                 style="max-height: 520px; overflow-y: auto;">
                                 <div class="col-6">
                                     <img src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908570_1471936595886940955_g4376460951761607370_c613c81ea174833f279a145506150ae2.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 2px solid #ffd166; box-shadow: 0 0 10px rgba(255,209,102,0.5); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-fashion-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908575_1471936595886940955_g4376460951761607370_64e320a4e21ff91dc8cd389603fe19bc.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-fashion-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908580_1471936595886940955_g4376460951761607370_c7023d5ed8a950186f880711b60d8162.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-fashion-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908583_1471936595886940955_g4376460951761607370_e00ebc2decbbedd4bde1e2b5a60c168c.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-fashion-main-img', this)">
@@ -1889,14 +1983,16 @@
                     </div>
                 </div>
 
-                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Trung Tâm Ẩm Thực & Văn Hóa Quốc Tế Global Village (19.3ha) -->
+                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Trung Tâm Ẩm Thực & Văn Hóa Quốc Tế Global Village (19,3 ha) -->
                 <div id="sec-tien-ich-global-village" class="card-custom sec-card-theme mb-5 p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                         <div>
                             <h4 class="fw-bold mb-1" style="font-size:1.4rem;">
-                                <i class="bi bi-globe-americas me-2" style="color:#ffd166;"></i>Trung Tâm Ẩm Thực &amp; Văn Hóa Quốc Tế Global Village (19.3ha)
+                                <i class="bi bi-globe-americas me-2" style="color:#ffd166;"></i>Trung Tâm Ẩm Thực &amp;
+                                Văn Hóa Quốc Tế Global Village (19,3 ha)
                             </h4>
-                            <div class="sub-text" style="font-size:0.88rem;">Phố ẩm thực 5 châu, mua sắm &amp; lễ hội văn hóa đa quốc gia sầm uất</div>
+                            <div class="sub-text" style="font-size:0.88rem;">Phố ẩm thực 5 châu, mua sắm &amp; lễ hội
+                                văn hóa đa quốc gia sầm uất</div>
                         </div>
                     </div>
 
@@ -1907,16 +2003,17 @@
                                 style="padding: 8px; min-height:360px;">
                                 <img id="sec-tien-ich-global-village-main-img"
                                     src="assets/Global Village/1779366058506_289378263983988423_g1000134458429698594_c1d438cdf6c1905e9c09775315fc6ff7_1.jpg"
-                                    loading="eager" decoding="async"
+                                    loading="lazy" decoding="async"
                                     class="img-fluid w-100 hover-lift cursor-pointer rounded-3"
                                     style="max-height: 520px; object-fit: contain; transition: opacity 0.2s ease, transform 0.3s ease;"
-                                    onclick="openGallery(this, 'Trung Tâm Ẩm Thực Global Village 19.3ha')">
+                                    onclick="openGallery(this, 'Trung Tâm Ẩm Thực Global Village (19,3 ha)')">
                                 <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start"
                                     style="background: linear-gradient(to top, rgba(5,20,16,0.92), transparent); pointer-events:none;">
                                     <span class="badge mb-1"
                                         style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
                                             class="bi bi-eye-fill me-1"></i>XEM TRƯỚC</span>
-                                    <div style="color:white; font-size:0.88rem; font-weight:600;">Global Village 19.3ha - Trung Tâm Ẩm Thực &amp; Văn Hóa (Click để phóng to HD)</div>
+                                    <div style="color:white; font-size:0.88rem; font-weight:600;">Global Village (19,3
+                                        ha) - Trung Tâm Ẩm Thực &amp; Văn Hóa (Click để phóng to HD)</div>
                                 </div>
                             </div>
                         </div>
@@ -1927,94 +2024,396 @@
                                 style="max-height: 520px; overflow-y: auto;">
                                 <div class="col-6">
                                     <img src="assets/Global Village/1779366058506_289378263983988423_g1000134458429698594_c1d438cdf6c1905e9c09775315fc6ff7_1.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 2px solid #ffd166; box-shadow: 0 0 10px rgba(255,209,102,0.5); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Global Village/global-village-trung-tam-am-thuc-quoc-te-rong-19-3ha-tai-vinhomes-hoc-mon-10-1024x572.webp"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Global Village/pho-phap-tien-ich-vinhomes-saigon-park-hoc-mon-9.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
                                     <img src="assets/Global Village/tien-ich-vinhomes-saigon-park-hoc-mon-1.jpg"
-                                        loading="eager" decoding="async"
+                                        loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Global Village/260523T16_TwG.jpg"
-                                        loading="eager" decoding="async"
+                                    <img src="assets/Global Village/260523T16_TwG.jpg" loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Global Village/260523T16_r8b.jpg"
-                                        loading="eager" decoding="async"
+                                    <img src="assets/Global Village/260523T16_r8b.jpg" loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Global Village/Screenshot 2026-08-29 215657.png"
-                                        loading="eager" decoding="async"
+                                    <img src="assets/Global Village/Screenshot 2026-08-29 215657.png" loading="lazy"
+                                        decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Global Village/Screenshot 2026-08-29 215707.png"
-                                        loading="eager" decoding="async"
+                                    <img src="assets/Global Village/Screenshot 2026-08-29 215707.png" loading="lazy"
+                                        decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Global Village/Screenshot 2026-08-29 215723.png"
-                                        loading="eager" decoding="async"
+                                    <img src="assets/Global Village/Screenshot 2026-08-29 215723.png" loading="lazy"
+                                        decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Global Village/Screenshot 2026-08-29 215739.png"
-                                        loading="eager" decoding="async"
+                                    <img src="assets/Global Village/Screenshot 2026-08-29 215739.png" loading="lazy"
+                                        decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Global Village/Screenshot 2026-08-29 215755.png"
-                                        loading="eager" decoding="async"
+                                    <img src="assets/Global Village/Screenshot 2026-08-29 215755.png" loading="lazy"
+                                        decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Global Village/Screenshot 2026-08-29 215931.png"
-                                        loading="eager" decoding="async"
+                                    <img src="assets/Global Village/Screenshot 2026-08-29 215931.png" loading="lazy"
+                                        decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Global Village/Screenshot 2026-08-29 215941.png"
-                                        loading="eager" decoding="async"
+                                    <img src="assets/Global Village/Screenshot 2026-08-29 215941.png" loading="lazy"
+                                        decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Sân Golf Quốc Tế Vinpearl Golf -->
+                <div id="sec-tien-ich-san-golf" class="card-custom sec-card-theme mb-5 p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                        <div>
+                            <h4 class="fw-bold mb-1" style="font-size:1.4rem;">
+                                <i class="bi bi-flag-fill me-2" style="color:#ffd166;"></i>Sân Golf Quốc Tế Vinpearl
+                                Golf (200 ha)
+                            </h4>
+                            <div class="sub-text" style="font-size:0.88rem;">Sân Golf 36 hố tiêu chuẩn quốc tế đỉnh cao,
+                                công viên thể thao &amp; câu lạc bộ thượng lưu Golf Club</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-stretch">
+                        <!-- Featured Main Image -->
+                        <div class="col-12 col-lg-7">
+                            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg"
+                                style="padding: 8px; min-height:360px;">
+                                <img id="sec-tien-ich-san-golf-main-img"
+                                    src="assets/Sân golf/TGC_VinPearl Golf CuChi_LIFESTYLE-9026_1758272340.jpg"
+                                    loading="lazy" decoding="async"
+                                    class="img-fluid w-100 hover-lift cursor-pointer rounded-3"
+                                    style="max-height: 520px; object-fit: contain; transition: opacity 0.2s ease, transform 0.3s ease;"
+                                    onclick="openGallery(this, 'Sân Golf Quốc Tế Vinpearl Golf (36 ha)')">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start"
+                                    style="background: linear-gradient(to top, rgba(5,20,16,0.92), transparent); pointer-events:none;">
+                                    <span class="badge mb-1"
+                                        style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
+                                            class="bi bi-eye-fill me-1"></i>XEM TRƯỚC</span>
+                                    <div style="color:white; font-size:0.88rem; font-weight:600;">Sân Golf Quốc Tế
+                                        Vinpearl Golf (36 hố) (Click để phóng to HD)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid các ô ảnh nhỏ (10 ảnh) -->
+                        <div class="col-12 col-lg-5">
+                            <div class="row g-2 overflow-x-hidden scrollbar-thin"
+                                style="max-height: 520px; overflow-y: auto;">
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/TGC_VinPearl Golf CuChi_LIFESTYLE-9026_1758272340.jpg"
+                                        loading="lazy" decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 2px solid #ffd166; box-shadow: 0 0 10px rgba(255,209,102,0.5); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/1_1758272005.png" loading="lazy" decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/4_1758271790.png" loading="lazy" decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/5_1758271523.png" loading="lazy" decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/Hole 15_1758272183.webp" loading="lazy" decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/Hole 8_1757667845.webp" loading="lazy" decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/Hole signature 11 (1)_1758272239.webp" loading="lazy"
+                                        decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/LÉMAN_1758272443.webp" loading="lazy" decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/2_1758271866.webp" loading="lazy" decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                                <div class="col-6">
+                                    <img src="assets/Sân golf/484980555_122138498696399789_8605898807596911070_n.jpg"
+                                        loading="lazy" decoding="async"
+                                        class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
+                                        style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
+                                        onclick="switchMainImage('sec-tien-ich-san-golf-main-img', this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CÁC MỤC ẢNH TIỆN ÍCH: Các Tiện Ích Đẳng Cấp Khác (Thanh trượt ngang) -->
+                <div id="sec-tien-ich-khac" class="card-custom sec-card-theme mb-5 p-4"
+                    style="border-left: 6px solid #ffd166;">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                        <div>
+                            <h4 class="fw-bold mb-1" style="font-size:1.4rem;">
+                                <i class="bi bi-grid-3x3-gap-fill me-2" style="color:#ffd166;"></i>Các Tiện Ích Đẳng Cấp
+                                Khác
+                            </h4>
+                            <div class="sub-text" style="font-size:0.88rem;">Hệ thống trường học, bệnh viện Vinmec, TTTM
+                                Vincom, công viên thể thao &amp; khu vui chơi mua sắm</div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-warning text-dark fw-bold px-3 py-2 rounded-pill small">
+                                <i class="bi bi-arrows-left-right me-1"></i>Trượt ngang để xem tiếp
+                            </span>
+                            <button type="button" class="btn btn-sm btn-outline-warning rounded-circle"
+                                onclick="document.getElementById('scroll-tien-ich-khac').scrollBy({left: -300, behavior: 'smooth'})">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-warning rounded-circle"
+                                onclick="document.getElementById('scroll-tien-ich-khac').scrollBy({left: 300, behavior: 'smooth'})">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Thanh Cuộn Trượt Ngang Chứa 10 Ảnh Tiện Ích Khác Đã Đặt Tên Chính Xác -->
+                    <div id="scroll-tien-ich-khac" class="d-flex flex-nowrap overflow-x-auto gap-3 pb-3 scrollbar-thin"
+                        style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+
+                        <!-- 1. Bệnh viện Vinmec -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'Bệnh Viện Đa Khoa Quốc Tế Vinmec 5 Sao (6,9 ha)')">
+                                <img src="assets/tien-ich-khac/vinmec-grand-park.jpg" loading="lazy" decoding="async"
+                                    class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Bệnh viện Vinmec (6,9 ha)">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i class="bi bi-hospital me-1"
+                                            style="color:#ffd166;"></i>Bệnh Viện Vinmec (6,9 ha)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Vincom Collection -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'Vincom Collection (6,5 ha)')">
+                                <img src="assets/tien-ich-khac/Screenshot 2026-08-29 230930.png" loading="lazy"
+                                    decoding="async" class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Vincom Collection (6,5 ha)">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i class="bi bi-stars me-1"
+                                            style="color:#ffd166;"></i>Vincom Collection (6,5 ha)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Vincom Collection -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'Vincom Collection (6,5 ha)')">
+                                <img src="assets/tien-ich-khac/Screenshot 2026-08-29 231010.png" loading="lazy"
+                                    decoding="async" class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Vincom Collection (6,5 ha)">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i class="bi bi-water me-1"
+                                            style="color:#ffd166;"></i>Vincom Collection (6,5 ha)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Vincom Collection - Phố Ẩm Thực & Đêm Hội Pháo Hoa -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'Vincom Collection (6,5 ha)')">
+                                <img src="assets/tien-ich-khac/Screenshot 2026-08-29 231026.png" loading="lazy"
+                                    decoding="async" class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Vincom Collection (6,5 ha)">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i class="bi bi-shop me-1"
+                                            style="color:#ffd166;"></i>Vincom Collection (6,5 ha)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. TTTM Vincom Mega Mall (4,6 ha) -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'TTTM Vincom Mega Mall (4,6 ha)')">
+                                <img src="assets/tien-ich-khac/Screenshot 2026-08-29 231045.png" loading="lazy"
+                                    decoding="async" class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Vincom Mega Mall & Vincom Collection (4,6 ha)">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i
+                                            class="bi bi-bag-check-fill me-1" style="color:#ffd166;"></i>Vincom Mega
+                                        Mall (4,6 ha)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 6. Nhà Kính Cánh Buồm & Vườn Bách Thảo -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'Nhà Kính Ôn Đới & Vườn Bách Thảo')">
+                                <img src="assets/tien-ich-khac/Screenshot 2026-08-29 231142.png" loading="lazy"
+                                    decoding="async" class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Nhà Kính Ôn Đới & Vườn Bách Thảo">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i class="bi bi-flower1 me-1"
+                                            style="color:#ffd166;"></i>Nhà Kính Ôn Đới & Vườn Bách Thảo</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 7. Công Viên Thiên Văn Galaxy Park (3,9 ha) -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'Công Viên Thiên Văn Galaxy Park (3,9 ha)')">
+                                <img src="assets/tien-ich-khac/Screenshot 2026-08-29 231158.png" loading="lazy"
+                                    decoding="async" class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Công Viên Thiên Văn Galaxy Park (3,9 ha)">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i
+                                            class="bi bi-moon-stars-fill me-1" style="color:#ffd166;"></i>Công Viên
+                                        Thiên
+                                        Văn Galaxy Park (3,9 ha)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 8. Quần Thể Hơn 150 Sân Thể Thao Ngoài Trời (Tennis & Pickleball) -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'Quần Thể Hơn 150 Sân Thể Thao Ngoài Trời (Tennis & Pickleball)')">
+                                <img src="assets/tien-ich-khac/Screenshot 2026-08-29 231229.png" loading="lazy"
+                                    decoding="async" class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Quần Thể Hơn 150 Sân Thể Thao Ngoài Trời">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i class="bi bi-activity me-1"
+                                            style="color:#ffd166;"></i>Quần Thể Hơn 150 Sân Thể Thao Ngoài Trời</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 9. Sân Chơi Trẻ Em Vận Động Sắc Màu Kid Park -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'Sân Chơi Trẻ Em Vận Động Sắc Màu Kid Park')">
+                                <img src="assets/tien-ich-khac/Screenshot 2026-08-29 231244.png" loading="lazy"
+                                    decoding="async" class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Sân Chơi Trẻ Em Kid Park">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i class="bi bi-controller me-1"
+                                            style="color:#ffd166;"></i>Sân Chơi Trẻ Em Kid Park</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 10. Toàn Cảnh Bể Bơi Resort Ven Sông -->
+                        <div class="flex-shrink-0" style="width: 270px; scroll-snap-align: start;">
+                            <div class="overflow-hidden rounded-3 border position-relative cursor-pointer hover-lift shadow-sm h-100"
+                                style="border-color: rgba(255,209,102,0.3) !important;"
+                                onclick="openGallery(this.querySelector('img'), 'Toàn Cảnh Bể Bơi Ngoài Trời & Công Viên Ven Sông')">
+                                <img src="assets/tien-ich-khac/Screenshot 2026-08-29 231310.png" loading="lazy"
+                                    decoding="async" class="img-fluid w-100" style="height: 165px; object-fit: cover;"
+                                    alt="Toàn Cảnh Bể Bơi Ngoài Trời & Công Viên Ven Sông">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-start"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.92), transparent);">
+                                    <div class="fw-bold text-white small text-truncate"><i
+                                            class="bi bi-life-preserver me-1" style="color:#ffd166;"></i>Bể Bơi
+                                        Ngoài Trời & Công Viên Ven Sông</div>
                                 </div>
                             </div>
                         </div>
@@ -2042,7 +2441,7 @@
                 <!-- Bìa Layout -->
                 <div class="mb-5 text-center overflow-hidden rounded-3 shadow-lg position-relative"
                     style="border: 2px solid #ffd166;">
-                    <img src="assets/layouts/layout_page_01.jpg" loading="eager" decoding="async"
+                    <img src="assets/layouts/layout_page_01.jpg" loading="lazy" decoding="async"
                         class="img-fluid w-100 hover-lift"
                         style="width: 100%; height: auto; display: block; background: #fff;"
                         onclick="openGallery(this, 'Ảnh Bìa Layout Sản Phẩm')">
@@ -2052,34 +2451,35 @@
                 <div class="mb-4">
                     <h5
                         style="color:#ffd166; font-weight:800; border-bottom: 1px solid rgba(255,209,102,0.3); padding-bottom: 8px; margin-bottom: 15px;">
-                        <i class="bi bi-house-door me-2"></i>LAYOUT CH-08</h5>
+                        <i class="bi bi-house-door me-2"></i>LAYOUT CH-08
+                    </h5>
                     <div class="d-flex gap-3 overflow-x-auto pb-4 scrollbar-thin layout-slider"
                         style="scroll-behavior: smooth;">
-                        <img src="assets/layouts/layout_page_02.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_02.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow-lg flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 3px solid #ffd166; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Title CH-08')">
-                        <img src="assets/layouts/layout_page_03.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_03.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-08')">
-                        <img src="assets/layouts/layout_page_04.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_04.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-08')">
-                        <img src="assets/layouts/layout_page_05.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_05.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-08')">
-                        <img src="assets/layouts/layout_page_06.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_06.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-08')">
-                        <img src="assets/layouts/layout_page_07.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_07.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-08')">
-                        <img src="assets/layouts/layout_page_08.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_08.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-08')">
@@ -2090,26 +2490,27 @@
                 <div class="mb-4">
                     <h5
                         style="color:#ffd166; font-weight:800; border-bottom: 1px solid rgba(255,209,102,0.3); padding-bottom: 8px; margin-bottom: 15px;">
-                        <i class="bi bi-house-door me-2"></i>LAYOUT CH-29</h5>
+                        <i class="bi bi-house-door me-2"></i>LAYOUT CH-29
+                    </h5>
                     <div class="d-flex gap-3 overflow-x-auto pb-4 scrollbar-thin layout-slider"
                         style="scroll-behavior: smooth;">
-                        <img src="assets/layouts/layout_page_09.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_09.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow-lg flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 3px solid #ffd166; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Title CH-29')">
-                        <img src="assets/layouts/layout_page_10.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_10.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-29')">
-                        <img src="assets/layouts/layout_page_11.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_11.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-29')">
-                        <img src="assets/layouts/layout_page_12.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_12.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-29')">
-                        <img src="assets/layouts/layout_page_13.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_13.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-29')">
@@ -2120,26 +2521,27 @@
                 <div class="mb-4">
                     <h5
                         style="color:#ffd166; font-weight:800; border-bottom: 1px solid rgba(255,209,102,0.3); padding-bottom: 8px; margin-bottom: 15px;">
-                        <i class="bi bi-house-door me-2"></i>LAYOUT CH-59</h5>
+                        <i class="bi bi-house-door me-2"></i>LAYOUT CH-59
+                    </h5>
                     <div class="d-flex gap-3 overflow-x-auto pb-4 scrollbar-thin layout-slider"
                         style="scroll-behavior: smooth;">
-                        <img src="assets/layouts/layout_page_14.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_14.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow-lg flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 3px solid #ffd166; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Title CH-59')">
-                        <img src="assets/layouts/layout_page_15.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_15.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-59')">
-                        <img src="assets/layouts/layout_page_16.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_16.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-59')">
-                        <img src="assets/layouts/layout_page_17.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_17.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-59')">
-                        <img src="assets/layouts/layout_page_18.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_18.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-59')">
@@ -2150,34 +2552,35 @@
                 <div class="mb-2">
                     <h5
                         style="color:#ffd166; font-weight:800; border-bottom: 1px solid rgba(255,209,102,0.3); padding-bottom: 8px; margin-bottom: 15px;">
-                        <i class="bi bi-house-door me-2"></i>LAYOUT CH-71</h5>
+                        <i class="bi bi-house-door me-2"></i>LAYOUT CH-71
+                    </h5>
                     <div class="d-flex gap-3 overflow-x-auto pb-4 scrollbar-thin layout-slider"
                         style="scroll-behavior: smooth;">
-                        <img src="assets/layouts/layout_page_19.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_19.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow-lg flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 3px solid #ffd166; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Title CH-71')">
-                        <img src="assets/layouts/layout_page_20.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_20.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-71')">
-                        <img src="assets/layouts/layout_page_21.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_21.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-71')">
-                        <img src="assets/layouts/layout_page_22.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_22.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-71')">
-                        <img src="assets/layouts/layout_page_23.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_23.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-71')">
-                        <img src="assets/layouts/layout_page_24.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_24.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-71')">
-                        <img src="assets/layouts/layout_page_25.jpg" loading="eager" decoding="async"
+                        <img src="assets/layouts/layout_page_25.jpg" loading="lazy" decoding="async"
                             class="rounded-3 shadow flex-shrink-0 cursor-pointer hover-lift"
                             style="height: 220px; border: 1px solid #cbd5e1; object-fit: contain; background: #fff;"
                             onclick="openGallery(this, 'Sketch CH-71')">
@@ -3203,20 +3606,22 @@
     <div class="modal fade" id="pdfViewModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content" style="background:#07201a; color:#ffffff;">
-                <div class="modal-header" style="border-bottom:1px solid rgba(255,209,102,0.3); background:#0d2e26; padding: 12px 20px;">
+                <div class="modal-header"
+                    style="border-bottom:1px solid rgba(255,209,102,0.3); background:#0d2e26; padding: 12px 20px;">
                     <h5 class="modal-title fw-bold" style="color:#ffd166; font-size:1.15rem;">
-                        <i class="bi bi-map-fill me-2"></i>Sơ Đồ Quy Hoạch Phân Lô Soi Căn Chi Tiết (Bản Vector 4K - VHSP.pdf)
+                        <i class="bi bi-map-fill me-2"></i>Sơ Đồ Quy Hoạch Phân Lô Soi Căn Chi Tiết (Bản Vector 4K -
+                        VHSP.pdf)
                     </h5>
                     <div class="d-flex align-items-center gap-2">
                         <a href="assets/VHSP.pdf" target="_blank" class="btn btn-sm btn-warning fw-bold">
                             <i class="bi bi-box-arrow-up-right me-1"></i> Mở Cửa Sổ Mới
                         </a>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                 </div>
                 <div class="modal-body p-0" style="height: calc(100vh - 60px);">
-                    <iframe src="assets/VHSP.pdf#toolbar=1&navpanes=0&scrollbar=1" 
-                        title="Bản Đồ Phân Lô PDF"
+                    <iframe src="assets/VHSP.pdf#toolbar=1&navpanes=0&scrollbar=1" title="Bản Đồ Phân Lô PDF"
                         style="width:100%; height:100%; border:none;"></iframe>
                 </div>
             </div>
