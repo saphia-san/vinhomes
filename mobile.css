@@ -18,7 +18,7 @@
     body {
         padding-left: 0 !important;
         padding-right: 0 !important;
-        padding-bottom: 30px !important;
+        padding-bottom: 80px !important; /* 60px bottom nav + 20px safe space */
     }
 
     .container, .container-fluid, .main-container {
@@ -38,13 +38,15 @@
         box-sizing: border-box !important;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
         margin-bottom: 24px !important;
-        /* Hardware Acceleration for zero lag scrolling */
-        transform: translateZ(0);
-        will-change: transform;
+        /* NOTE: Hardware acceleration intentionally removed here.
+           will-change:transform on ALL cards causes VRAM exhaustion on mobile.
+           See section 5.6 below – only .mobile-bottom-nav uses will-change. */
     }
 
-    /* Remove heavy blur filters on mobile to eliminate scrolling lag */
-    div[style*="backdrop-filter"] {
+    /* Remove heavy blur filters on mobile – belt-and-suspenders for inline style overrides */
+    div[style*="backdrop-filter"],
+    div[style*="backdrop-filter:"],
+    div[style*="-webkit-backdrop-filter"] {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
     }
@@ -78,6 +80,31 @@
         text-align: left !important;
     }
 
+    /* Main Sticky Navigation Bar Horizontal Scroll on Mobile */
+    .sticky-nav-container {
+        padding: 4px 6px !important;
+        margin-bottom: 14px !important;
+    }
+
+    #mainTab {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        justify-content: flex-start !important;
+        padding-bottom: 4px !important;
+    }
+
+    #mainTab .nav-item {
+        flex-shrink: 0 !important;
+    }
+
+    #mainTab .nav-link {
+        white-space: nowrap !important;
+        font-size: 0.82rem !important;
+        padding: 8px 14px !important;
+        border-radius: 10px !important;
+    }
+
     /* Buttons scaling on phone screens */
     .btn {
         font-size: 0.85rem !important;
@@ -87,10 +114,78 @@
         border-radius: 10px !important;
     }
 
-    /* Quick Anchor Navigation Bar */
+    /* Quick Anchor Navigation Bar Pills */
     .quick-nav-btn {
         font-size: 0.78rem !important;
-        padding: 6px 12px !important;
+        padding: 6px 14px !important;
+        white-space: nowrap !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+        height: 36px !important;
+        border-radius: 20px !important;
+    }
+
+    /* Sticky Mobile Bottom App Navigation Bar */
+    .mobile-bottom-nav {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 9999 !important;
+        height: 60px !important;
+        background: rgba(8, 28, 22, 0.96) !important;
+        border-top: 1.5px solid rgba(255, 209, 102, 0.5) !important;
+        display: flex !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5) !important;
+        padding: 0 4px !important;
+    }
+
+    body.light-theme .mobile-bottom-nav {
+        background: rgba(255, 255, 255, 0.96) !important;
+        border-top: 1.5px solid #cbd5e1 !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .mobile-nav-item {
+        background: transparent !important;
+        border: none !important;
+        color: #94a3b8 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 0.65rem !important;
+        font-weight: 700 !important;
+        padding: 4px 2px !important;
+        border-radius: 8px !important;
+        flex: 1 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+
+    body.light-theme .mobile-nav-item {
+        color: #64748b !important;
+    }
+
+    .mobile-nav-item i {
+        font-size: 1.2rem !important;
+        margin-bottom: 2px !important;
+    }
+
+    .mobile-nav-item.active {
+        color: #ffd166 !important;
+        font-weight: 800 !important;
+    }
+
+    body.light-theme .mobile-nav-item.active {
+        color: #0d2e26 !important;
+    }
+
+    .mobile-nav-item.active i {
+        transform: scale(1.15) !important;
     }
 
     /* --------------------------------------------------------------------------
@@ -224,17 +319,147 @@
     /* --------------------------------------------------------------------------
        5. SPEED & TOUCH SMOOTHNESS OPTIMIZATIONS
        -------------------------------------------------------------------------- */
-    .overflow-x-auto, .overflow-y-auto, .scrollbar-thin {
-        -webkit-overflow-scrolling: touch !important;
-        scroll-snap-type: none !important; /* Prevents jerky scroll on iOS */
+
+    /* ─── 5.1  Native smooth scroll + momentum ─── */
+    html {
+        scroll-behavior: smooth !important;
     }
 
-    /* Image lazy render containment */
+    .overflow-x-auto, .overflow-y-auto, .scrollbar-thin,
+    .table-responsive, #mainTab {
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: none !important;
+    }
+
+    /* ─── 5.2  KILL backdrop-filter COMPLETELY (biggest perf win on mobile) ─── */
+    /* backdrop-filter triggers a full compositing layer on EVERY scroll tick  */
+    *,
+    *::before,
+    *::after {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    /* Fallback solid backgrounds for glassy elements */
+    .sticky-nav-container {
+        background: rgba(10, 25, 20, 0.97) !important;
+    }
+
+    body.light-theme .sticky-nav-container {
+        background: rgba(13, 46, 38, 0.98) !important;
+    }
+
+    .search-dropdown {
+        background: #071a15 !important;
+    }
+
+    body.light-theme .search-dropdown {
+        background: #ffffff !important;
+    }
+
+    .summary-box {
+        background: rgba(8, 28, 22, 0.95) !important;
+    }
+
+    body.light-theme .summary-box {
+        background: #f8fafc !important;
+    }
+
+    /* ─── 5.3  Kill background-attachment:fixed (causes full-page repaint on iOS) ─── */
+    body, body.light-theme, body.dark-theme,
+    body[style*="background-attachment"] {
+        background-attachment: scroll !important;
+    }
+
+    /* ─── 5.4  Simplify box-shadows (reduce paint complexity) ─── */
+    .card-custom, .sec-card-theme {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Zero-shadow on decorative wrappers that don't need depth */
+    .sticky-nav-container {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    /* ─── 5.5  Disable hover transitions (no hover on touch = wasted GPU) ─── */
+    .hover-lift,
+    .hover-lift:hover {
+        transform: none !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+        transition: none !important;
+    }
+
+    /* Remove all transition on elements not actively animated */
+    .summary-box,
+    .card-custom,
+    .sec-card-theme,
+    .quick-nav-btn,
+    .nav-link,
+    .search-item {
+        transition: background-color 0.15s ease !important;
+    }
+
+    /* ─── 5.6  will-change: ONLY on elements actively composited ─── */
+    /* Remove from cards (too many layers = VRAM exhaustion) */
+    .card-custom, .sec-card-theme {
+        will-change: auto !important;
+        transform: none !important;
+    }
+
+    /* Keep GPU composite only for bottom nav (slides above content) */
+    .mobile-bottom-nav {
+        will-change: transform !important;
+        transform: translateZ(0) !important;
+    }
+
+    /* ─── 5.7  contain: layout style – prevent layout thrash on big sections ─── */
+    .tab-pane,
+    #tab-overview,
+    #tab-input,
+    #tab-result,
+    #tab-loan,
+    #tab-compare2 {
+        contain: layout style !important;
+    }
+
+    /* ─── 5.8  content-visibility: auto – skip rendering off-screen sections ─── */
+    /* Only applied to non-visible sub-sections within overview tab */
+    #sec-thap-bieu-tuong,
+    #sec-hero,
+    #sec-pdf-map,
+    #sec-vi-tri,
+    #sec-tien-ich,
+    #sec-layout {
+        content-visibility: auto !important;
+        contain-intrinsic-size: 0 600px !important;
+    }
+
+    /* ─── 5.9  Images – decode async + containment ─── */
     img {
         content-visibility: auto;
     }
 
-    /* SweetAlert History Modal Responsive Fix */
+    /* ─── 5.10  Reduce animation complexity ─── */
+    /* Pulse animation uses box-shadow which triggers repaint – slow on mobile */
+    .map-pin-pulse {
+        animation-duration: 2.2s !important; /* slower = fewer repaints per second */
+    }
+
+    /* Disable spinner/shimmer animations that run even when off-screen */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* ─── 5.11  Touch target sizing (reduces mis-tap & JS re-layout) ─── */
+    button, a, .btn, .nav-link, .mobile-nav-item, input, select {
+        touch-action: manipulation !important;
+    }
+
+    /* ─── 5.12  SweetAlert History Modal Responsive Fix ─── */
     .swal2-popup {
         width: 95% !important;
         padding: 16px 10px !important;
@@ -247,6 +472,15 @@
 
     .swal2-html-container {
         margin: 1em 0.2em !important;
+    }
+}
+
+/* ==========================================================================
+   MOBILE BOTTOM NAV – HIDE ON DESKTOP (Outside media query – always applies)
+   ========================================================================== */
+@media (min-width: 992px) {
+    .mobile-bottom-nav {
+        display: none !important;
     }
 }
 

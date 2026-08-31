@@ -1179,32 +1179,39 @@
     <div class="container-fluid max-width-container px-3 px-md-4 py-4" style="max-width:1320px;">
 
         <!-- Header Bar -->
-        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-            <div class="d-flex align-items-center gap-3">
+        <div class="d-flex justify-content-between align-items-center mb-3 mb-md-4 flex-wrap gap-2 header-bar">
+            <div class="d-flex align-items-center gap-2 gap-md-3 flex-grow-1 min-w-0">
                 <img loading="lazy" src="logo-vinhomes-saigon-park-gold.jpg" alt="Logo Vinhomes Sài Gòn Park"
-                    style="height: 64px; width: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); border: 1.5px solid rgba(212, 175, 55, 0.4);">
-                <div>
-                    <h2 class="header-title mb-1">Vinhomes Sài Gòn Park</h2>
-                    <div style="font-size:0.85rem; color:var(--text-muted);">
-                        Áp dụng: Phân khu Ivy Park & Global Park | Cập nhật giá theo CSBH mới nhất
+                    class="header-logo"
+                    style="height: 56px; width: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); border: 1.5px solid rgba(212, 175, 55, 0.4); flex-shrink:0;">
+                <div class="min-w-0">
+                    <h2 class="header-title mb-0">Vinhomes Sài Gòn Park</h2>
+                    <div class="header-subtitle d-none d-sm-block" style="font-size:0.82rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        Áp dụng: Phân khu Ivy Park &amp; Global Park | Cập nhật giá theo CSBH mới nhất
+                    </div>
+                    <div class="d-sm-none" style="font-size:0.75rem; color:var(--text-muted);">
+                        Ivy Park &amp; Global Park – CSBH mới nhất
                     </div>
                 </div>
             </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-outline-secondary rounded-3 px-3 py-2 fw-semibold" id="themeToggleBtn"
-                    style="border-color: #cbd5e1; color: #0f172a; background: #ffffff; font-size: 0.88rem;"
+            <div class="d-flex gap-2 flex-shrink-0 header-actions">
+                <!-- Icon-only on mobile, text+icon on desktop -->
+                <button class="btn btn-outline-secondary rounded-3 fw-semibold" id="themeToggleBtn"
+                    style="border-color: #cbd5e1; color: #0f172a; background: #ffffff; font-size: 0.88rem; padding:8px 12px;"
                     onclick="toggleTheme()">
-                    <i class="bi bi-moon-stars-fill me-1" style="color:#2563eb;"></i> Giao Diện Tối
+                    <i class="bi bi-moon-stars-fill" style="color:#2563eb;"></i>
+                    <span class="d-none d-sm-inline ms-1"> Giao Diện Tối</span>
                 </button>
-                <button class="btn btn-outline-warning rounded-3 px-3 py-2 fw-semibold"
-                    style="border-color: rgba(212, 175, 55, 0.5); color: #b8860b;" onclick="showHistoryModal()">
-                    <i class="bi bi-clock-history me-1"></i> Lịch Sử Báo Giá
+                <button class="btn btn-outline-warning rounded-3 fw-semibold"
+                    style="border-color: rgba(212, 175, 55, 0.5); color: #b8860b; padding:8px 12px;" onclick="showHistoryModal()">
+                    <i class="bi bi-clock-history"></i>
+                    <span class="d-none d-sm-inline ms-1"> Lịch Sử Báo Giá</span>
                 </button>
             </div>
         </div>
 
         <!-- Sticky Navigation Tabs Bar (Glassmorphism Sticky Bar) -->
-        <div class="sticky-nav-container shadow-lg rounded-4 px-2 py-2 mb-4" id="stickyNavWrapper">
+        <div class="sticky-nav-container shadow-lg rounded-4 px-2 py-2 mb-3 mb-md-4 d-none d-lg-block" id="stickyNavWrapper">
             <ul class="nav nav-tabs nav-tabs-custom border-0 m-0 justify-content-center flex-wrap gap-1" id="mainTab">
                 <li class="nav-item">
                     <button class="nav-link active fw-bold" id="tab-overview-btn" onclick="showTab('overview')">
@@ -1284,7 +1291,7 @@
                 }
             </style>
             <!-- Dedicated Mobile Responsive & Performance Stylesheet -->
-            <link rel="stylesheet" href="mobile.css?v=20260830">
+            <link rel="stylesheet" href="mobile.css?v=20260831_1510">
 
             <!-- Quick Anchor Navigation Bar -->
             <div class="d-flex align-items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-thin"
@@ -3894,6 +3901,30 @@
             </div>
         </footer>
 
+        <!-- Sticky Mobile Bottom App Navigation Bar -->
+        <nav class="mobile-bottom-nav d-lg-none" id="mobileBottomNav">
+            <button type="button" class="mobile-nav-item active" id="tab-overview-mobile-btn" onclick="showTab('overview')">
+                <i class="bi bi-globe-americas"></i>
+                <span>Tổng Quan</span>
+            </button>
+            <button type="button" class="mobile-nav-item" id="tab-input-mobile-btn" onclick="showTab('input')">
+                <i class="bi bi-sliders"></i>
+                <span>Tính Giá</span>
+            </button>
+            <button type="button" class="mobile-nav-item" id="tab-result-mobile-btn" onclick="showTab('result')">
+                <i class="bi bi-table"></i>
+                <span>Kết Quả</span>
+            </button>
+            <button type="button" class="mobile-nav-item" id="tab-loan-mobile-btn" onclick="showTab('loan')">
+                <i class="bi bi-bank"></i>
+                <span>Lịch Vay</span>
+            </button>
+            <button type="button" class="mobile-nav-item" id="tab-compare2-mobile-btn" onclick="showTab('compare2')">
+                <i class="bi bi-layout-split"></i>
+                <span>So Sánh</span>
+            </button>
+        </nav>
+
     </div>
 
     <!-- 
@@ -3989,10 +4020,10 @@
     <script src="gallery_lightbox.js?v=20260829_1358"></script>
     <script src="data.js"></script>
     <script src="config.js?v=20260830_2332"></script>
-    <script src="calculator.js?v=20260831_1339"></script>
+    <script src="calculator.js?v=20260831_1454"></script>
     <script src="charts.js?v=20260831_0942"></script>
     <script src="export_card.js?v=20260831_1435"></script>
-    <script src="ui.js?v=20260831_1416"></script>
+    <script src="ui.js?v=20260831_1508"></script>
 
     <script>
         function activatePdfIframe() {
