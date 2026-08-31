@@ -316,31 +316,13 @@
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
     }
 
-    /* --------------------------------------------------------------------------
-       5. SPEED & TOUCH SMOOTHNESS OPTIMIZATIONS
-       -------------------------------------------------------------------------- */
-
-    /* ─── 5.1  Native smooth scroll + momentum ─── */
-    html {
-        scroll-behavior: smooth !important;
-    }
-
+    /* ─── 5.1  Scroll momentum for touch containers ─── */
     .overflow-x-auto, .overflow-y-auto, .scrollbar-thin,
     .table-responsive, #mainTab {
         -webkit-overflow-scrolling: touch !important;
-        scroll-snap-type: none !important;
     }
 
-    /* ─── 5.2  KILL backdrop-filter COMPLETELY (biggest perf win on mobile) ─── */
-    /* backdrop-filter triggers a full compositing layer on EVERY scroll tick  */
-    *,
-    *::before,
-    *::after {
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-    }
-
-    /* Fallback solid backgrounds for glassy elements */
+    /* ─── 5.2  Lightweight backdrop-filter fallback for low-end mobile ─── */
     .sticky-nav-container {
         background: rgba(10, 25, 20, 0.97) !important;
     }
@@ -349,117 +331,12 @@
         background: rgba(13, 46, 38, 0.98) !important;
     }
 
-    .search-dropdown {
-        background: #071a15 !important;
-    }
-
-    body.light-theme .search-dropdown {
-        background: #ffffff !important;
-    }
-
-    .summary-box {
-        background: rgba(8, 28, 22, 0.95) !important;
-    }
-
-    body.light-theme .summary-box {
-        background: #f8fafc !important;
-    }
-
-    /* ─── 5.3  Kill background-attachment:fixed (causes full-page repaint on iOS) ─── */
-    body, body.light-theme, body.dark-theme,
-    body[style*="background-attachment"] {
+    /* ─── 5.3  Disable fixed background attachment on iOS ─── */
+    body, body.light-theme, body.dark-theme {
         background-attachment: scroll !important;
     }
 
-    /* ─── 5.4  Simplify box-shadows (reduce paint complexity) ─── */
-    .card-custom, .sec-card-theme {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-    }
-
-    /* Zero-shadow on decorative wrappers that don't need depth */
-    .sticky-nav-container {
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35) !important;
-    }
-
-    /* ─── 5.5  Disable hover transitions (no hover on touch = wasted GPU) ─── */
-    .hover-lift,
-    .hover-lift:hover {
-        transform: none !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
-        transition: none !important;
-    }
-
-    /* Remove all transition on elements not actively animated */
-    .summary-box,
-    .card-custom,
-    .sec-card-theme,
-    .quick-nav-btn,
-    .nav-link,
-    .search-item {
-        transition: background-color 0.15s ease !important;
-    }
-
-    /* ─── 5.6  will-change: ONLY on elements actively composited ─── */
-    /* Remove from cards (too many layers = VRAM exhaustion) */
-    .card-custom, .sec-card-theme {
-        will-change: auto !important;
-        transform: none !important;
-    }
-
-    /* Keep GPU composite only for bottom nav (slides above content) */
-    .mobile-bottom-nav {
-        will-change: transform !important;
-        transform: translateZ(0) !important;
-    }
-
-    /* ─── 5.7  contain: layout style – prevent layout thrash on big sections ─── */
-    .tab-pane,
-    #tab-overview,
-    #tab-input,
-    #tab-result,
-    #tab-loan,
-    #tab-compare2 {
-        contain: layout style !important;
-    }
-
-    /* ─── 5.8  content-visibility: auto – skip rendering off-screen sections ─── */
-    /* Only applied to non-visible sub-sections within overview tab */
-    #sec-thap-bieu-tuong,
-    #sec-hero,
-    #sec-pdf-map,
-    #sec-vi-tri,
-    #sec-tien-ich,
-    #sec-layout {
-        content-visibility: auto !important;
-        contain-intrinsic-size: 0 600px !important;
-    }
-
-    /* ─── 5.9  Images – decode async + containment ─── */
-    img {
-        content-visibility: auto;
-    }
-
-    /* ─── 5.10  Reduce animation complexity ─── */
-    /* Pulse animation uses box-shadow which triggers repaint – slow on mobile */
-    .map-pin-pulse {
-        animation-duration: 2.2s !important; /* slower = fewer repaints per second */
-    }
-
-    /* Disable spinner/shimmer animations that run even when off-screen */
-    @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-        }
-    }
-
-    /* ─── 5.11  Touch target sizing (reduces mis-tap & JS re-layout) ─── */
-    button, a, .btn, .nav-link, .mobile-nav-item, input, select {
-        touch-action: manipulation !important;
-    }
-
-    /* ─── 5.12  SweetAlert History Modal Responsive Fix ─── */
+    /* ─── 5.4  SweetAlert History Modal Responsive Fix ─── */
     .swal2-popup {
         width: 95% !important;
         padding: 16px 10px !important;
