@@ -408,26 +408,51 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             const L_15 = Math.round(LT * 0.15);
             const L_bg25 = Math.round(LT * 0.25);
 
-            stages.push({ no: 1, label: 'Đặt cọc (Đất)', date: startDate, gross: DEP, badge: 'badge-deposit', note: 'Cố định 300 triệu VNĐ' });
-            stages.push({ no: 2, label: 'Ký CN HĐMB (Đất)', date: signDate, gross: L_sign10 + L_5gua, badge: 'badge-sign', note: '10% Đất (trừ cọc) + 5% Đất chưa VAT' });
-            stages.push({ no: 3, label: 'Đất lần 3 (T+15)', date: addDays(startDate, 15), gross: L_15, badge: 'badge-progress', note: '15% Đất (gồm VAT)' });
-            stages.push({ no: 4, label: 'Đất lần 4 (T+60)', date: addDays(startDate, 60), gross: L_15, badge: 'badge-progress', note: '15% Đất (gồm VAT)' });
-            stages.push({ no: 5, label: 'Đất lần 5 (T+120)', date: addDays(startDate, 120), gross: L_15, badge: 'badge-progress', note: '15% Đất (gồm VAT)' });
-            stages.push({ no: 6, label: 'Đất lần 6 (T+180)', date: addDays(startDate, 180), gross: L_15, badge: 'badge-progress', note: '15% Đất (gồm VAT)' });
-            stages.push({ no: 7, label: 'Thông báo CĐT (Đất)', date: addDays(startDate, 270), gross: L_bg25 + L_vat5, badge: 'badge-handover', note: '25% Đất + VAT 5% giá bán Đất' });
+            stages.push({ no: 1, label: 'Ký TTĐC', date: startDate, gross: DEP, badge: 'badge-deposit', note: 'Cố định 300 triệu VNĐ' });
+            stages.push({
+                no: 2, label: 'Ký HĐMB (Dự kiến)', date: signDate, gross: L_sign10 + L_5gua, badge: 'badge-sign', note: '10% giá bán gồm VAT (đã trừ TTĐC) + 5% Chưa gồm VAT',
+                subItems: [
+                    { label: '10% giá bán gồm VAT (đã trừ tiền TTĐC)', gross: L_sign10 },
+                    { label: '5% Chưa gồm VAT', gross: L_5gua }
+                ]
+            });
+            stages.push({ no: 3, label: 'Đợt 2 + 15 ngày', date: addDays(startDate, 15), gross: L_15, badge: 'badge-progress', note: '15% giá bán gồm VAT' });
+            stages.push({ no: 4, label: 'Đợt 2 + 60 ngày', date: addDays(startDate, 60), gross: L_15, badge: 'badge-progress', note: '15% giá bán gồm VAT' });
+            stages.push({ no: 5, label: 'Đợt 2 + 120 ngày', date: addDays(startDate, 120), gross: L_15, badge: 'badge-progress', note: '15% giá bán gồm VAT' });
+            stages.push({ no: 6, label: 'Đợt 2 + 180 ngày', date: addDays(startDate, 180), gross: L_15, badge: 'badge-progress', note: '15% giá bán gồm VAT' });
+            stages.push({
+                no: 7, label: 'Thông báo cđt (Dự kiến)', date: addDays(startDate, 270), gross: L_bg25 + L_vat5, badge: 'badge-handover', note: '25% giá bán gồm VAT + VAT 5% giá bán',
+                subItems: [
+                    { label: '25% giá bán gồm VAT', gross: L_bg25 },
+                    { label: 'VAT 5% giá bán', gross: L_vat5 }
+                ]
+            });
 
             const X_d0 = addDays(startDate, 540);
             const X_15 = Math.round(CT * 0.15);
             const X_5gua = Math.round(C_p * 0.05);
             const X_bg25 = Math.round(CT * 0.25);
 
-            stages.push({ no: 8, label: 'Bắt đầu Xây (T+540)', date: X_d0, gross: X_15 + X_5gua, badge: 'badge-progress', note: '15% Xây + 5% Xây chưa VAT' });
-            stages.push({ no: 9, label: 'Xây T+555', date: addDays(startDate, 555), gross: Math.round(CT * 0.10), badge: 'badge-progress', note: '10% Xây' });
-            stages.push({ no: 10, label: 'Xây T+600', date: addDays(startDate, 600), gross: X_15, badge: 'badge-progress', note: '15% Xây' });
-            stages.push({ no: 11, label: 'Xây T+660', date: addDays(startDate, 660), gross: X_15, badge: 'badge-progress', note: '15% Xây' });
-            stages.push({ no: 12, label: 'Xây T+720', date: addDays(startDate, 720), gross: X_15, badge: 'badge-progress', note: '15% Xây' });
-            stages.push({ no: 13, label: 'Bàn giao nhà', date: handoverDate, dateLabel: handoverLabel, gross: X_bg25 + C_vat5 + KPBT, badge: 'badge-handover', note: '25% Xây + VAT 5% + KPBT' });
-            stages.push({ no: 14, label: 'Sổ hồng', date: pinkBookDate, dateLabel: pinkBookLabel, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã trả ở Đợt 2 & 8' });
+            stages.push({
+                no: 8, label: 'Đợt 2 + 540 Ngày', date: X_d0, gross: X_15 + X_5gua, badge: 'badge-progress', note: '15% giá bán gồm VAT + 5% Chưa gồm VAT',
+                subItems: [
+                    { label: '15% giá bán gồm VAT', gross: X_15 },
+                    { label: '5% Chưa gồm VAT', gross: X_5gua }
+                ]
+            });
+            stages.push({ no: 9, label: 'T+555', date: addDays(startDate, 555), gross: Math.round(CT * 0.10), badge: 'badge-progress', note: '10% giá bán gồm VAT' });
+            stages.push({ no: 10, label: 'T+600', date: addDays(startDate, 600), gross: X_15, badge: 'badge-progress', note: '15% giá bán gồm VAT' });
+            stages.push({ no: 11, label: 'T+660', date: addDays(startDate, 660), gross: X_15, badge: 'badge-progress', note: '15% giá bán gồm VAT' });
+            stages.push({ no: 12, label: 'T+720', date: addDays(startDate, 720), gross: X_15, badge: 'badge-progress', note: '15% giá bán gồm VAT' });
+            stages.push({
+                no: 13, label: 'Bàn giao dự kiến', date: handoverDate, dateLabel: handoverLabel, gross: X_bg25 + C_vat5 + KPBT, badge: 'badge-handover', note: '25% giá bán gồm VAT + VAT 5% + KPBT',
+                subItems: [
+                    { label: '25% giá bán gồm VAT', gross: X_bg25 },
+                    { label: 'VAT 5% giá bán', gross: C_vat5 },
+                    { label: '100% KPBT', gross: KPBT }
+                ]
+            });
+            stages.push({ no: 14, label: 'Thông báo cấp sổ', date: pinkBookDate, dateLabel: pinkBookLabel, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã trả ở Đợt 2 & 8' });
 
             stages.isSplit = true;
             stages.landStages = stages.slice(0, 7);

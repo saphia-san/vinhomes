@@ -19,8 +19,8 @@ function toggleTheme() {
     const btn = document.getElementById('themeToggleBtn');
     if (btn) {
         btn.innerHTML = nowLight
-            ? '<i class="bi bi-moon-stars-fill me-1" style="color:#2563eb;"></i> Giao Diện Tối'
-            : '<i class="bi bi-sun-fill me-1" style="color:#d97706;"></i> Giao Diện Sáng';
+            ? '<i class="bi bi-moon-stars-fill" style="color:#2563eb;"></i><span class="d-none d-sm-inline ms-1"> Giao Diện Tối</span>'
+            : '<i class="bi bi-sun-fill" style="color:#d97706;"></i><span class="d-none d-sm-inline ms-1"> Giao Diện Sáng</span>';
     }
     try { localStorage.setItem('vhp_theme', nowLight ? 'light' : 'dark'); } catch (e) { }
     if (typeof calculate === 'function') {
@@ -114,10 +114,23 @@ function showTab(name) {
         }
         const btn = document.getElementById('tab-' + t + '-btn');
         if (btn) btn.classList.toggle('active', t === name);
+
+        const mBtn = document.getElementById('tab-' + t + '-mobile-btn');
+        if (mBtn) mBtn.classList.toggle('active', t === name);
     });
     if (name === 'compare2') {
         if (typeof initCompare2Tab === 'function') initCompare2Tab();
         if (typeof renderCompare2FullTab === 'function') renderCompare2FullTab();
+    }
+
+    // Smooth scroll to top of active tab content when switching tabs if scrolled down
+    if (window.pageYOffset > 150) {
+        const targetEl = document.getElementById('tab-' + name);
+        if (targetEl) {
+            const rect = targetEl.getBoundingClientRect();
+            const offset = window.innerWidth <= 991 ? 70 : 80;
+            window.scrollTo({ top: Math.max(0, window.pageYOffset + rect.top - offset), behavior: 'smooth' });
+        }
     }
 }
 
@@ -243,9 +256,8 @@ function selectApt(macan) {
 
     const typeLabel = { rough: '🧱 Thô', finished: '🏠 Hoàn thiện', gianXay: '🏗️ Giãn xây' };
     if (document.getElementById('selectedCanLabel')) document.getElementById('selectedCanLabel').textContent = apt.macan;
-    let detail = `${typeLabel[apt.type] || 'Hoàn thiện'} &nbsp;|&nbsp; DT Đất: ${apt.dtDat} m² &nbsp;|&nbsp; DT Xây: ${apt.dtXay} m²<br>`;
-    detail += `Giá trước VAT: <strong style="color:var(--accent-light);">${fmt(apt.priceBeforeVat)} VNĐ</strong>`;
-    detail += `<div class="mt-2"><button type="button" class="btn btn-sm btn-warning fw-bold px-3 py-1 text-dark shadow-sm" onclick="focusOnUnitOnMap('${apt.macan}', true)"><i class="bi bi-geo-alt-fill me-1"></i> Soi Vị Trí Căn Này Trên Bản Đồ 📍</button></div>`;
+    let detail = `<span style="color:#cbd5e1;">${typeLabel[apt.type] || 'Hoàn thiện'} &nbsp;|&nbsp; DT Đất: ${apt.dtDat} m² &nbsp;|&nbsp; DT Xây: ${apt.dtXay} m²</span><br>`;
+    detail += `<span style="color:#cbd5e1; font-size:0.9rem;">Giá trước VAT: </span><strong style="color:#ffd166; font-size:1.15rem; font-weight:800; text-shadow:0 0 10px rgba(255,209,102,0.3);">${fmt(apt.priceBeforeVat)} VNĐ</strong>`;
     if (document.getElementById('selectedCanDetail')) document.getElementById('selectedCanDetail').innerHTML = detail;
     if (document.getElementById('propInfoBox')) document.getElementById('propInfoBox').style.display = 'block';
 
@@ -366,16 +378,20 @@ ${stages.constStages.map(renderSingleRow).join('')}`;
     <td style="font-size:0.78rem;color:var(--text-muted);">KH trả dần ${loanData.termYears} năm</td>
 </tr>` : '';
 
+    const grandLabelText = (loanData && paymentMethod === 'bank')
+        ? 'TỔNG CHI PHÍ KHÁCH HÀNG PHẢI TRẢ (Gốc + Lãi NH)'
+        : 'TỔNG CHI PHÍ KHÁCH HÀNG PHẢI TRẢ';
+
     const grandRow = `
 <tr class="row-grand">
-    <td colspan="2" style="color:var(--accent-light);font-weight:800;font-size:1rem;">
-        <i class="bi bi-wallet2 me-2"></i>TỔNG CHI PHÍ KHÁCH HÀNG PHẢI TRẢ (Gốc + Lãi NH)
+    <td colspan="2" class="grand-title">
+        <i class="bi bi-wallet2 me-2"></i>${grandLabelText}
     </td>
-    <td colspan="3" class="net-amount" style="font-size:1.3rem;">
+    <td colspan="3" class="net-amount">
         ${fmt(grandTotal)} VNĐ
     </td>
-    <td style="font-size:0.78rem;color:var(--text-muted);">
-        CĐT: ${fmt(totalKHtoCDT)} VNĐ${loanData ? ' + NH: ' + fmt(totalKHtoBank) + ' VNĐ' : ''}
+    <td class="grand-note">
+        CĐT: ${fmt(totalKHtoCDT)} VNĐ${(loanData && paymentMethod === 'bank') ? ' + NH: ' + fmt(totalKHtoBank) + ' VNĐ' : ''}
     </td>
 </tr>`;
 
