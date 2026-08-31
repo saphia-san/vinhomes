@@ -1231,16 +1231,36 @@ function showHistoryModal() {
         'bank': 'Vay NH (HTLS 0%)'
     };
 
+    // Clean, crisp, high-contrast light modal palette (preferred by user for both Light & Dark modes)
+    const modalBg = '#ffffff';
+    const modalTextColor = '#0f172a';
+    const tableHeaderBg = '#f1f5f9';
+    const tableHeaderColor = '#0f172a';
+    const rowBorderColor = '#e2e8f0';
+    const timeColor = '#475569';
+    const macanColor = '#0d2e26';
+    const macanBg = '#fef3c7';
+    const priceColor = '#0f172a';
+    const totalColor = '#16a34a';
+
     const tbody = hist.map(r => `
-        <tr style="cursor:pointer;" onclick="restoreHistoryItem('${r.id}')" title="Bấm để tải lại cấu hình căn này">
-            <td style="font-size:11px; color:var(--text-muted);">${r.time}</td>
-            <td style="color:var(--accent-light); font-weight:700;">${r.macan}</td>
-            <td style="font-size:11px;">${methodLabelMap[r.paymentMethod] || r.paymentMethod}</td>
-            <td class="text-end" style="font-size:12px;">${fmt(r.propValue)}</td>
-            <td class="text-end" style="color:#7ecfff; font-weight:700; font-size:12px;">${fmt(r.totalKHtoCDT)}</td>
-            <td class="text-center">
-                <button class="btn btn-sm btn-outline-info py-1 px-2" style="font-size:11px; font-weight:600;" onclick="event.stopPropagation(); restoreHistoryItem('${r.id}')">
-                    <i class="bi bi-arrow-counterclockwise me-1"></i> Tải lại
+        <tr style="cursor:pointer; border-bottom: 1px solid ${rowBorderColor}; background: #ffffff;" 
+            onclick="restoreHistoryItem('${r.id}')" 
+            title="Bấm để tải lại cấu hình căn này">
+            <td style="font-size:12px; color:${timeColor}; white-space:nowrap; padding:10px;">${r.time}</td>
+            <td style="padding:10px;">
+                <span class="badge" style="background:${macanBg}; color:${macanColor}; font-weight:800; font-size:12px; border:1px solid #fde68a; padding:4px 8px;">
+                    ${r.macan}
+                </span>
+            </td>
+            <td style="font-size:12px; font-weight:600; color:${modalTextColor}; white-space:nowrap; padding:10px;">${methodLabelMap[r.paymentMethod] || r.paymentMethod}</td>
+            <td class="text-end" style="font-size:12px; font-weight:600; color:${priceColor}; white-space:nowrap; padding:10px;">${fmt(r.propValue)}</td>
+            <td class="text-end" style="color:${totalColor}; font-weight:800; font-size:13px; white-space:nowrap; padding:10px;">${fmt(r.totalKHtoCDT)}</td>
+            <td class="text-center" style="white-space:nowrap; padding:10px;">
+                <button class="btn btn-sm py-1 px-2 fw-bold" 
+                        style="font-size:11px; background:#0d2e26; color:#ffffff; border:none; border-radius:6px;" 
+                        onclick="event.stopPropagation(); restoreHistoryItem('${r.id}')">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>Tải lại
                 </button>
             </td>
         </tr>
@@ -1248,23 +1268,25 @@ function showHistoryModal() {
 
     if (typeof Swal !== 'undefined') {
         Swal.fire({
-            title: `<i class="bi bi-clock-history me-2"></i>Lịch sử Báo Giá`,
-            html: `<div style="max-height:420px; overflow-y:auto;">
-                <table class="table table-dark table-hover table-sm" style="font-size:13px; text-align:left; vertical-align:middle;">
-                    <thead style="position:sticky; top:0; background:#1a2035; z-index:2;">
+            title: `<span style="color:#0d2e26; font-weight:800;"><i class="bi bi-clock-history me-2"></i>Lịch Sử Báo Giá</span>`,
+            background: modalBg,
+            color: modalTextColor,
+            html: `<div style="max-height:420px; overflow-y:auto; overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:10px; border:1px solid ${rowBorderColor}; background:#ffffff;">
+                <table class="table align-middle m-0" style="font-size:13px; text-align:left; background:#ffffff; color:#0f172a;">
+                    <thead style="position:sticky; top:0; background:${tableHeaderBg}; color:${tableHeaderColor}; z-index:2; border-bottom:2px solid #cbd5e1;">
                         <tr>
-                            <th>Thời gian</th>
-                            <th>Mã Căn</th>
-                            <th>PTTT</th>
-                            <th class="text-end">Giá chưa VAT</th>
-                            <th class="text-end">Thực trả CĐT</th>
-                            <th class="text-center">Thao tác</th>
+                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Thời gian</th>
+                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Mã Căn</th>
+                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700;">PTTT</th>
+                            <th class="text-end" style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Giá chưa VAT</th>
+                            <th class="text-end" style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Thực trả CĐT</th>
+                            <th class="text-center" style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody>${tbody}</tbody>
+                    <tbody style="color:#0f172a; background:#ffffff;">${tbody}</tbody>
                 </table>
             </div>`,
-            width: 780,
+            width: 820,
             showCancelButton: true,
             confirmButtonText: 'Đóng',
             cancelButtonColor: '#e74c3c',

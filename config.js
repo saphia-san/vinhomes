@@ -57,7 +57,7 @@ var SALES_POLICY = {
 
     /* Khuyến mãi & Quà tặng – CSBH V08 (29/08/2026) */
     promotions: {
-        earlyMoveIn: 10.0,           // 10% trên Giá BĐS
+        earlyMoveIn: 5.0,            // 5% Trừ trực tiếp vào Giá BĐS (5% còn lại nhận hoàn tiền mặt khi về ở sớm)
         aquafield: 20_000_000,       // VNĐ – 500 căn đầu tiên
         goldGift: {                  // Từ 29/08/2026 đến hết 10/09/2026
             under10b:    15_000_000,  // Dưới 10 tỷ -> 1 chỉ (15tr)

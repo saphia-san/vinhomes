@@ -1240,50 +1240,33 @@
                 </div>
             </div>
 
-            <!-- 2.05 TRÌNH XEM SOI CĂN PDF PHÂN LÔ 4K VECTOR -->
-            <div id="sec-pdf-map" class="card-custom sec-card-theme mb-5 p-4 p-md-5"
+            <!-- 2.05 TRÌNH XEM SOI CĂN VECTOR PDF GỐC (SALER TỰ ZOOM NÉT CĂNG 100%) -->
+            <div id="sec-pdf-map" class="card-custom sec-card-theme mb-5 p-3 p-md-4"
                 style="border-left: 6px solid #ffd166;">
-                <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-3">
+                <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
                     <div>
                         <span class="badge mb-2"
                             style="background:#ffd166; color:#0d2e26; font-size:0.85rem; font-weight:800; padding: 6px 14px;">
-                            <i class="bi bi-search me-1"></i> TRA CỨU VỊ TRÍ TỪNG CĂN
+                            <i class="bi bi-file-earmark-pdf-fill me-1"></i> SƠ ĐỒ MẶT BẰNG QUY HOẠCH PHÂN LÔ PDF GỐC
                         </span>
                         <h3 class="fw-bold mb-0"
-                            style="font-size:1.6rem; font-family:'Be Vietnam Pro', sans-serif; text-transform: uppercase;">
-                            <i class="bi bi-file-earmark-pdf-fill me-2" style="color:#ffd166;"></i>Sơ Đồ Quy Hoạch Phân Lô Chi Tiết
+                            style="font-size:1.5rem; font-family:'Be Vietnam Pro', sans-serif; text-transform: uppercase;">
+                            <i class="bi bi-map-fill me-2" style="color:#ffd166;"></i>Bản Đồ Quy Hoạch Phân Lô Chi Tiết (Vector PDF Cực Nét)
                         </h3>
                     </div>
 
-                    <!-- Nút Thao Tác Tải File PDF -->
                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <a href="assets/VHSP.pdf" download="MatBangPhanLo_VinhomesSaigonPark.pdf"
-                            class="btn btn-sm btn-outline-warning fw-bold px-3 py-2" style="border-radius:8px;">
-                            <i class="bi bi-download me-1"></i> Tải File PDF Gốc (7.7 MB)
+                        <a href="assets/VHSP.pdf" target="_blank" class="btn btn-sm btn-warning fw-bold px-3 py-2 shadow-sm" style="border-radius:8px;">
+                            <i class="bi bi-box-arrow-up-right me-1"></i> Mở PDF Trong Thẻ Mới
                         </a>
                     </div>
                 </div>
 
-                <!-- Khung Trình Xem PDF Siêu Nhanh & Mượt Mà (Không Lag trên Điện Thoại & Máy Tính) -->
-                <div id="pdfViewerContainer"
-                    class="position-relative overflow-hidden rounded-4 shadow-sm border text-center d-flex flex-column align-items-center justify-content-center p-4 p-md-5"
-                    style="border:2px solid rgba(255,209,102,0.4) !important; background:#071c16; min-height:360px;">
-
-                    <div class="position-relative z-2 p-3 p-md-4 rounded-4 w-100" style="background:#0d2e26; border:1px solid rgba(255,209,102,0.3); max-width:650px;">
-                        <i class="bi bi-file-earmark-pdf-fill mb-2" style="font-size:3rem; color:#ffd166; display:block;"></i>
-                        <h4 class="fw-bold text-white mb-3" style="font-size:1.25rem;">Sơ Đồ Quy Hoạch Phân Lô Chi Tiết (Bản PDF Vector)</h4>
-
-                        <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
-                            <a href="assets/VHSP.pdf" target="_blank" class="btn btn-warning fw-bold px-4 py-2 text-dark shadow-sm"
-                                style="border-radius:10px;">
-                                <i class="bi bi-arrows-fullscreen me-2"></i>Mở Xem Trực Tiếp Mượt Nhất (Zoom 500%+)
-                            </a>
-                            <button type="button" onclick="loadPdfViewer()"
-                                class="btn btn-outline-warning fw-bold px-4 py-2" style="border-radius:10px;">
-                                <i class="bi bi-play-circle-fill me-2"></i>Nạp Trình Xem Ngay Tại Trang
-                            </button>
-                        </div>
-                    </div>
+                <!-- Khung Trình Xem Vector PDF Gốc Trực Quan Cực Nét -->
+                <div class="position-relative rounded-4 overflow-hidden border shadow-lg"
+                    style="border:2px solid rgba(255,209,102,0.4) !important; background:#051410; min-height: 720px;">
+                    <iframe src="assets/VHSP.pdf#toolbar=1&navpanes=0&scrollbar=1" class="w-100 h-100 border-0"
+                        style="min-height: 720px; display: block; background: #051410;" title="Sơ đồ mặt bằng phân lô Vinhomes Sài Gòn Park PDF"></iframe>
                 </div>
             </div>
 
@@ -1853,7 +1836,7 @@
                             <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg"
                                 style="padding: 8px; min-height:360px;">
                                 <img id="sec-tien-ich-startup-main-img"
-                                    src="assets/Làng Khởi Nghiệp - Saigon Startup Village 2.3ha/1784778936025_1471936595886940955_g4376460951761607370_d178e5eca69c5dbd127a0638d61bd7b6.jpg"
+                                    src="assets/saigon-startup-village/1784778936025_1471936595886940955_g4376460951761607370_d178e5eca69c5dbd127a0638d61bd7b6.jpg"
                                     loading="lazy" decoding="async"
                                     class="img-fluid w-100 hover-lift cursor-pointer rounded-3"
                                     style="max-height: 520px; object-fit: contain; transition: opacity 0.2s ease, transform 0.3s ease;"
@@ -1873,21 +1856,21 @@
                             <div class="row g-2 overflow-x-hidden scrollbar-thin"
                                 style="max-height: 520px; overflow-y: auto;">
                                 <div class="col-6">
-                                    <img src="assets/Làng Khởi Nghiệp - Saigon Startup Village 2.3ha/1784778936025_1471936595886940955_g4376460951761607370_d178e5eca69c5dbd127a0638d61bd7b6.jpg"
+                                    <img src="assets/saigon-startup-village/1784778936025_1471936595886940955_g4376460951761607370_d178e5eca69c5dbd127a0638d61bd7b6.jpg"
                                         loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 2px solid #ffd166; box-shadow: 0 0 10px rgba(255,209,102,0.5); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-startup-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Làng Khởi Nghiệp - Saigon Startup Village 2.3ha/1784778936031_1471936595886940955_g4376460951761607370_2b2f40ed4b8ea0afb65149ec2cd612d4.jpg"
+                                    <img src="assets/saigon-startup-village/1784778936031_1471936595886940955_g4376460951761607370_2b2f40ed4b8ea0afb65149ec2cd612d4.jpg"
                                         loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-startup-main-img', this)">
                                 </div>
                                 <div class="col-12">
-                                    <img src="assets/Làng Khởi Nghiệp - Saigon Startup Village 2.3ha/1784778936036_1471936595886940955_g4376460951761607370_1156897c6afdc889e2f989483d001ed8.jpg"
+                                    <img src="assets/saigon-startup-village/1784778936036_1471936595886940955_g4376460951761607370_1156897c6afdc889e2f989483d001ed8.jpg"
                                         loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/9; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
@@ -1915,7 +1898,7 @@
                             <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg"
                                 style="padding: 8px; min-height:360px;">
                                 <img id="sec-tien-ich-fashion-main-img"
-                                    src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908570_1471936595886940955_g4376460951761607370_c613c81ea174833f279a145506150ae2.jpg"
+                                    src="assets/trendy-fashion-town/1784778908570_1471936595886940955_g4376460951761607370_c613c81ea174833f279a145506150ae2.jpg"
                                     loading="lazy" decoding="async"
                                     class="img-fluid w-100 hover-lift cursor-pointer rounded-3"
                                     style="max-height: 520px; object-fit: contain; transition: opacity 0.2s ease, transform 0.3s ease;"
@@ -1935,28 +1918,28 @@
                             <div class="row g-2 overflow-x-hidden scrollbar-thin"
                                 style="max-height: 520px; overflow-y: auto;">
                                 <div class="col-6">
-                                    <img src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908570_1471936595886940955_g4376460951761607370_c613c81ea174833f279a145506150ae2.jpg"
+                                    <img src="assets/trendy-fashion-town/1784778908570_1471936595886940955_g4376460951761607370_c613c81ea174833f279a145506150ae2.jpg"
                                         loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 2px solid #ffd166; box-shadow: 0 0 10px rgba(255,209,102,0.5); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-fashion-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908575_1471936595886940955_g4376460951761607370_64e320a4e21ff91dc8cd389603fe19bc.jpg"
+                                    <img src="assets/trendy-fashion-town/1784778908575_1471936595886940955_g4376460951761607370_64e320a4e21ff91dc8cd389603fe19bc.jpg"
                                         loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-fashion-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908580_1471936595886940955_g4376460951761607370_c7023d5ed8a950186f880711b60d8162.jpg"
+                                    <img src="assets/trendy-fashion-town/1784778908580_1471936595886940955_g4376460951761607370_c7023d5ed8a950186f880711b60d8162.jpg"
                                         loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-fashion-main-img', this)">
                                 </div>
                                 <div class="col-6">
-                                    <img src="assets/Phối cảnh làng thời trang Trendy Fashion Town 2,3ha/1784778908583_1471936595886940955_g4376460951761607370_e00ebc2decbbedd4bde1e2b5a60c168c.jpg"
+                                    <img src="assets/trendy-fashion-town/1784778908583_1471936595886940955_g4376460951761607370_e00ebc2decbbedd4bde1e2b5a60c168c.jpg"
                                         loading="lazy" decoding="async"
                                         class="img-fluid w-100 rounded-3 shadow-sm hover-lift cursor-pointer"
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
@@ -3615,11 +3598,13 @@
     <script src="gallery_data.js"></script>
     <script src="gallery_lightbox.js?v=20260829_1358"></script>
     <script src="data.js"></script>
-    <script src="config.js"></script>
-    <script src="calculator.js"></script>
+    <script src="map_coordinates.js?v=20260830_2310"></script>
+    <script src="map_engine.js?v=20260830_2323"></script>
+    <script src="config.js?v=20260830_2332"></script>
+    <script src="calculator.js?v=20260830_2332"></script>
     <script src="charts.js?v=20260829_2047"></script>
     <script src="export_card.js?v=20260829_2055"></script>
-    <script src="ui.js"></script>
+    <script src="ui.js?v=20260830_2334"></script>
 
     <script>
         function loadPdfViewer() {

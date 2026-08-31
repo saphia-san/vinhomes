@@ -293,12 +293,15 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
         ckDetails.push({ label: '🛡️ Từ chối bảo lãnh ngân hàng (0.5%)', pct: noBlnhPct, vnd: ckAmt });
     }
 
-    if (promoEarlyMoveIn && apt.type !== 'gianXay') {
+    if (promoEarlyMoveIn) {
         const baseEarlyMoveIn = currentLandPrice + gVnd;
         const ckAmt = Math.round(baseEarlyMoveIn * (SP.promotions.earlyMoveIn / 100));
         currentLandPrice -= ckAmt;
         totalCkVnd += ckAmt;
-        ckDetails.push({ label: '🏠 Cam kết về ở sớm', pct: SP.promotions.earlyMoveIn, vnd: ckAmt });
+        ckDetails.push({ label: '🏠 Cam kết về ở sớm (Trừ vào giá: 5%)', pct: SP.promotions.earlyMoveIn, vnd: ckAmt });
+        // Bổ sung 5% hoàn tiền mặt khi về ở sớm (Không trừ vào giá hợp đồng)
+        const cashBackAmt = ckAmt;
+        ckDetails.push({ label: '🎁 Cam kết về ở sớm (Nhận hoàn tiền mặt sau khi ở: 5%)', pct: 5.0, vnd: cashBackAmt, nonDeductible: true });
     }
 
     if (promoVoucher && voucherAmount > 0) {
