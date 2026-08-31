@@ -144,11 +144,11 @@ function calcLoan(principal, annualRatePct, termYears, supportPlan, disbursement
 function calculate(silent = false, returnOnly = false, overrideMethod = null, overrideSupportIdx = null, overrideApt = null) {
     // Lấy dữ liệu căn hộ (ưu tiên từ overrideApt, selectedApt, fallback autocomplete hoặc nhập thủ công)
     let apt = overrideApt || ((typeof selectedApt !== 'undefined') ? selectedApt : null);
-    
+
     if (!apt && typeof document !== 'undefined' && document.getElementById('searchApt')) {
         const searchVal = document.getElementById('searchApt').value.trim().toUpperCase().replace(/\s+/g, '');
         if (searchVal && typeof APARTMENT_DATA !== 'undefined') {
-            const found = APARTMENT_DATA.find(a => 
+            const found = APARTMENT_DATA.find(a =>
                 a.macan.toUpperCase().replace(/\s+/g, '') === searchVal ||
                 a.macan.toUpperCase().replace(/\s+/g, '').includes(searchVal)
             );
@@ -195,7 +195,7 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
     const promoNoBlnh = doc && doc.getElementById('promo_noBlnh') ? doc.getElementById('promo_noBlnh').checked : false;
     const promoGoldGift = doc && doc.getElementById('promo_goldGift') ? doc.getElementById('promo_goldGift').checked : false;
     const promoVoucher = doc && doc.getElementById('promo_voucher') ? doc.getElementById('promo_voucher').checked : false;
-    
+
     let voucherAmount = 0;
     if (promoVoucher && doc && doc.getElementById('oldHousePrice')) {
         const oldPrice = parseNum(doc.getElementById('oldHousePrice').value);
@@ -228,7 +228,6 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
     }
     let currentLandPrice = baseLandPrice;
     let totalCkVnd = 0;
-    let gVnd = 0;
 
     // a) Quà tặng Vàng
     if (promoGoldGift) {
@@ -236,12 +235,16 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
         let goldLabel = '🥇 Quà tặng Vàng';
         if (goldVal !== 'auto') {
             const count = parseInt(goldVal, 10);
-            gVnd = count * 15_000_000;
+            const gVnd = count * 15_000_000;
             goldLabel = `🥇 Quà tặng Vàng (${count} chỉ)`;
+            currentLandPrice -= gVnd;
+            totalCkVnd += gVnd;
+            ckDetails.push({ label: goldLabel, pct: 0, vnd: gVnd, deductType: 'gift' });
         } else {
             const origPA = breakdownPrice(baseLandPrice, apt.dtDat, apt.dtXay, apt.type, tienSDĐ, fixedKpbt);
             const origAllin = origPA.allin;
             const gMap = SP.promotions.goldGift;
+            let gVnd = 0;
             if (origAllin >= 20e9) {
                 gVnd = gMap.over20b;
                 goldLabel = '🥇 Quà tặng Vàng (5 chỉ – căn từ 20 tỷ)';
@@ -252,13 +255,13 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
                 gVnd = gMap.under10b;
                 goldLabel = '🥇 Quà tặng Vàng (1 chỉ – căn dưới 10 tỷ)';
             }
+            currentLandPrice -= gVnd;
+            totalCkVnd += gVnd;
+            ckDetails.push({ label: goldLabel, pct: 0, vnd: gVnd, deductType: 'gift' });
         }
-        currentLandPrice -= gVnd;
-        totalCkVnd += gVnd;
-        ckDetails.push({ label: goldLabel, pct: 0, vnd: gVnd });
     }
 
-    // b) Chiết khấu % (tính lùi)
+    // b) Chiết khấu % Chính Sách Thanh Toán (TTS & BLNH)
     const ckPctList = [];
     if (paymentMethod === 'own-early') {
         const today = startDate || new Date();
@@ -281,38 +284,41 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             const ckAmt = Math.round(currentLandPrice * (c.pct / 100));
             currentLandPrice -= ckAmt;
             totalCkVnd += ckAmt;
-            ckDetails.push({ label: c.label, pct: c.pct, vnd: ckAmt });
+            ckDetails.push({ label: c.label, pct: c.pct, vnd: ckAmt, deductType: 'price' });
         }
     }
 
     if (promoNoBlnh) {
         const noBlnhPct = 0.5;
-        const ckAmt = currentLandPrice * (noBlnhPct / 100);
+        const ckAmt = Math.round(currentLandPrice * (noBlnhPct / 100));
         currentLandPrice -= ckAmt;
         totalCkVnd += ckAmt;
-        ckDetails.push({ label: '🛡️ Từ chối bảo lãnh ngân hàng (0.5%)', pct: noBlnhPct, vnd: ckAmt });
+        ckDetails.push({ label: '🛡️ Từ chối bảo lãnh ngân hàng (0.5%)', pct: noBlnhPct, vnd: ckAmt, deductType: 'price' });
     }
 
-    if (promoEarlyMoveIn) {
-        const baseEarlyMoveIn = currentLandPrice + gVnd;
-        const ckAmt = Math.round(baseEarlyMoveIn * (SP.promotions.earlyMoveIn / 100));
-        currentLandPrice -= ckAmt;
-        totalCkVnd += ckAmt;
-        ckDetails.push({ label: '🏠 Cam kết về ở sớm (Trừ vào giá: 5%)', pct: SP.promotions.earlyMoveIn, vnd: ckAmt });
-        // Bổ sung 5% hoàn tiền mặt khi về ở sớm (Không trừ vào giá hợp đồng)
-        const cashBackAmt = ckAmt;
-        ckDetails.push({ label: '🎁 Cam kết về ở sớm (Nhận hoàn tiền mặt sau khi ở: 5%)', pct: 5.0, vnd: cashBackAmt, nonDeductible: true });
+    // c) Chiết khấu Cam kết về ở sớm (5% tính trên Giá ĐÃ TRỪ CK TTS & BLNH)
+    if (promoEarlyMoveIn && apt.type !== 'gianXay') {
+        const earlyMoveInAmt = Math.round(currentLandPrice * (SP.promotions.earlyMoveIn / 100));
+        currentLandPrice -= earlyMoveInAmt;
+        totalCkVnd += earlyMoveInAmt;
+        ckDetails.push({ label: '🏠 Cam kết về ở sớm (5% trừ giá HĐ)', pct: SP.promotions.earlyMoveIn, vnd: earlyMoveInAmt, deductType: 'price' });
+        // 5% hoàn tiền mặt sau khi về ở (không trừ vào giá HĐ)
+        ckDetails.push({ label: '🎁 Cam kết về ở sớm (5% hoàn tiền sau khi về ở)', pct: 5.0, vnd: earlyMoveInAmt, deductType: 'cashback' });
     }
 
     if (promoVoucher && voucherAmount > 0) {
-        const maxV = apt.priceBeforeVat * SP.promotions.voucher.maxPercent / 100;
+        const maxV = Math.round(apt.priceBeforeVat * SP.promotions.voucher.maxPercent / 100);
         const applied = Math.min(voucherAmount, maxV);
+        currentLandPrice -= applied;
         totalCkVnd += applied;
-        ckDetails.push({ label: `🎟️ Voucher mua nhà (tối đa 30% = ${fmt(maxV)})`, pct: 0, vnd: applied });
+        ckDetails.push({ label: `🎟️ Voucher mua nhà (tối đa 30% = ${fmt(maxV)})`, pct: 0, vnd: applied, deductType: 'price' });
     }
+
     if (promoAquafield) {
-        ckDetails.push({ label: '🏊 Quà Aquafield (voucher spa)', pct: 0, vnd: SP.promotions.aquafield });
+        ckDetails.push({ label: '🏊 Quà Aquafield (voucher spa)', pct: 0, vnd: SP.promotions.aquafield, deductType: 'gift' });
     }
+
+    currentLandPrice = Math.max(0, currentLandPrice);
 
     // c) Tính lại bộ giá sau chiết khấu
     const PA = breakdownPrice(currentLandPrice, apt.dtDat, apt.dtXay, apt.type, tienSDĐ, fixedKpbt);
@@ -320,6 +326,10 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
     /* --- Bước 2: Lịch thanh toán (Chuẩn Công Ty Tính) --- */
     const DEP = SP.paymentSchedule.deposit; // 300tr
     let stages = [];
+
+    // Nhãn ngày bàn giao dự kiến theo loại căn
+    const handoverLabel = apt.type === 'gianXay' ? 'Quý 4/2028' : 'Quý 4/2027';
+    const pinkBookLabel = 'Theo TB cấp sổ';
 
     if (apt.type === 'gianXay') {
         const LT = PA.land_total;
@@ -336,9 +346,15 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             const L_85 = Math.round(LT * 0.85);
 
             stages.push({ no: 1, label: 'Ký TTĐC (Đất)', date: startDate, gross: DEP, badge: 'badge-deposit', note: 'Cố định 300 triệu VNĐ' });
-            stages.push({ no: 2, label: 'Ký HĐMB (Đất)', date: signDate, gross: L_sign10 + L_5gua, badge: 'badge-sign', note: '10% Đất gồm VAT (trừ cọc) + 5% Đất chưa VAT' });
-            stages.push({ no: 3, label: 'Thanh toán sớm Đất (T+15)', date: addDays(startDate, 15), gross: L_85, badge: 'badge-progress', note: '85% Đất gồm VAT (Thanh toán sớm)' });
-            stages.push({ no: 4, label: 'Thông báo CĐT (Đất)', date: addDays(startDate, 270), gross: L_vat5, badge: 'badge-handover', note: 'VAT 5% giá bán Đất' });
+            stages.push({
+                no: 2, label: 'Ký CN HĐMB (Dự Kiến)', date: signDate, gross: L_sign10 + L_5gua, badge: 'badge-sign', note: '10% giá bán gồm VAT (đã trừ TTĐC) + 5% Chưa gồm VAT',
+                subItems: [
+                    { label: '10% giá bán gồm VAT (đã trừ tiền TTĐC)', gross: L_sign10 },
+                    { label: '5% Chưa gồm VAT', gross: L_5gua }
+                ]
+            });
+            stages.push({ no: 3, label: 'Đợt 2 + 15 ngày', date: addDays(startDate, 15), gross: L_85, badge: 'badge-progress', note: '85% giá bán gồm VAT' });
+            stages.push({ no: 4, label: 'Ngày bàn giao DỰ KIẾN', date: handoverDate, dateLabel: handoverLabel, gross: L_vat5, badge: 'badge-handover', note: 'VAT 5% giá bán Đất' });
 
             const X_d0 = addDays(startDate, 540);
             const X_15 = Math.round(CT * 0.15);
@@ -350,8 +366,8 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             stages.push({ no: 7, label: 'Xây T+600', date: addDays(startDate, 600), gross: X_15, badge: 'badge-progress', note: '15% Xây gồm VAT' });
             stages.push({ no: 8, label: 'Xây T+660', date: addDays(startDate, 660), gross: X_15, badge: 'badge-progress', note: '15% Xây gồm VAT' });
             stages.push({ no: 9, label: 'Xây T+720', date: addDays(startDate, 720), gross: X_15, badge: 'badge-progress', note: '15% Xây gồm VAT' });
-            stages.push({ no: 10, label: 'Bàn giao nhà', date: handoverDate, gross: X_bg25 + C_vat5 + KPBT, badge: 'badge-handover', note: '25% Xây gồm VAT + VAT 5% Xây + KPBT' });
-            stages.push({ no: 11, label: 'Sổ hồng', date: pinkBookDate, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã thanh toán ở Đợt 2 & Đợt 5' });
+            stages.push({ no: 10, label: 'Bàn giao nhà', date: handoverDate, dateLabel: handoverLabel, gross: X_bg25 + C_vat5 + KPBT, badge: 'badge-handover', note: '25% Xây gồm VAT + VAT 5% Xây + KPBT' });
+            stages.push({ no: 11, label: 'Sổ hồng', date: pinkBookDate, dateLabel: pinkBookLabel, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã thanh toán ở Đợt 2 & Đợt 5' });
 
             stages.isSplit = true;
             stages.landStages = stages.slice(0, 4);
@@ -364,10 +380,10 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             const L_bank70 = Math.round(LT * (loanPct / 100));
 
             stages.push({ no: 1, label: 'Ký TTĐC (Đất)', date: startDate, gross: DEP, badge: 'badge-deposit', note: 'Cố định 300 triệu VNĐ' });
-            stages.push({ no: 2, label: 'Ký HĐMB (Đất)', date: signDate, gross: L_sign10 + L_5gua, badge: 'badge-sign', note: '10% Đất (trừ cọc) + 5% Đất chưa VAT' });
+            stages.push({ no: 2, label: 'Ký CN HĐMB (Đất)', date: signDate, gross: L_sign10 + L_5gua, badge: 'badge-sign', note: '10% Đất (trừ cọc) + 5% Đất chưa VAT' });
             stages.push({ no: 3, label: 'Vốn tự có Đợt 3 (T+15)', date: addDays(startDate, 15), gross: L_15, badge: 'badge-progress', note: '15% Đất (gồm VAT)' });
             stages.push({ no: 4, label: 'Ngân hàng giải ngân (T+30)', date: addDays(startDate, 30), gross: L_bank70, badge: 'badge-bank', note: `${loanPct}% Đất (gồm VAT) – NH giải ngân CĐT` });
-            stages.push({ no: 5, label: 'Thông báo CĐT (Đất)', date: addDays(startDate, 270), gross: L_vat5, badge: 'badge-handover', note: 'VAT 5% giá bán Đất' });
+            stages.push({ no: 5, label: 'Thông báo CĐT (Đất)', date: handoverDate, dateLabel: handoverLabel, gross: L_vat5, badge: 'badge-handover', note: 'VAT 5% giá bán Đất' });
 
             const X_d0 = addDays(startDate, 540);
             const X_15 = Math.round(CT * 0.15);
@@ -379,8 +395,8 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             stages.push({ no: 8, label: 'Xây T+600', date: addDays(startDate, 600), gross: X_15, badge: 'badge-progress', note: '15% Xây' });
             stages.push({ no: 9, label: 'Xây T+660', date: addDays(startDate, 660), gross: X_15, badge: 'badge-progress', note: '15% Xây' });
             stages.push({ no: 10, label: 'Xây T+720', date: addDays(startDate, 720), gross: X_15, badge: 'badge-progress', note: '15% Xây' });
-            stages.push({ no: 11, label: 'Bàn giao nhà', date: handoverDate, gross: X_bg25 + C_vat5 + KPBT, badge: 'badge-handover', note: '25% Xây + VAT 5% + KPBT' });
-            stages.push({ no: 12, label: 'Sổ hồng', date: pinkBookDate, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã trả ở Đợt 2 & 6' });
+            stages.push({ no: 11, label: 'Bàn giao nhà', date: handoverDate, dateLabel: handoverLabel, gross: X_bg25 + C_vat5 + KPBT, badge: 'badge-handover', note: '25% Xây + VAT 5% + KPBT' });
+            stages.push({ no: 12, label: 'Sổ hồng', date: pinkBookDate, dateLabel: pinkBookLabel, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã trả ở Đợt 2 & 6' });
 
             stages.isSplit = true;
             stages.landStages = stages.slice(0, 5);
@@ -393,7 +409,7 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             const L_bg25 = Math.round(LT * 0.25);
 
             stages.push({ no: 1, label: 'Đặt cọc (Đất)', date: startDate, gross: DEP, badge: 'badge-deposit', note: 'Cố định 300 triệu VNĐ' });
-            stages.push({ no: 2, label: 'Ký HĐMB (Đất)', date: signDate, gross: L_sign10 + L_5gua, badge: 'badge-sign', note: '10% Đất (trừ cọc) + 5% Đất chưa VAT' });
+            stages.push({ no: 2, label: 'Ký CN HĐMB (Đất)', date: signDate, gross: L_sign10 + L_5gua, badge: 'badge-sign', note: '10% Đất (trừ cọc) + 5% Đất chưa VAT' });
             stages.push({ no: 3, label: 'Đất lần 3 (T+15)', date: addDays(startDate, 15), gross: L_15, badge: 'badge-progress', note: '15% Đất (gồm VAT)' });
             stages.push({ no: 4, label: 'Đất lần 4 (T+60)', date: addDays(startDate, 60), gross: L_15, badge: 'badge-progress', note: '15% Đất (gồm VAT)' });
             stages.push({ no: 5, label: 'Đất lần 5 (T+120)', date: addDays(startDate, 120), gross: L_15, badge: 'badge-progress', note: '15% Đất (gồm VAT)' });
@@ -410,8 +426,8 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             stages.push({ no: 10, label: 'Xây T+600', date: addDays(startDate, 600), gross: X_15, badge: 'badge-progress', note: '15% Xây' });
             stages.push({ no: 11, label: 'Xây T+660', date: addDays(startDate, 660), gross: X_15, badge: 'badge-progress', note: '15% Xây' });
             stages.push({ no: 12, label: 'Xây T+720', date: addDays(startDate, 720), gross: X_15, badge: 'badge-progress', note: '15% Xây' });
-            stages.push({ no: 13, label: 'Bàn giao nhà', date: handoverDate, gross: X_bg25 + C_vat5 + KPBT, badge: 'badge-handover', note: '25% Xây + VAT 5% + KPBT' });
-            stages.push({ no: 14, label: 'Sổ hồng', date: pinkBookDate, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã trả ở Đợt 2 & 8' });
+            stages.push({ no: 13, label: 'Bàn giao nhà', date: handoverDate, dateLabel: handoverLabel, gross: X_bg25 + C_vat5 + KPBT, badge: 'badge-handover', note: '25% Xây + VAT 5% + KPBT' });
+            stages.push({ no: 14, label: 'Sổ hồng', date: pinkBookDate, dateLabel: pinkBookLabel, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã trả ở Đợt 2 & 8' });
 
             stages.isSplit = true;
             stages.landStages = stages.slice(0, 7);
@@ -430,10 +446,22 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             const early85 = Math.round(FV_no_kpbt * 0.85);
 
             stages.push({ no: 1, label: 'Ký TTĐC', date: startDate, gross: DEP, badge: 'badge-deposit', note: 'Cố định 300 triệu VNĐ' });
-            stages.push({ no: 2, label: 'Ký HĐMB / CN HĐMB', date: signDate, gross: sign10 + sign5gua, badge: 'badge-sign', note: '10% gồm VAT (trừ cọc) + 5% chưa VAT' });
-            stages.push({ no: 3, label: 'Thanh toán sớm (T+15)', date: addDays(startDate, 15), gross: early85, badge: 'badge-progress', note: '85% giá bán gồm VAT (Thanh toán sớm)' });
-            stages.push({ no: 4, label: 'Nhận bàn giao nhà', date: handoverDate, gross: vat5 + kpbt, badge: 'badge-handover', note: 'VAT 5% giá bán + 100% KPBT' });
-            stages.push({ no: 5, label: 'Sổ hồng', date: pinkBookDate, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã thanh toán ở Đợt 2' });
+            stages.push({
+                no: 2, label: 'Ký CN HĐMB (Dự Kiến)', date: signDate, gross: sign10 + sign5gua, badge: 'badge-sign', note: '10% giá bán gồm VAT (đã trừ TTĐC) + 5% Chưa gồm VAT',
+                subItems: [
+                    { label: '10% giá bán gồm VAT (đã trừ tiền TTĐC)', gross: sign10 },
+                    { label: '5% Chưa gồm VAT', gross: sign5gua }
+                ]
+            });
+            stages.push({ no: 3, label: 'Đợt 2 + 15 ngày', date: addDays(startDate, 15), gross: early85, badge: 'badge-progress', note: '85% giá bán gồm VAT' });
+            stages.push({
+                no: 4, label: 'Ngày bàn giao DỰ KIẾN', date: handoverDate, dateLabel: handoverLabel, gross: vat5 + kpbt, badge: 'badge-handover', note: 'VAT 5% giá bán + 100% KPBT',
+                subItems: [
+                    { label: 'VAT 5% giá bán', gross: vat5 },
+                    { label: '100% KPBT', gross: kpbt }
+                ]
+            });
+            stages.push({ no: 5, label: 'Theo thông báo cấp sổ', date: pinkBookDate, dateLabel: pinkBookLabel, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã thanh toán ở Đợt 2' });
 
         } else if (paymentMethod === 'own-normal') {
             const prog15 = Math.round(FV_no_kpbt * 0.15);
@@ -445,8 +473,8 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             stages.push({ no: 4, label: 'Lần 4 (T+60)', date: addDays(startDate, 60), gross: prog15, badge: 'badge-progress', note: '15% giá trị gồm VAT' });
             stages.push({ no: 5, label: 'Lần 5 (T+120)', date: addDays(startDate, 120), gross: prog15, badge: 'badge-progress', note: '15% giá trị gồm VAT' });
             stages.push({ no: 6, label: 'Lần 6 (T+180)', date: addDays(startDate, 180), gross: prog15, badge: 'badge-progress', note: '15% giá trị gồm VAT' });
-            stages.push({ no: 7, label: 'Nhận bàn giao', date: handoverDate, gross: bg25 + vat5 + kpbt, badge: 'badge-handover', note: '25% + VAT 5% đảm bảo + KPBT' });
-            stages.push({ no: 8, label: 'Sổ hồng', date: pinkBookDate, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã thanh toán ở Đợt 2' });
+            stages.push({ no: 7, label: 'Nhận bàn giao', date: handoverDate, dateLabel: handoverLabel, gross: bg25 + vat5 + kpbt, badge: 'badge-handover', note: '25% + VAT 5% đảm bảo + KPBT' });
+            stages.push({ no: 8, label: 'Sổ hồng', date: pinkBookDate, dateLabel: pinkBookLabel, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã thanh toán ở Đợt 2' });
 
         } else {
             const bankAmt = Math.round(FV_no_kpbt * (loanPct / 100));
@@ -461,8 +489,8 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
                 stages.push({ no: 3, label: 'Vốn tự có thêm (T+15)', date: addDays(startDate, 15), gross: selfRemaining, badge: 'badge-progress', note: `${100 - loanPct - 15}% phần tự có còn lại` });
             }
             stages.push({ no: 4, label: 'Ngân hàng giải ngân (T+30)', date: addDays(startDate, 30), gross: bankAmt, badge: 'badge-bank', note: `${loanPct}% – NH thanh toán trực tiếp CĐT` });
-            stages.push({ no: 5, label: 'Nhận bàn giao + KPBT', date: handoverDate, gross: kpbt, badge: 'badge-handover', note: 'KPBT 2%' });
-            stages.push({ no: 6, label: 'Sổ hồng', date: pinkBookDate, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã thanh toán ở Đợt 2' });
+            stages.push({ no: 5, label: 'Nhận bàn giao + KPBT', date: handoverDate, dateLabel: handoverLabel, gross: kpbt, badge: 'badge-handover', note: 'KPBT 2%' });
+            stages.push({ no: 6, label: 'Sổ hồng', date: pinkBookDate, dateLabel: pinkBookLabel, gross: 0, badge: 'badge-pink', note: '5% đảm bảo đã thanh toán ở Đợt 2' });
         }
     }
 
@@ -496,7 +524,7 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
     if (paymentMethod === 'bank') {
         const bankStage = stages.find(s => s.label.includes('Ngân hàng'));
         actualBankAmt = bankStage ? bankStage.gross : Math.round((PA.p_land + PA.vat_land) * (loanPct / 100));
-        
+
         if (showBankSim) {
             const plans = (apt.type === 'finished') ? SP.interestSupport.finished : SP.interestSupport.roughAndGianXay;
             loanData = calcLoan(actualBankAmt, interestRate, loanTermYears, plans[supportPlanIdx], addDays(startDate, 30));
@@ -506,7 +534,7 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
     const totalKHtoBank = loanData ? loanData.totalKHPays : 0;
     const contractPrice = totalKHtoCDT + actualBankAmt;
     const grandTotal = (paymentMethod === 'bank') ? contractPrice : (totalKHtoCDT + totalKHtoBank);
-    const ckPct = ckPctList.reduce((a, c) => a + c.pct, 0);
+    const ckPct = ckDetails.filter(d => d.deductType === 'price' && d.pct > 0).reduce((a, d) => a + d.pct, 0);
 
     const resultDataS = {
         macan: apt ? apt.macan : 'Thủ công',
@@ -528,7 +556,7 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
             { id: 'own-early', label: '💰 TTS – Vốn tự có', m: 'own-early', pIdx: null },
             { id: 'own-normal', label: '📋 Tiến độ thường', m: 'own-normal', pIdx: null }
         ];
-        
+
         plans.forEach((p, idx) => {
             methodsToCompare.push({
                 id: 'bank-' + idx,

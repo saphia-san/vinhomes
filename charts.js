@@ -6,6 +6,12 @@
 var activeChartInstances = {};
 
 function destroyChart(canvasId) {
+    if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+        try {
+            const existing = Chart.getChart(canvasId);
+            if (existing) existing.destroy();
+        } catch (e) { console.warn('Error destroying Chart via getChart:', e); }
+    }
     if (activeChartInstances[canvasId]) {
         try {
             activeChartInstances[canvasId].destroy();
@@ -15,12 +21,11 @@ function destroyChart(canvasId) {
 }
 
 function getChartColors() {
-    const isLight = document.body && document.body.classList.contains('light-theme');
     const colors = {
-        textColor: isLight ? '#0f172a' : '#e2e8f0',
-        subTextColor: isLight ? '#475569' : '#94a3b8',
-        gridColor: isLight ? 'rgba(15,23,42,0.12)' : 'rgba(255,255,255,0.08)',
-        angleGridColor: isLight ? 'rgba(15,23,42,0.22)' : 'rgba(255,255,255,0.15)'
+        textColor: '#000000',
+        subTextColor: '#1e293b',
+        gridColor: 'rgba(0, 0, 0, 0.08)',
+        angleGridColor: 'rgba(0, 0, 0, 0.15)'
     };
     if (typeof Chart !== 'undefined' && Chart.defaults) {
         Chart.defaults.color = colors.textColor;
@@ -41,24 +46,87 @@ function renderPriceBreakdownChart(canvasId, PA, S) {
 
     const labels = ['Giá Đất (Chưa VAT)', 'Giá Xây Dựng (Chưa VAT)', 'Thuế GTGT (VAT 10%)', 'Kinh phí bảo trì (KPBT 2%)'];
     const data = [PA.p_land, PA.p_const || 0, (PA.vat_land + PA.vat_const), PA.kpbt];
-    const colors = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899'];
+    
+    const ctx = canvas.getContext('2d');
+    
+    const bgColors = [
+        'rgba(229, 195, 132, 0.30)', // Vàng Cát (Mellow Gold)
+        'rgba(158, 215, 198, 0.30)', // Xanh Bạc Hà (Mint Green)
+        'rgba(153, 203, 235, 0.30)', // Xanh Da Trời Nhạt (Baby Blue)
+        'rgba(226, 169, 155, 0.30)'  // Hồng Đất (Rose Gold)
+    ];
+    const borderColors = ['#D4A855', '#68B8A0', '#66A9D7', '#C98372'];
 
     if (S.totalCkAll > 0) {
         labels.push('Tiết kiệm Chiết khấu');
         data.push(S.totalCkAll);
-        colors.push('#059669');
+        bgColors.push('rgba(203, 185, 235, 0.30)'); // Tím Oải Hương (Soft Lavender)
+        borderColors.push('#A282D7');
     }
 
-    const ctx = canvas.getContext('2d');
+    const centerTextPlugin = {
+        id: 'centerText',
+        afterDraw: function(chart) {
+            try {
+                if (chart.config.type !== 'doughnut') return;
+                var ctx = chart.ctx;
+                var chartArea = chart.chartArea;
+                if (!chartArea || typeof chartArea.left !== 'number') return;
+
+                ctx.save();
+                var dynamicC = getChartColors();
+                
+                var centerX = (chartArea.left + chartArea.right) / 2;
+                var centerY = (chartArea.top + chartArea.bottom) / 2;
+                var innerDim = Math.min(chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+                if (!innerDim || isNaN(innerDim) || innerDim <= 0) {
+                    ctx.restore();
+                    return;
+                }
+
+                var fontScale = innerDim / 220;
+                if (isNaN(fontScale) || fontScale <= 0) fontScale = 1;
+                ctx.textBaseline = "middle";
+                
+                var totalVal = ((PA.p_land || 0) + (PA.p_const || 0) + (PA.vat_land || 0) + (PA.vat_const || 0) + (PA.kpbt || 0)) / 1e9;
+                var textStr = totalVal.toFixed(1) + " Tỷ";
+                
+                // Draw Subtext (TỔNG GIÁ TRỊ)
+                var subFontSize = Math.max(9, Math.round(11 * fontScale));
+                ctx.font = "700 " + subFontSize + "px 'Plus Jakarta Sans'";
+                ctx.fillStyle = dynamicC.subTextColor;
+                var subText = "TỔNG GIÁ TRỊ";
+                var subX = Math.round(centerX - (ctx.measureText(subText).width / 2));
+                var subY = Math.round(centerY - (innerDim * 0.07));
+                ctx.fillText(subText, subX, subY);
+
+                // Draw Main Text (5.2 Tỷ)
+                var mainFontSize = Math.max(13, Math.round(20 * fontScale));
+                ctx.font = "800 " + mainFontSize + "px 'Plus Jakarta Sans'";
+                ctx.fillStyle = dynamicC.textColor;
+                var textX = Math.round(centerX - (ctx.measureText(textStr).width / 2));
+                var textY = Math.round(centerY + (innerDim * 0.08));
+                ctx.fillText(textStr, textX, textY);
+                
+                ctx.restore();
+            } catch (e) {
+                console.error("Error in centerTextPlugin:", e);
+            }
+        }
+    };
+
     activeChartInstances[canvasId] = new Chart(ctx, {
         type: 'doughnut',
+        plugins: [centerTextPlugin],
         data: {
             labels,
             datasets: [{
                 data,
-                backgroundColor: colors,
-                borderColor: document.body && document.body.classList.contains('dark-theme') ? '#0d2e26' : '#ffffff',
-                borderWidth: 2,
+                backgroundColor: bgColors,
+                borderColor: borderColors,
+                borderWidth: 2.5,
+                borderRadius: 4, 
+                spacing: 3, 
                 hoverOffset: 6
             }]
         },
@@ -76,6 +144,13 @@ function renderPriceBreakdownChart(canvasId, PA, S) {
                     }
                 },
                 tooltip: {
+                    backgroundColor: 'rgba(15,23,42,0.95)',
+                    titleFont: { size: 14, family: 'Plus Jakarta Sans', weight: 'bold' },
+                    bodyFont: { size: 13, family: 'Plus Jakarta Sans' },
+                    padding: 12,
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    borderWidth: 1,
+                    cornerRadius: 8,
                     callbacks: {
                         label: function (context) {
                             const val = context.raw || 0;
@@ -84,7 +159,8 @@ function renderPriceBreakdownChart(canvasId, PA, S) {
                     }
                 }
             },
-            cutout: '65%'
+            cutout: '75%',
+            layout: { padding: 10 }
         }
     });
 }
@@ -118,28 +194,44 @@ function renderMethodComparisonChart(canvasId, results) {
     });
 
     const ctx = canvas.getContext('2d');
+
     activeChartInstances[canvasId] = new Chart(ctx, {
         type: 'bar',
         data: {
             labels,
             datasets: [
                 {
-                    label: 'Vốn tự có trả CĐT (Tỷ VNĐ)',
+                    label: 'Vốn tự có trả CĐT',
                     data: khPaysData,
-                    backgroundColor: '#f59e0b',
-                    borderRadius: 6
+                    backgroundColor: 'rgba(229, 195, 132, 0.35)', // Vàng Cát (Mellow Gold)
+                    borderColor: '#D4A855',
+                    borderWidth: 1.5,
+                    borderRadius: 4,
+                    borderSkipped: 'bottom',
+                    barPercentage: 0.6,
+                    categoryPercentage: 0.75
                 },
                 {
-                    label: 'Ngân hàng giải ngân (Tỷ VNĐ)',
+                    label: 'Ngân hàng giải ngân',
                     data: bankPaysData,
-                    backgroundColor: '#3b82f6',
-                    borderRadius: 6
+                    backgroundColor: 'rgba(153, 203, 235, 0.35)', // Xanh Da Trời Nhạt (Baby Blue)
+                    borderColor: '#66A9D7',
+                    borderWidth: 1.5,
+                    borderRadius: 4,
+                    borderSkipped: 'bottom',
+                    barPercentage: 0.6,
+                    categoryPercentage: 0.75
                 },
                 {
-                    label: 'Tổng chi phí (Tỷ VNĐ)',
+                    label: 'Tổng chi phí',
                     data: totalCostData,
-                    backgroundColor: '#10b981',
-                    borderRadius: 6
+                    backgroundColor: 'rgba(158, 215, 198, 0.35)', // Xanh Bạc Hà (Mint Green)
+                    borderColor: '#68B8A0',
+                    borderWidth: 1.5,
+                    borderRadius: 4,
+                    borderSkipped: 'bottom',
+                    barPercentage: 0.6,
+                    categoryPercentage: 0.75
                 }
             ]
         },
@@ -149,9 +241,16 @@ function renderMethodComparisonChart(canvasId, results) {
             plugins: {
                 legend: {
                     position: 'top',
-                    labels: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' }, usePointStyle: true }
+                    labels: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' }, usePointStyle: true, padding: 15 }
                 },
                 tooltip: {
+                    backgroundColor: 'rgba(15,23,42,0.95)',
+                    titleFont: { size: 14, family: 'Plus Jakarta Sans', weight: 'bold' },
+                    bodyFont: { size: 13, family: 'Plus Jakarta Sans' },
+                    padding: 12,
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    borderWidth: 1,
+                    cornerRadius: 8,
                     callbacks: {
                         label: (ctx) => ` ${ctx.dataset.label}: ${ctx.raw} Tỷ VNĐ`
                     }
@@ -159,13 +258,14 @@ function renderMethodComparisonChart(canvasId, results) {
             },
             scales: {
                 x: {
-                    ticks: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } },
-                    grid: { color: C.gridColor }
+                    ticks: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '700' } },
+                    grid: { display: false }
                 },
                 y: {
-                    ticks: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } },
-                    grid: { color: C.gridColor },
-                    title: { display: true, text: 'Tỷ VNĐ', color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } }
+                    ticks: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '700' } },
+                    grid: { color: C.gridColor, borderDash: [5, 5] },
+                    title: { display: true, text: 'Tỷ VNĐ', color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } },
+                    border: { display: false }
                 }
             }
         }
@@ -201,6 +301,11 @@ function renderLoanScheduleChart(canvasId, loanData) {
     const cdtSupportedData = Object.values(yearly).map(y => ((y.interest - y.khInterest) / 1e6).toFixed(0));
 
     const ctx = canvas.getContext('2d');
+    
+    const gradLine = ctx.createLinearGradient(0, 0, 0, 400);
+    gradLine.addColorStop(0, 'rgba(245,158,11,0.5)');
+    gradLine.addColorStop(1, 'rgba(245,158,11,0.0)');
+
     activeChartInstances[canvasId] = new Chart(ctx, {
         type: 'line',
         data: {
@@ -210,28 +315,37 @@ function renderLoanScheduleChart(canvasId, loanData) {
                     label: 'Dư nợ còn lại (Tỷ VNĐ)',
                     data: balanceData,
                     borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245,158,11,0.15)',
+                    backgroundColor: gradLine,
                     fill: true,
-                    tension: 0.3,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#fcd34d',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
                     yAxisID: 'y'
                 },
                 {
                     label: 'Lãi KH phải trả/năm (Tr VNĐ)',
                     data: khInterestData,
                     borderColor: '#ef4444',
-                    backgroundColor: '#ef4444',
-                    type: 'bar',
-                    yAxisID: 'y1',
-                    borderRadius: 4
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    pointRadius: 3,
+                    yAxisID: 'y1'
                 },
                 {
-                    label: 'Lãi CĐT hỗ trợ 0%/năm (Tr VNĐ)',
+                    label: 'CĐT Hỗ trợ lãi (Tr VNĐ)',
                     data: cdtSupportedData,
                     borderColor: '#10b981',
-                    backgroundColor: '#10b981',
-                    type: 'bar',
-                    yAxisID: 'y1',
-                    borderRadius: 4
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    yAxisID: 'y1'
                 }
             ]
         },
@@ -241,26 +355,47 @@ function renderLoanScheduleChart(canvasId, loanData) {
             plugins: {
                 legend: {
                     position: 'top',
-                    labels: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' }, usePointStyle: true }
+                    labels: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' }, usePointStyle: true, padding: 15 }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15,23,42,0.95)',
+                    titleFont: { size: 14, family: 'Plus Jakarta Sans', weight: 'bold' },
+                    bodyFont: { size: 13, family: 'Plus Jakarta Sans' },
+                    padding: 12,
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    mode: 'index',
+                    intersect: false
                 }
             },
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            },
             scales: {
-                x: { ticks: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } }, grid: { color: C.gridColor } },
+                x: { 
+                    ticks: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '700' } }, 
+                    grid: { display: false } 
+                },
                 y: {
                     type: 'linear',
                     display: true,
                     position: 'left',
-                    ticks: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } },
+                    ticks: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '700' } },
                     title: { display: true, text: 'Dư nợ (Tỷ VNĐ)', color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } },
-                    grid: { color: C.gridColor }
+                    grid: { color: C.gridColor, borderDash: [5, 5] },
+                    border: { display: false }
                 },
                 y1: {
                     type: 'linear',
                     display: true,
                     position: 'right',
-                    ticks: { color: '#ef4444', font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } },
+                    ticks: { color: '#ef4444', font: { family: 'Plus Jakarta Sans', size: 12, weight: '700' } },
                     title: { display: true, text: 'Tiền lãi (Triệu VNĐ)', color: '#ef4444', font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } },
-                    grid: { drawOnChartArea: false }
+                    grid: { drawOnChartArea: false },
+                    border: { display: false }
                 }
             }
         }
@@ -278,23 +413,28 @@ function renderRadarComparisonChart(canvasId, res1, res2) {
     destroyChart(canvasId);
     const C = getChartColors();
 
-    const labels = ['Giá HĐMB', 'Vốn Tự Có 30%', 'Diện Tích Đất', 'Chiết Khấu %', 'Đơn Giá/m2'];
+    const labels = ['Tổng Giá Thực Trả', 'Vốn Tự Có Đợt 1', 'Đơn Giá Đất / m²', 'Tổng % Chiết Khấu', 'Diện Tích Đất (m²)'];
 
-    const maxVal = Math.max(res1.grandTotal, res2.grandTotal) || 1;
+    const maxTotal = Math.max(res1.grandTotal, res2.grandTotal) || 1;
+    const maxEquity = Math.max(res1.totalKHtoCDT, res2.totalKHtoCDT) || 1;
+    const maxSqm = Math.max(res1.propValue / (res1.dtDat || 1), res2.propValue / (res2.dtDat || 1)) || 1;
+    const maxCk = Math.max(res1.ckPct, res2.ckPct) || 1;
+    const maxArea = Math.max(res1.dtDat || 50, res2.dtDat || 50) || 1;
+
     const data1 = [
-        Math.round((res1.grandTotal / maxVal) * 100),
-        Math.round(((res1.totalKHtoCDT || res1.grandTotal * 0.3) / maxVal) * 100),
-        Math.min(100, Math.round((res1.propValue / 1e8))),
-        Math.round(res1.ckPct * 5),
-        80
+        Math.round((res1.grandTotal / maxTotal) * 100),
+        Math.round((res1.totalKHtoCDT / maxEquity) * 100),
+        Math.round(((res1.propValue / (res1.dtDat || 1)) / maxSqm) * 100),
+        Math.round((res1.ckPct / maxCk) * 100),
+        Math.round(((res1.dtDat || 50) / maxArea) * 100)
     ];
 
     const data2 = [
-        Math.round((res2.grandTotal / maxVal) * 100),
-        Math.round(((res2.totalKHtoCDT || res2.grandTotal * 0.3) / maxVal) * 100),
-        Math.min(100, Math.round((res2.propValue / 1e8))),
-        Math.round(res2.ckPct * 5),
-        75
+        Math.round((res2.grandTotal / maxTotal) * 100),
+        Math.round((res2.totalKHtoCDT / maxEquity) * 100),
+        Math.round(((res2.propValue / (res2.dtDat || 1)) / maxSqm) * 100),
+        Math.round((res2.ckPct / maxCk) * 100),
+        Math.round(((res2.dtDat || 50) / maxArea) * 100)
     ];
 
     const ctx = canvas.getContext('2d');
@@ -304,18 +444,20 @@ function renderRadarComparisonChart(canvasId, res1, res2) {
             labels,
             datasets: [
                 {
-                    label: `Căn 1 (${res1.macan})`,
+                    label: `Căn A (${res1.macan || 'CĂN A'})`,
                     data: data1,
                     borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245,158,11,0.25)',
-                    pointBackgroundColor: '#f59e0b'
+                    backgroundColor: 'rgba(245,158,11,0.3)',
+                    pointBackgroundColor: '#f59e0b',
+                    borderWidth: 2.5
                 },
                 {
-                    label: `Căn 2 (${res2.macan})`,
+                    label: `Căn B (${res2.macan || 'CĂN B'})`,
                     data: data2,
-                    borderColor: '#3b82f6',
-                    backgroundColor: 'rgba(59,130,246,0.25)',
-                    pointBackgroundColor: '#3b82f6'
+                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(56,189,248,0.3)',
+                    pointBackgroundColor: '#38bdf8',
+                    borderWidth: 2.5
                 }
             ]
         },
@@ -330,7 +472,9 @@ function renderRadarComparisonChart(canvasId, res1, res2) {
                     angleLines: { color: C.angleGridColor },
                     grid: { color: C.angleGridColor },
                     pointLabels: { color: C.textColor, font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' } },
-                    ticks: { display: false }
+                    ticks: { display: false },
+                    suggestedMin: 0,
+                    suggestedMax: 100
                 }
             }
         }

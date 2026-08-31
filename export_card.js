@@ -21,6 +21,14 @@ function openExportModal(S) {
         modalEl = document.getElementById('exportCardModal');
     }
 
+    const savedName = localStorage.getItem('vsp_sale_name') || 'Nguyễn Văn A';
+    const savedPhone = localStorage.getItem('vsp_sale_phone') || '0901 234 567';
+    const savedCustomer = localStorage.getItem('vsp_customer_name') || 'Anh/Chị Khách Hàng';
+
+    if (document.getElementById('exportSaleName')) document.getElementById('exportSaleName').value = savedName;
+    if (document.getElementById('exportSalePhone')) document.getElementById('exportSalePhone').value = savedPhone;
+    if (document.getElementById('exportCustomerName')) document.getElementById('exportCustomerName').value = savedCustomer;
+
     updateQuotationPreview();
 
     if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
@@ -39,10 +47,14 @@ function updateQuotationPreview() {
     const S = currentExportSData;
     if (!S) return;
 
-    const saleName = document.getElementById('exportSaleName') ? document.getElementById('exportSaleName').value : 'Chuyên Viên Tư Vấn';
+    const saleName = document.getElementById('exportSaleName') ? document.getElementById('exportSaleName').value : 'Nguyễn Văn A';
     const salePhone = document.getElementById('exportSalePhone') ? document.getElementById('exportSalePhone').value : '0901 234 567';
     const customerName = document.getElementById('exportCustomerName') ? document.getElementById('exportCustomerName').value : 'Quý Khách Hàng';
     const theme = document.getElementById('exportTheme') ? document.getElementById('exportTheme').value : 'gold';
+
+    localStorage.setItem('vsp_sale_name', saleName);
+    localStorage.setItem('vsp_sale_phone', salePhone);
+    localStorage.setItem('vsp_customer_name', customerName);
 
     const container = document.getElementById('quotationCardPreview');
     if (!container) return;
@@ -224,7 +236,7 @@ function updateQuotationPreview() {
     <div style="display:flex; justify-content:space-between; align-items:center; border-top:1.5px solid ${goldColor}; padding-top:20px; font-size:0.78rem; color:${mutedColor};">
         <div>
             <div style="font-weight:700; color:${textColor};">Vinhomes Sài Gòn Park – Đô Thị Tri Thức 1.080 ha</div>
-            <div>Báo giá mang tính chất minh họa phương án tài chính chuẩn xác.</div>
+            <div>Báo giá mang tính chất tham khảo minh họa phương án tài chính theo CSBH CĐT.</div>
         </div>
         <div style="text-align:right;">
             <div style="font-weight:800; color:${goldColor}; font-size:0.85rem;">CẢM ƠN QUÝ KHÁCH HÀNG!</div>
@@ -323,6 +335,229 @@ function createExportModalHTML() {
 
 function closeExportModal() {
     const modalEl = document.getElementById('exportCardModal');
+    if (modalEl) {
+        modalEl.style.display = 'none';
+        modalEl.classList.remove('show');
+    }
+}
+
+/* =============================================================
+   MODULE XUẤT ẢNH SO SÁNH 2 CĂN HỘ (2-APARTMENT COMPARISON EXPORT)
+   ============================================================= */
+
+/**
+ * Mở modal tùy chỉnh thông tin sale/khách hàng cho bảng so sánh 2 căn
+ */
+function exportCompare2Image() {
+    const container = document.getElementById('compare2FullContent');
+    if (!container || !container.children.length) {
+        alert('Vui lòng chọn mã 2 căn hộ và bấm So Sánh trước khi xuất ảnh!');
+        return;
+    }
+
+    let modalEl = document.getElementById('exportCompareCardModal');
+    if (!modalEl) {
+        createExportCompareModalHTML();
+        modalEl = document.getElementById('exportCompareCardModal');
+    }
+
+    const savedName = localStorage.getItem('vsp_sale_name') || 'Nguyễn Văn A';
+    const savedPhone = localStorage.getItem('vsp_sale_phone') || '0901 234 567';
+    const savedCustomer = localStorage.getItem('vsp_customer_name') || 'Anh/Chị Khách Hàng';
+
+    if (document.getElementById('exportCmpSaleName')) document.getElementById('exportCmpSaleName').value = savedName;
+    if (document.getElementById('exportCmpSalePhone')) document.getElementById('exportCmpSalePhone').value = savedPhone;
+    if (document.getElementById('exportCmpCustomerName')) document.getElementById('exportCmpCustomerName').value = savedCustomer;
+
+    updateCompareQuotationPreview();
+
+    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    } else {
+        modalEl.style.display = 'block';
+        modalEl.classList.add('show');
+    }
+}
+
+/**
+ * Cập nhật xem trước ảnh so sánh 2 căn kèm header Chuyên viên tư vấn & Khách hàng
+ */
+function updateCompareQuotationPreview() {
+    const saleName = document.getElementById('exportCmpSaleName') ? document.getElementById('exportCmpSaleName').value : 'Nguyễn Văn A';
+    const salePhone = document.getElementById('exportCmpSalePhone') ? document.getElementById('exportCmpSalePhone').value : '0901 234 567';
+    const customerName = document.getElementById('exportCmpCustomerName') ? document.getElementById('exportCmpCustomerName').value : 'Quý Khách Hàng';
+
+    localStorage.setItem('vsp_sale_name', saleName);
+    localStorage.setItem('vsp_sale_phone', salePhone);
+    localStorage.setItem('vsp_customer_name', customerName);
+
+    const mainContent = document.getElementById('compare2FullContent');
+    const previewBox = document.getElementById('compareQuotationCardPreview');
+    if (!mainContent || !previewBox) return;
+
+    const val1 = document.getElementById('cmpApt1') ? document.getElementById('cmpApt1').value.trim().toUpperCase() : 'CĂN A';
+    const val2 = document.getElementById('cmpApt2') ? document.getElementById('cmpApt2').value.trim().toUpperCase() : 'CĂN B';
+    const todayStr = new Date().toLocaleDateString('vi-VN');
+
+    previewBox.innerHTML = `
+<div id="compareQuotationRenderCapture" style="width:1150px; padding:32px; background: linear-gradient(145deg, #061a15 0%, #0d2e26 50%, #051410 100%); color: #ffffff; font-family:'Plus Jakarta Sans', sans-serif; border-radius:20px; border:3px solid #ffd166; box-shadow:0 20px 60px rgba(0,0,0,0.6); margin:0 auto; box-sizing:border-box;">
+    
+    <!-- Top Header Banner -->
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ffd166; padding-bottom:18px; margin-bottom:20px;">
+        <div>
+            <div style="font-size:1.6rem; font-weight:900; color:#ffd166; letter-spacing:1.5px; text-transform:uppercase;">VINHOMES SÀI GÒN PARK</div>
+            <div style="font-size:0.95rem; font-weight:800; color:#ffffff; margin-top:3px;">BẢNG SO SÁNH PHƯƠNG ÁN TÀI CHÍNH BẤT ĐỘNG SẢN CHÍNH THỨC (${val1} vs ${val2})</div>
+            <div style="font-size:0.78rem; color:#cbd5e1; margin-top:2px;">Áp dụng CSBH CĐT Vingroup · Ngày lập: ${todayStr}</div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <div style="background:linear-gradient(135deg, #ffd166 0%, #f3a83b 100%); color:#0d2e26; font-size:1.1rem; font-weight:900; padding:8px 18px; border-radius:10px; text-align:center;">
+                <div style="font-size:0.65rem; text-transform:uppercase; font-weight:700; opacity:0.85;">CĂN A</div>
+                ${val1}
+            </div>
+            <div style="background:linear-gradient(135deg, #34d399 0%, #10b981 100%); color:#0d2e26; font-size:1.1rem; font-weight:900; padding:8px 18px; border-radius:10px; text-align:center;">
+                <div style="font-size:0.65rem; text-transform:uppercase; font-weight:700; opacity:0.85;">CĂN B</div>
+                ${val2}
+            </div>
+        </div>
+    </div>
+
+    <!-- Sale & Customer Info Bar -->
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+        <div style="background:rgba(255,255,255,0.06); padding:12px 18px; border-radius:12px; border:1px solid rgba(255,209,102,0.3); border-left:4px solid #ffd166;">
+            <div style="font-size:0.75rem; color:#cbd5e1; text-transform:uppercase; font-weight:700;">KÍNH GỬI QUÝ KHÁCH HÀNG</div>
+            <div style="font-size:1.15rem; font-weight:900; color:#ffd166; margin-top:2px;">${customerName}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06); padding:12px 18px; border-radius:12px; border:1px solid rgba(255,209,102,0.3); border-left:4px solid #34d399;">
+            <div style="font-size:0.75rem; color:#cbd5e1; text-transform:uppercase; font-weight:700;">CHUYÊN VIÊN TƯ VẤN BẤT ĐỘNG SẢN</div>
+            <div style="font-size:1.05rem; font-weight:800; color:#ffffff; margin-top:2px;">${saleName}</div>
+            <div style="font-size:0.9rem; font-weight:700; color:#ffd166;">📞 Hotline: ${salePhone}</div>
+        </div>
+    </div>
+
+    <!-- Nội dung bảng so sánh chi tiết -->
+    <div class="compare-capture-body">
+        ${mainContent.innerHTML}
+    </div>
+
+    <!-- Footer Banner -->
+    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1.5px solid #ffd166; padding-top:16px; margin-top:24px; font-size:0.78rem; color:#cbd5e1;">
+        <div>
+            <div style="font-weight:700; color:#ffffff;">Vinhomes Sài Gòn Park – Đô Thị Tri Thức 1.080 ha</div>
+            <div>Bảng so sánh mang tính chất tham khảo minh họa phương án tài chính theo CSBH CĐT.</div>
+        </div>
+        <div style="text-align:right;">
+            <div style="font-weight:800; color:#ffd166; font-size:0.85rem;">CHUYÊN VIÊN TƯ VẤN: ${saleName.toUpperCase()}</div>
+            <div>Hotline hỗ trợ 24/7: ${salePhone}</div>
+        </div>
+    </div>
+
+</div>`;
+
+    // 1. Chuyển đổi toàn bộ thẻ <canvas> (như biểu đồ Radar) thành thẻ <img> sắc nét
+    const origCanvases = mainContent.querySelectorAll('canvas');
+    const previewCanvases = previewBox.querySelectorAll('canvas');
+    origCanvases.forEach((origCanvas, i) => {
+        if (previewCanvases[i]) {
+            try {
+                const imgData = origCanvas.toDataURL('image/png');
+                const img = document.createElement('img');
+                img.src = imgData;
+                img.style.width = '100%';
+                img.style.maxHeight = '280px';
+                img.style.objectFit = 'contain';
+                previewCanvases[i].parentNode.replaceChild(img, previewCanvases[i]);
+            } catch (err) {
+                console.error('Lỗi chuyển đổi canvas sang img:', err);
+            }
+        }
+    });
+
+    // 2. Ẩn nút bấm trong ảnh xuất ra để giữ thẻ sạch đẹp
+    previewBox.querySelectorAll('.compare-capture-body button').forEach(btn => btn.remove());
+}
+
+/**
+ * Tải ảnh PNG so sánh 2 căn (HD Quality)
+ */
+function downloadCompareQuotationPNG() {
+    const el = document.getElementById('compareQuotationRenderCapture');
+    if (!el) {
+        alert('Không tìm thấy bản so sánh để xuất ảnh!');
+        return;
+    }
+
+    if (typeof html2canvas === 'undefined') {
+        alert('Thư viện html2canvas chưa được tải. Vui lòng kiểm tra kết nối mạng!');
+        return;
+    }
+
+    const val1 = document.getElementById('cmpApt1') ? document.getElementById('cmpApt1').value.trim() : 'CanA';
+    const val2 = document.getElementById('cmpApt2') ? document.getElementById('cmpApt2').value.trim() : 'CanB';
+
+    html2canvas(el, {
+        scale: 2, // HD Quality
+        useCORS: true,
+        backgroundColor: '#051410'
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `SoSanh_VinhomesSaigonPark_${val1}_vs_${val2}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }).catch(err => {
+        console.error('Error generating comparison PNG card:', err);
+        alert('Có lỗi khi tạo ảnh so sánh: ' + err.message);
+    });
+}
+
+/**
+ * Tạo Modal HTML cho Export Compare Card
+ */
+function createExportCompareModalHTML() {
+    const modalHTML = `
+<div class="modal fade" id="exportCompareCardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content" style="background:#0d2e26; color:#ffffff; border:1px solid #ffd166; border-radius:14px;">
+            <div class="modal-header" style="border-bottom:1px solid rgba(255,209,102,0.3);">
+                <h5 class="modal-title" style="color:#ffd166; font-weight:800;">
+                    <i class="bi bi-camera-fill me-2"></i>Tùy Chỉnh & Xuất Ảnh So Sánh 2 Căn Hộ PNG Cho Khách Hàng
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="closeExportCompareModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-warning small font-weight-bold">Tên Chuyên Viên Tư Vấn (Sale):</label>
+                        <input type="text" id="exportCmpSaleName" class="form-control form-control-sm" value="Nguyễn Văn A" oninput="updateCompareQuotationPreview()">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-warning small font-weight-bold">Số Điện Thoại Sale:</label>
+                        <input type="text" id="exportCmpSalePhone" class="form-control form-control-sm" value="0901 234 567" oninput="updateCompareQuotationPreview()">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-warning small font-weight-bold">Tên Khách Hàng:</label>
+                        <input type="text" id="exportCmpCustomerName" class="form-control form-control-sm" value="Anh/Chị Khách Hàng" oninput="updateCompareQuotationPreview()">
+                    </div>
+                </div>
+
+                <div class="text-center mb-2 text-muted small"><i class="bi bi-eye me-1"></i>Xem trước Bản So Sánh Phương Án Tài Chính 2 Căn HD:</div>
+                <div id="compareQuotationCardPreview" style="overflow-x:auto; padding:10px; background:rgba(0,0,0,0.3); border-radius:10px;"></div>
+            </div>
+            <div class="modal-footer" style="border-top:1px solid rgba(255,209,102,0.3);">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="closeExportCompareModal()">Đóng</button>
+                <button type="button" class="btn btn-warning btn-sm font-weight-bold" onclick="downloadCompareQuotationPNG()">
+                    <i class="bi bi-download me-1"></i>Tải Ảnh So Sánh PNG (HD)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>`;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function closeExportCompareModal() {
+    const modalEl = document.getElementById('exportCompareCardModal');
     if (modalEl) {
         modalEl.style.display = 'none';
         modalEl.classList.remove('show');

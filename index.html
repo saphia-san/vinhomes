@@ -25,9 +25,20 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <style>
-        
         /* Standardized High-Definition Vietnamese Font for All Titles */
-        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .title-font {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .h1,
+        .h2,
+        .h3,
+        .h4,
+        .h5,
+        .h6,
+        .title-font {
             font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', sans-serif !important;
             letter-spacing: 0.2px;
         }
@@ -48,6 +59,24 @@
             --accent-danger: #dc2626;
             --border: #cbd5e1;
             --accent-light: #0d2e26;
+        }
+
+        /* --- STICKY FLOATING TAB BAR WITH GLASSMORPHISM --- */
+        .sticky-nav-container {
+            position: sticky;
+            top: 10px;
+            z-index: 1050;
+            background: rgba(15, 23, 42, 0.92) !important;
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1.5px solid rgba(255, 209, 102, 0.45) !important;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        body.light-theme .sticky-nav-container {
+            background: rgba(13, 46, 38, 0.94) !important;
+            border: 1.5px solid rgba(255, 209, 102, 0.6) !important;
         }
 
         .text-muted {
@@ -71,8 +100,14 @@
             display: none !important;
         }
 
-        body.light-theme .text-white {
+        body.light-theme .text-white:not(.keep-text-white) {
             color: #0f172a !important;
+        }
+
+        body.light-theme .keep-text-white,
+        body.light-theme .position-absolute .text-white {
+            color: #ffffff !important;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
         }
 
         body.light-theme .opacity-90 {
@@ -100,6 +135,186 @@
 
         body.light-theme .text-muted {
             color: #475569 !important;
+        }
+
+        /* Promo Box in Comparison Tab 5 */
+        .cmp-promo-box {
+            background: rgba(13, 46, 38, 0.45);
+            border: 1px solid rgba(212, 175, 55, 0.35) !important;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        body.light-theme .cmp-promo-box {
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        .cmp-promo-box .promo-title {
+            color: #ffd166;
+            font-weight: 800;
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+        }
+
+        body.light-theme .cmp-promo-box .promo-title {
+            color: #d97706 !important;
+        }
+
+        .cmp-promo-box label {
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .cmp-promo-box .lbl-gold {
+            color: #ffd166;
+        }
+
+        body.light-theme .cmp-promo-box .lbl-gold {
+            color: #b45309 !important;
+        }
+
+        .cmp-promo-box .lbl-white {
+            color: #ffffff;
+        }
+
+        body.light-theme .cmp-promo-box .lbl-white {
+            color: #334155 !important;
+        }
+
+        .cmp-promo-box .lbl-info {
+            color: #38bdf8;
+        }
+
+        body.light-theme .cmp-promo-box .lbl-info {
+            color: #0284c7 !important;
+        }
+
+        .cmp-promo-box .voucher-tag {
+            background: #0d2e26;
+            color: #ffd166;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+        }
+
+        body.light-theme .cmp-promo-box .voucher-tag {
+            background: #e2e8f0 !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        .cmp-promo-box .voucher-input {
+            background: rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 0.8rem;
+        }
+
+        body.light-theme .cmp-promo-box .voucher-input {
+            background: #ffffff !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* High-contrast difference badges for Light & Dark Theme */
+        .badge-equal {
+            background: #e2e8f0 !important;
+            color: #334155 !important;
+            border: 1px solid #cbd5e1 !important;
+            font-weight: 700 !important;
+        }
+
+        body.dark-theme .badge-equal {
+            background: rgba(148, 163, 184, 0.2) !important;
+            color: #cbd5e1 !important;
+            border: 1px solid rgba(148, 163, 184, 0.3) !important;
+            font-weight: 700 !important;
+        }
+
+        .badge-diff-high {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+            border: 1px solid #fca5a5 !important;
+            font-weight: 700 !important;
+        }
+
+        body.dark-theme .badge-diff-high {
+            background: rgba(239, 68, 68, 0.2) !important;
+            color: #f87171 !important;
+            border: 1px solid rgba(239, 68, 68, 0.35) !important;
+            font-weight: 700 !important;
+        }
+
+        .badge-diff-low {
+            background: #dcfce7 !important;
+            color: #15803d !important;
+            border: 1px solid #86efac !important;
+            font-weight: 700 !important;
+        }
+
+        body.dark-theme .badge-diff-low {
+            background: rgba(74, 222, 128, 0.2) !important;
+            color: #4ade80 !important;
+            border: 1px solid rgba(74, 222, 128, 0.35) !important;
+            font-weight: 700 !important;
+        }
+
+        /* High-contrast comparison panel styling for Light & Dark Theme */
+        .card-panel-title {
+            color: #ffd166;
+            font-weight: 800;
+        }
+
+        body.light-theme .card-panel-title {
+            color: #b45309 !important;
+        }
+
+        .card-panel-header {
+            border-bottom: 2px solid #ffd166;
+        }
+
+        body.light-theme .card-panel-header {
+            border-bottom: 2px solid #b45309 !important;
+        }
+
+        .sec-heading-theme {
+            color: #ffd166;
+        }
+
+        body.light-theme .sec-heading-theme {
+            color: #b45309 !important;
+        }
+
+        .val-gold-theme {
+            color: #f3e5ab;
+        }
+
+        body.light-theme .val-gold-theme {
+            color: #0f172a !important;
+        }
+
+        .stage-section-header-land {
+            background: rgba(212, 175, 55, 0.18);
+            color: #f3e5ab;
+        }
+
+        body.light-theme .stage-section-header-land {
+            background: #f1f5f9 !important;
+            color: #0d2e26 !important;
+        }
+
+        .stage-section-header-const {
+            background: rgba(255, 209, 102, 0.18);
+            color: #ffd166;
+        }
+
+        body.light-theme .stage-section-header-const {
+            background: #f1f5f9 !important;
+            color: #b45309 !important;
         }
 
         body.light-theme .nav-tabs-custom {
@@ -298,6 +513,43 @@
             background: rgba(4, 18, 14, 0.7) !important;
             border: 1px solid rgba(255, 209, 102, 0.25) !important;
             color: #ffffff !important;
+        }
+
+        /* Fix placeholder text contrast in Dark and Light themes */
+        body.dark-theme .form-control::placeholder,
+        body.dark-theme input::placeholder {
+            color: #cbd5e1 !important;
+            opacity: 1 !important;
+        }
+
+        body.dark-theme .form-control::-webkit-input-placeholder,
+        body.dark-theme input::-webkit-input-placeholder {
+            color: #cbd5e1 !important;
+            opacity: 1 !important;
+        }
+
+        body.dark-theme .form-control::-moz-placeholder,
+        body.dark-theme input::-moz-placeholder {
+            color: #cbd5e1 !important;
+            opacity: 1 !important;
+        }
+
+        body.light-theme .form-control::placeholder,
+        body.light-theme input::placeholder {
+            color: #64748b !important;
+            opacity: 1 !important;
+        }
+
+        body.light-theme .form-control::-webkit-input-placeholder,
+        body.light-theme input::-webkit-input-placeholder {
+            color: #64748b !important;
+            opacity: 1 !important;
+        }
+
+        body.light-theme .form-control::-moz-placeholder,
+        body.light-theme input::-moz-placeholder {
+            color: #64748b !important;
+            opacity: 1 !important;
         }
 
         body.dark-theme .summary-box {
@@ -585,6 +837,22 @@
 
         .search-item:hover {
             background: rgba(255, 209, 102, 0.18);
+        }
+
+        .search-item-code {
+            color: #ffd166 !important;
+        }
+
+        .search-item-meta {
+            color: #cbd5e1 !important;
+        }
+
+        body.light-theme .search-item-code {
+            color: #0d2e26 !important;
+        }
+
+        body.light-theme .search-item-meta {
+            color: #64748b !important;
         }
 
         /* Summary Boxes */
@@ -913,12 +1181,12 @@
         <!-- Header Bar -->
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
             <div class="d-flex align-items-center gap-3">
-                <img src="logo-vinhomes-saigon-park-gold.jpg" alt="Logo Vinhomes Sài Gòn Park"
+                <img loading="lazy" src="logo-vinhomes-saigon-park-gold.jpg" alt="Logo Vinhomes Sài Gòn Park"
                     style="height: 64px; width: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); border: 1.5px solid rgba(212, 175, 55, 0.4);">
                 <div>
                     <h2 class="header-title mb-1">Vinhomes Sài Gòn Park</h2>
                     <div style="font-size:0.85rem; color:var(--text-muted);">
-                        Áp dụng từ: 25/08/2026 (CSBH V07 Mới Nhất) · Khu Công viên Tri Thức 1 & Công viên Quốc Tế
+                        Áp dụng: Phân khu Ivy Park & Global Park | Cập nhật giá theo CSBH mới nhất
                     </div>
                 </div>
             </div>
@@ -935,34 +1203,36 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs -->
-        <ul class="nav nav-tabs nav-tabs-custom mb-4" id="mainTab">
-            <li class="nav-item">
-                <button class="nav-link active" id="tab-overview-btn" onclick="showTab('overview')">
-                    <i class="bi bi-globe-americas me-1"></i> Tổng Quan Dự Án
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" id="tab-input-btn" onclick="showTab('input')">
-                    <i class="bi bi-sliders me-1"></i> Nhập Thông Tin
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" id="tab-result-btn" onclick="showTab('result')">
-                    <i class="bi bi-table me-1"></i> Bảng Kết Quả &amp; So Sánh
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" id="tab-loan-btn" onclick="showTab('loan')">
-                    <i class="bi bi-bank me-1"></i> Lịch Vay Ngân Hàng
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" id="tab-compare2-btn" onclick="showTab('compare2')">
-                    <i class="bi bi-layout-split me-1"></i> So Sánh Căn
-                </button>
-            </li>
-        </ul>
+        <!-- Sticky Navigation Tabs Bar (Glassmorphism Sticky Bar) -->
+        <div class="sticky-nav-container shadow-lg rounded-4 px-2 py-2 mb-4" id="stickyNavWrapper">
+            <ul class="nav nav-tabs nav-tabs-custom border-0 m-0 justify-content-center flex-wrap gap-1" id="mainTab">
+                <li class="nav-item">
+                    <button class="nav-link active fw-bold" id="tab-overview-btn" onclick="showTab('overview')">
+                        <i class="bi bi-globe-americas me-1"></i> Tổng Quan Dự Án
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link fw-bold" id="tab-input-btn" onclick="showTab('input')">
+                        <i class="bi bi-sliders me-1"></i> Nhập Thông Tin Tính Giá
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link fw-bold" id="tab-result-btn" onclick="showTab('result')">
+                        <i class="bi bi-table me-1"></i> Kết Quả &amp; So Sánh
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link fw-bold" id="tab-loan-btn" onclick="showTab('loan')">
+                        <i class="bi bi-bank me-1"></i> Lịch Vay Ngân Hàng
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link fw-bold" id="tab-compare2-btn" onclick="showTab('compare2')">
+                        <i class="bi bi-layout-split me-1"></i> So Sánh Căn
+                    </button>
+                </li>
+            </ul>
+        </div>
 
         <!-- TAB 0: PROJECT OVERVIEW (DESIGN MASTERPIECE WITH DEDICATED LAYOUT SECTION & IMAGE COUNTS) -->
         <div id="tab-overview" class="tab-pane fade show active">
@@ -1041,10 +1311,11 @@
                 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                     <div>
                         <h3 class="fw-bold mb-1" style="font-size:1.6rem; text-transform: uppercase;">
-                            <i class="bi bi-images me-2" style="color:#b8860b;"></i>Tổng Quan Phối Cảnh Khu Đô Thị
+                            <i class="bi bi-images me-2" style="color:#b8860b;"></i>TỔNG QUAN DỰ ÁN VINHOMES SÀI GÒN
+                            PARK
                         </h3>
-                        <div class="sub-text" style="font-size:0.95rem;">Góc nhìn toàn cảnh không gian sống &amp; hệ
-                            sinh thái 1.080 ha</div>
+                        <div class="sub-text" style="font-size:0.95rem;">Nơi tri thức, trải nghiệm, &amp; kinh
+                            doanh cùng tạo nên dòng cơ hội.</div>
                     </div>
                 </div>
 
@@ -1054,7 +1325,7 @@
                         loading="lazy" decoding="async"
                         class="img-fluid w-100 rounded-4 shadow-sm hover-lift cursor-pointer"
                         style="height: auto; object-fit: contain; transition: transform 0.4s ease;"
-                        onclick="openGallery(this, 'Phối Cảnh Tổng Quan Dự Án')">
+                        onclick="openGallery(this, 'Tổng Quan Dự Án')">
                 </div>
 
                 <!-- 9 ảnh phối cảnh đô thị thiết kế tràn viền vuông (3 hàng x 3 cột), sang trọng & thẩm mỹ -->
@@ -1173,7 +1444,8 @@
                             Park
                         </h3>
                         <div class="sub-text" style="font-size:0.95rem;">
-                            Ngọn tháp biểu tượng kiêu hãnh - Điểm nhấn kiến trúc cho toàn cảnh quan độc bản của đại đô thị
+                            Ngọn tháp biểu tượng kiêu hãnh - Điểm nhấn kiến trúc cho toàn cảnh quan độc bản của đại đô
+                            thị
                         </div>
                     </div>
 
@@ -1212,7 +1484,9 @@
                         style="background: linear-gradient(to top, rgba(5,20,16,0.95), transparent); pointer-events:none;">
                         <span class="badge mb-1" style="background:#ffd166; color:#0d2e26; font-weight:800;"><i
                                 class="bi bi-zoom-in me-1"></i>BẤM ĐỂ PHÓNG TO HD</span>
-                        <div class="fw-bold text-white fs-5">Tháp Biểu Tượng Đô Thị Tri Thức Vinhomes Sài Gòn Park</div>
+                        <div class="fw-bold text-white keep-text-white fs-5"
+                            style="color:#ffffff !important; text-shadow: 0 2px 8px rgba(0,0,0,0.95);">Tháp Biểu Tượng
+                            Đô Thị Tri Thức Vinhomes Sài Gòn Park</div>
                     </div>
                 </div>
             </div>
@@ -1228,10 +1502,10 @@
                     style="background: linear-gradient(to top, rgba(5,20,16,0.96) 0%, rgba(5,20,16,0.7) 60%, transparent 100%);">
                     <h2 class="fw-bold mb-2 flex-wrap d-flex align-items-center gap-2"
                         style="font-size: 2.2rem; font-family: 'Be Vietnam Pro', sans-serif; line-height: 1.45; margin-top: 5px;">
-                        <i class="bi bi-star-fill me-1"
-                            style="color: #ffd166; font-size: 1.8rem;"></i>
+                        <i class="bi bi-star-fill me-1" style="color: #ffd166; font-size: 1.8rem;"></i>
                         <span
-                            style="color: #ffd166; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.95); letter-spacing: 0.5px;">MẶT BẰNG TỔNG THỂ DỰ ÁN</span>
+                            style="color: #ffd166; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.95); letter-spacing: 0.5px;">MẶT
+                            BẰNG TỔNG THỂ DỰ ÁN</span>
                     </h2>
                     <p
                         style="color: #f1f5f9; font-size: 1.15rem; font-weight: 600; margin-bottom: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
@@ -1251,22 +1525,37 @@
                         </span>
                         <h3 class="fw-bold mb-0"
                             style="font-size:1.5rem; font-family:'Be Vietnam Pro', sans-serif; text-transform: uppercase;">
-                            <i class="bi bi-map-fill me-2" style="color:#ffd166;"></i>Bản Đồ Quy Hoạch Phân Lô Chi Tiết (Vector PDF Cực Nét)
+                            <i class="bi bi-map-fill me-2" style="color:#ffd166;"></i>Bản Đồ Quy Hoạch Phân Lô Chi Tiết
+                            (Vector PDF Cực Nét)
                         </h3>
                     </div>
 
                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <a href="assets/VHSP.pdf" target="_blank" class="btn btn-sm btn-warning fw-bold px-3 py-2 shadow-sm" style="border-radius:8px;">
+                        <a href="assets/VHSP.pdf" target="_blank"
+                            class="btn btn-sm btn-warning fw-bold px-3 py-2 shadow-sm" style="border-radius:8px;">
                             <i class="bi bi-box-arrow-up-right me-1"></i> Mở PDF Trong Thẻ Mới
                         </a>
                     </div>
                 </div>
 
-                <!-- Khung Trình Xem Vector PDF Gốc Trực Quan Cực Nét -->
-                <div class="position-relative rounded-4 overflow-hidden border shadow-lg"
-                    style="border:2px solid rgba(255,209,102,0.4) !important; background:#051410; min-height: 720px;">
-                    <iframe src="assets/VHSP.pdf#toolbar=1&navpanes=0&scrollbar=1" class="w-100 h-100 border-0"
-                        style="min-height: 720px; display: block; background: #051410;" title="Sơ đồ mặt bằng phân lô Vinhomes Sài Gòn Park PDF"></iframe>
+                <!-- Khung Trình Xem Vector PDF Gốc Trực Quan Cực Nét (On-Demand Loading) -->
+                <div id="pdfViewerFrameContainer"
+                    class="position-relative rounded-4 overflow-hidden border shadow-lg d-flex flex-column align-items-center justify-content-center p-4 text-center"
+                    style="border:2px solid rgba(255,209,102,0.4) !important; background:#051410; min-height: 480px;">
+                    <i class="bi bi-file-earmark-pdf-fill text-warning mb-2" style="font-size: 3.5rem;"></i>
+                    <h4 class="fw-bold text-white mb-2" style="font-size:1.25rem;">Bản Đồ Quy Hoạch Phân Lô Chi Tiết
+                        (PDF Gốc 13.3MB)</h4>
+                    <p class="text-white-50 small mb-4" style="max-width: 460px; font-size:0.88rem;">Bấm nút bên dưới để
+                        tải và xem sơ đồ quy hoạch PDF gốc sắc nét vector 100%.</p>
+                    <div class="d-flex gap-2 flex-wrap justify-content-center">
+                        <button type="button" class="btn btn-warning fw-bold px-4 py-2 shadow"
+                            onclick="activatePdfIframe()">
+                            <i class="bi bi-play-circle-fill me-1"></i> ▶️ Mở Xem Sơ Đồ PDF Trực Tiếp
+                        </button>
+                        <a href="assets/VHSP.pdf" target="_blank" class="btn btn-outline-warning fw-bold px-3 py-2">
+                            <i class="bi bi-box-arrow-up-right me-1"></i> Mở Thẻ Mới
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -1323,7 +1612,8 @@
                         <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: #ffd166 !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-tri-thuc-ivy-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 1: Mặt Bằng Công Viên Tri Thức Ivy Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-tri-thuc-ivy-park-vinhomes-saigon-park-hoc-mon.jpg"
+                            <img loading="lazy"
+                                src="assets/mat-bang-phan-khu/mat-bang-cong-vien-tri-thuc-ivy-park-vinhomes-saigon-park-hoc-mon.jpg"
                                 class="rounded-2"
                                 style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid #ffd166;"
                                 alt="Ivy Park">
@@ -1344,7 +1634,8 @@
                         <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: rgba(255,209,102,0.2) !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-quoc-te-global-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 2: Mặt Bằng Công Viên Quốc Tế Global Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-quoc-te-global-park-vinhomes-saigon-park-hoc-mon.jpg"
+                            <img loading="lazy"
+                                src="assets/mat-bang-phan-khu/mat-bang-cong-vien-quoc-te-global-park-vinhomes-saigon-park-hoc-mon.jpg"
                                 class="rounded-2"
                                 style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);"
                                 alt="Global Park">
@@ -1365,7 +1656,8 @@
                         <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: rgba(255,209,102,0.2) !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-bien-xanh-laguna-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 3: Mặt Bằng Công Viên Biển Xanh Laguna Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-bien-xanh-laguna-park-vinhomes-saigon-park-hoc-mon.jpg"
+                            <img loading="lazy"
+                                src="assets/mat-bang-phan-khu/mat-bang-cong-vien-bien-xanh-laguna-park-vinhomes-saigon-park-hoc-mon.jpg"
                                 class="rounded-2"
                                 style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);"
                                 alt="Laguna Park">
@@ -1386,7 +1678,8 @@
                         <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: rgba(255,209,102,0.2) !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-thien-zen-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 4: Mặt Bằng Công Viên Thiền Zen Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-thien-zen-park-vinhomes-saigon-park-hoc-mon.jpg"
+                            <img loading="lazy"
+                                src="assets/mat-bang-phan-khu/mat-bang-cong-vien-thien-zen-park-vinhomes-saigon-park-hoc-mon.jpg"
                                 class="rounded-2"
                                 style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);"
                                 alt="Zen Park">
@@ -1406,7 +1699,8 @@
                         <div class="d-flex align-items-center gap-3 p-2 rounded-3 border hover-lift cursor-pointer"
                             style="background: rgba(255,255,255,0.04); border-color: rgba(255,209,102,0.2) !important;"
                             onclick="switchMainImageWithCaption('sec-mat-bang-phan-khu-main-img', 'assets/mat-bang-phan-khu/mat-bang-cong-vien-golf-golf-park-vinhomes-saigon-park-hoc-mon.jpg', 'sec-mat-bang-phan-khu-caption', 'Khu 5: Mặt Bằng Công Viên Golf Golf Park', this)">
-                            <img src="assets/mat-bang-phan-khu/mat-bang-cong-vien-golf-golf-park-vinhomes-saigon-park-hoc-mon.jpg"
+                            <img loading="lazy"
+                                src="assets/mat-bang-phan-khu/mat-bang-cong-vien-golf-golf-park-vinhomes-saigon-park-hoc-mon.jpg"
                                 class="rounded-2"
                                 style="width: 100px; height: 68px; object-fit: cover; border: 1.5px solid rgba(255,255,255,0.2);"
                                 alt="Golf Park">
@@ -1430,7 +1724,8 @@
                     <div class="col-6 col-md-4 col-lg-2">
                         <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
                             style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/1787975645349_59065042594565031_4258139849654498913_54dddb94e29ba423687875d4feaacfe1.jpg"
+                            <img loading="lazy"
+                                src="assets/mat-bang-anh-phu/1787975645349_59065042594565031_4258139849654498913_54dddb94e29ba423687875d4feaacfe1.jpg"
                                 class="img-fluid w-100" style="height: 125px; object-fit: cover;"
                                 alt="Ảnh phụ mặt bằng 1">
                         </div>
@@ -1438,36 +1733,41 @@
                     <div class="col-6 col-md-4 col-lg-2">
                         <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
                             style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213317.png" class="img-fluid w-100"
-                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 2">
+                            <img loading="lazy" src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213317.png"
+                                class="img-fluid w-100" style="height: 125px; object-fit: cover;"
+                                alt="Ảnh phụ mặt bằng 2">
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
                         <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
                             style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213328.png" class="img-fluid w-100"
-                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 3">
+                            <img loading="lazy" src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213328.png"
+                                class="img-fluid w-100" style="height: 125px; object-fit: cover;"
+                                alt="Ảnh phụ mặt bằng 3">
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
                         <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
                             style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213715.png" class="img-fluid w-100"
-                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 4">
+                            <img loading="lazy" src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213715.png"
+                                class="img-fluid w-100" style="height: 125px; object-fit: cover;"
+                                alt="Ảnh phụ mặt bằng 4">
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
                         <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
                             style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213913.png" class="img-fluid w-100"
-                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 5">
+                            <img loading="lazy" src="assets/mat-bang-anh-phu/Screenshot 2026-08-29 213913.png"
+                                class="img-fluid w-100" style="height: 125px; object-fit: cover;"
+                                alt="Ảnh phụ mặt bằng 5">
                         </div>
                     </div>
                     <div class="col-6 col-md-4 col-lg-2">
                         <div class="overflow-hidden rounded-3 border h-100 shadow-sm"
                             style="border-color: rgba(255,209,102,0.3) !important;">
-                            <img src="assets/mat-bang-anh-phu/a3-9-1787902988783.webp" class="img-fluid w-100"
-                                style="height: 125px; object-fit: cover;" alt="Ảnh phụ mặt bằng 6">
+                            <img loading="lazy" src="assets/mat-bang-anh-phu/a3-9-1787902988783.webp"
+                                class="img-fluid w-100" style="height: 125px; object-fit: cover;"
+                                alt="Ảnh phụ mặt bằng 6">
                         </div>
                     </div>
                 </div>
@@ -3413,10 +3713,11 @@
         <div id="tab-result" class="tab-pane fade">
             <div id="resultContent">
                 <div class="card-custom text-center py-5">
-                    <i class="bi bi-calculator" style="font-size:3rem; color:var(--accent-light);"></i>
-                    <h4 class="mt-3 text-white fw-bold">Chưa có kết quả báo giá</h4>
+                    <i class="bi bi-calculator mb-2" style="font-size:3.5rem; color:#ffd166;"></i>
+                    <h4 class="mt-2 text-white fw-bold">Chưa có kết quả báo giá</h4>
                     <p class="text-white opacity-90 mt-2" style="font-size:0.95rem;">Vui lòng chọn thông tin căn hộ ở
-                        Tab 1 và bấm nút <strong style="color:var(--accent-light);">"TÍNH BÁO GIÁ CHI TIẾT"</strong></p>
+                        Tab 1 và bấm nút <strong style="color:#ffd166; font-weight:800;">"TÍNH BÁO GIÁ CHI
+                            TIẾT"</strong></p>
                 </div>
             </div>
         </div>
@@ -3425,8 +3726,8 @@
         <div id="tab-loan" class="tab-pane fade">
             <div id="loanContent">
                 <div class="card-custom sec-card-theme text-center py-5">
-                    <i class="bi bi-bank" style="font-size:3rem; color:var(--accent-light);"></i>
-                    <h4 class="mt-3 fw-bold card-title-theme">Chưa chọn phương thức Vay Ngân Hàng</h4>
+                    <i class="bi bi-bank mb-2" style="font-size:3.5rem; color:#ffd166;"></i>
+                    <h4 class="mt-2 fw-bold card-title-theme">Chưa chọn phương thức Vay Ngân Hàng</h4>
                     <p class="sub-text mt-2" style="font-size:0.95rem;">Vui lòng chọn phương thức Vay ngân hàng ở Tab 1
                         để hiển thị lịch vay chi tiết.</p>
                 </div>
@@ -3439,11 +3740,12 @@
                 <div class="card-title"><i class="bi bi-sliders me-2"></i>Chọn 2 Căn Hộ Để So Sánh Song Song</div>
                 <div class="row g-3 align-items-end">
                     <div class="col-md-5">
-                        <label class="form-label fw-bold" style="color:var(--accent-light);">Căn Thứ 1 (Căn A)</label>
+                        <label class="form-label fw-bold" style="color:#ffd166;">Căn Thứ 1 (Căn A)</label>
                         <input type="text" id="cmpApt1" class="form-control mb-2"
                             placeholder="Mã căn A (ví dụ: AS72-24)" list="aptDatalist"
                             onchange="renderCompare2FullTab()">
-                        <select id="cmpMethod1" class="form-select form-select-sm" onchange="renderCompare2FullTab()">
+                        <select id="cmpMethod1" class="form-select form-select-sm mb-2"
+                            onchange="renderCompare2FullTab()">
                             <option value="own-early">💰 TTS – Vốn tự có</option>
                             <option value="own-normal">📋 Tiến độ thường</option>
                             <option value="bank_0">🏦 Vay HTLS 18T</option>
@@ -3451,13 +3753,58 @@
                             <option value="bank_2">🏦 Vay HTLS 30T</option>
                             <option value="bank_3">🏦 Vay HTLS 36T</option>
                         </select>
+                        <!-- Ưu đãi đầy đủ riêng Căn A -->
+                        <div class="cmp-promo-box small">
+                            <div class="promo-title"><i class="bi bi-gift-fill me-1"></i>Chiết khấu &amp; Ưu đãi Căn A:
+                            </div>
+                            <div class="row g-1">
+                                <div class="col-6">
+                                    <div class="form-check form-check-inline m-0">
+                                        <input class="form-check-input" type="checkbox" id="cmpEarly1" checked
+                                            onchange="renderCompare2FullTab()">
+                                        <label class="form-check-label lbl-gold" for="cmpEarly1">Về ở sớm</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check form-check-inline m-0">
+                                        <input class="form-check-input" type="checkbox" id="cmpNoBlnh1" checked
+                                            onchange="renderCompare2FullTab()">
+                                        <label class="form-check-label lbl-white" for="cmpNoBlnh1">Từ chối BLNH</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check form-check-inline m-0">
+                                        <input class="form-check-input" type="checkbox" id="cmpGold1" checked
+                                            onchange="renderCompare2FullTab()">
+                                        <label class="form-check-label lbl-gold" for="cmpGold1">Quà Vàng</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check form-check-inline m-0">
+                                        <input class="form-check-input" type="checkbox" id="cmpAqua1"
+                                            onchange="renderCompare2FullTab()">
+                                        <label class="form-check-label lbl-info" for="cmpAqua1">Aquafield</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-1">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text voucher-tag rounded-start py-0 px-2">🎟️
+                                            Voucher</span>
+                                        <input type="text" id="cmpVoucher1" class="form-control voucher-input py-0"
+                                            placeholder="Tiền Voucher (VNĐ)"
+                                            oninput="formatNumberInput(this); renderCompare2FullTab();">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-5">
                         <label class="form-label fw-bold" style="color:#ffd166;">Căn Thứ 2 (Căn B)</label>
                         <input type="text" id="cmpApt2" class="form-control mb-2"
                             placeholder="Mã căn B (ví dụ: ĐLCV2-08)" list="aptDatalist"
                             onchange="renderCompare2FullTab()">
-                        <select id="cmpMethod2" class="form-select form-select-sm" onchange="renderCompare2FullTab()">
+                        <select id="cmpMethod2" class="form-select form-select-sm mb-2"
+                            onchange="renderCompare2FullTab()">
                             <option value="own-early">💰 TTS – Vốn tự có</option>
                             <option value="own-normal">📋 Tiến độ thường</option>
                             <option value="bank_0">🏦 Vay HTLS 18T</option>
@@ -3465,9 +3812,53 @@
                             <option value="bank_2">🏦 Vay HTLS 30T</option>
                             <option value="bank_3">🏦 Vay HTLS 36T</option>
                         </select>
+                        <!-- Ưu đãi đầy đủ riêng Căn B -->
+                        <div class="cmp-promo-box small">
+                            <div class="promo-title"><i class="bi bi-gift-fill me-1"></i>Chiết khấu &amp; Ưu đãi Căn B:
+                            </div>
+                            <div class="row g-1">
+                                <div class="col-6">
+                                    <div class="form-check form-check-inline m-0">
+                                        <input class="form-check-input" type="checkbox" id="cmpEarly2" checked
+                                            onchange="renderCompare2FullTab()">
+                                        <label class="form-check-label lbl-gold" for="cmpEarly2">Về ở sớm</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check form-check-inline m-0">
+                                        <input class="form-check-input" type="checkbox" id="cmpNoBlnh2" checked
+                                            onchange="renderCompare2FullTab()">
+                                        <label class="form-check-label lbl-white" for="cmpNoBlnh2">Từ chối BLNH</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check form-check-inline m-0">
+                                        <input class="form-check-input" type="checkbox" id="cmpGold2" checked
+                                            onchange="renderCompare2FullTab()">
+                                        <label class="form-check-label lbl-gold" for="cmpGold2">Quà Vàng</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check form-check-inline m-0">
+                                        <input class="form-check-input" type="checkbox" id="cmpAqua2"
+                                            onchange="renderCompare2FullTab()">
+                                        <label class="form-check-label lbl-info" for="cmpAqua2">Aquafield</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-1">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text voucher-tag rounded-start py-0 px-2">🎟️
+                                            Voucher</span>
+                                        <input type="text" id="cmpVoucher2" class="form-control voucher-input py-0"
+                                            placeholder="Tiền Voucher (VNĐ)"
+                                            oninput="formatNumberInput(this); renderCompare2FullTab();">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-primary-custom w-100 py-2 fw-bold text-uppercase"
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button class="btn btn-primary-custom w-100 py-3 fw-bold text-uppercase shadow"
                             onclick="renderCompare2FullTab()">
                             <i class="bi bi-arrow-repeat me-1"></i> So Sánh
                         </button>
@@ -3486,10 +3877,10 @@
                 &copy; 2026 Vinhomes Sài Gòn Park. Bản quyền phần mềm được bảo hộ.
             </div>
             <div class="mb-2" style="font-size: 0.8rem; color: #94a3b8;">
-                Mã chính sách áp dụng: <span
-                    style="color: var(--accent-light); font-weight: 600;">VSP_CSBH_CDT_Gian_xay_V08_290826</span> |
-                <span
-                    style="color: var(--accent-light); font-weight: 600;">VSP_CSBH_TT_CDT_Tho&amp;HT_CSBH_V07_250826</span>
+                Mã chính sách áp dụng: <span class="footer-highlight-text"
+                    style="color:#ffd166; font-weight:600;">VSP_CSBH_CDT_Gian_xay_V08_290826</span> |
+                <span class="footer-highlight-text"
+                    style="color:#ffd166; font-weight:600;">VSP_CSBH_TT_CDT_Tho&amp;HT_CSBH_V07_250826</span>
             </div>
             <div class="mb-2">
                 <em>Lưu ý: Mọi số liệu, chiết khấu và lịch thanh toán trên phần mềm chỉ mang tính chất tham khảo, không
@@ -3498,8 +3889,8 @@
             </div>
             <div>
                 Cần đóng góp ý kiến, hỗ trợ kỹ thuật hoặc đề xuất chỉnh sửa, vui lòng liên hệ Email:
-                <a href="mailto:saphia.vinhomes@gmail.com"
-                    style="color: var(--accent-light); font-weight: 600; text-decoration: underline;">saphia.vinhomes@gmail.com</a>
+                <a href="mailto:saphia.vinhomes@gmail.com" class="footer-highlight-text"
+                    style="color:#ffd166; font-weight:600; text-decoration: underline;">saphia.vinhomes@gmail.com</a>
             </div>
         </footer>
 
@@ -3544,7 +3935,7 @@
                         <i class="bi bi-chevron-left" style="font-size:1.6rem;"></i>
                     </button>
 
-                    <img id="albumLightboxImg"
+                    <img loading="lazy" id="albumLightboxImg"
                         src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                         alt="Album Slide"
                         style="max-width:96vw !important; max-height:calc(100vh - 135px) !important; width:auto !important; height:auto !important; object-fit:contain !important; border-radius:6px; box-shadow: 0 10px 35px rgba(0,0,0,0.8);">
@@ -3576,8 +3967,7 @@
                 <div class="modal-header"
                     style="border-bottom:1px solid rgba(255,209,102,0.3); background:#0d2e26; padding: 12px 20px;">
                     <h5 class="modal-title fw-bold" style="color:#ffd166; font-size:1.15rem;">
-                        <i class="bi bi-map-fill me-2"></i>Sơ Đồ Quy Hoạch Phân Lô Soi Căn Chi Tiết (Bản Vector 4K -
-                        VHSP.pdf)
+                        <i class="bi bi-map-fill me-2"></i>Sơ Đồ Quy Hoạch Phân Lô Chi Tiết
                     </h5>
                     <div class="d-flex align-items-center gap-2">
                         <a href="assets/VHSP.pdf" target="_blank" class="btn btn-sm btn-warning fw-bold">
@@ -3598,15 +3988,19 @@
     <script src="gallery_data.js"></script>
     <script src="gallery_lightbox.js?v=20260829_1358"></script>
     <script src="data.js"></script>
-    <script src="map_coordinates.js?v=20260830_2310"></script>
-    <script src="map_engine.js?v=20260830_2323"></script>
     <script src="config.js?v=20260830_2332"></script>
-    <script src="calculator.js?v=20260830_2332"></script>
-    <script src="charts.js?v=20260829_2047"></script>
-    <script src="export_card.js?v=20260829_2055"></script>
-    <script src="ui.js?v=20260830_2334"></script>
+    <script src="calculator.js?v=20260831_1339"></script>
+    <script src="charts.js?v=20260831_0942"></script>
+    <script src="export_card.js?v=20260831_1435"></script>
+    <script src="ui.js?v=20260831_1416"></script>
 
     <script>
+        function activatePdfIframe() {
+            const container = document.getElementById('pdfViewerFrameContainer');
+            if (!container) return;
+            container.innerHTML = `<iframe src="assets/VHSP.pdf#toolbar=1&navpanes=0&scrollbar=1" class="w-100 h-100 border-0" style="min-height: 720px; display: block; background: #051410;" title="Sơ đồ mặt bằng phân lô Vinhomes Sài Gòn Park PDF"></iframe>`;
+        }
+
         function loadPdfViewer() {
             const container = document.getElementById('pdfViewerContainer');
             if (!container) return;

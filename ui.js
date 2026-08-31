@@ -220,8 +220,8 @@ function onSearchInput(query) {
     const typeLabel = { rough: 'Thô', finished: 'Hoàn thiện', gianXay: 'Giãn xây' };
     dd.innerHTML = matches.map(a => `
         <div class="search-item" onclick="selectApt('${a.macan}')">
-            <span style="font-weight:700;color:var(--accent-light);">${a.macan}</span>
-            <span style="font-size:0.78rem;color:var(--text-muted);">${typeLabel[a.type]} · ${fmt(a.priceBeforeVat)} VNĐ</span>
+            <span class="search-item-code" style="font-weight:800; font-size:0.95rem;">${a.macan}</span>
+            <span class="search-item-meta" style="font-size:0.8rem;">${typeLabel[a.type]} &bull; ${fmt(a.priceBeforeVat)} VNĐ</span>
         </div>`).join('');
     dd.style.display = 'block';
 }
@@ -245,6 +245,7 @@ function selectApt(macan) {
     if (document.getElementById('selectedCanLabel')) document.getElementById('selectedCanLabel').textContent = apt.macan;
     let detail = `${typeLabel[apt.type] || 'Hoàn thiện'} &nbsp;|&nbsp; DT Đất: ${apt.dtDat} m² &nbsp;|&nbsp; DT Xây: ${apt.dtXay} m²<br>`;
     detail += `Giá trước VAT: <strong style="color:var(--accent-light);">${fmt(apt.priceBeforeVat)} VNĐ</strong>`;
+    detail += `<div class="mt-2"><button type="button" class="btn btn-sm btn-warning fw-bold px-3 py-1 text-dark shadow-sm" onclick="focusOnUnitOnMap('${apt.macan}', true)"><i class="bi bi-geo-alt-fill me-1"></i> Soi Vị Trí Căn Này Trên Bản Đồ 📍</button></div>`;
     if (document.getElementById('selectedCanDetail')) document.getElementById('selectedCanDetail').innerHTML = detail;
     if (document.getElementById('propInfoBox')) document.getElementById('propInfoBox').style.display = 'block';
 
@@ -264,7 +265,7 @@ function clearSelected() {
     if (document.getElementById('searchApt')) document.getElementById('searchApt').value = '';
     if (document.getElementById('propInfoBox')) document.getElementById('propInfoBox').style.display = 'none';
     if (document.getElementById('manualInputWrap')) document.getElementById('manualInputWrap').style.display = 'block';
-    
+
     const elType = document.getElementById('apartmentType');
     if (elType) {
         elType.disabled = false; // Mở lại cho chọn khi ở chế độ nhập thủ công
@@ -378,6 +379,13 @@ ${stages.constStages.map(renderSingleRow).join('')}`;
     </td>
 </tr>`;
 
+    const deductTypeBadge = (d) => {
+        if (d.deductType === 'price') return `<span style="background:rgba(74,222,128,0.18);color:#4ade80;font-size:0.72rem;font-weight:800;padding:2px 8px;border-radius:20px;border:1px solid #4ade80;white-space:nowrap;">✂️ Trừ vào giá HĐ</span>`;
+        if (d.deductType === 'cashback') return `<span style="background:rgba(251,191,36,0.18);color:#fbbf24;font-size:0.72rem;font-weight:800;padding:2px 8px;border-radius:20px;border:1px solid #fbbf24;white-space:nowrap;">💵 Hoàn tiền sau khi về ở</span>`;
+        if (d.deductType === 'gift') return `<span style="background:rgba(167,139,250,0.18);color:#a78bfa;font-size:0.72rem;font-weight:800;padding:2px 8px;border-radius:20px;border:1px solid #a78bfa;white-space:nowrap;">🎁 Quà tặng / Voucher</span>`;
+        return '';
+    };
+
     const ckRows = ckDetails.map(d => `
 <tr>
     <td>${d.label} <span style="font-size:0.75rem;color:var(--text-muted);">${d.appliedOn ? '(áp dụng trên ' + d.appliedOn + ')' : ''}</span></td>
@@ -390,6 +398,7 @@ ${stages.constStages.map(renderSingleRow).join('')}`;
     <td class="text-end" style="font-weight:800;color:#f3e5ab;">
         ${fmt(d.vnd)} VNĐ
     </td>
+    <td class="text-center" style="white-space:nowrap;">${deductTypeBadge(d)}</td>
 </tr>`).join('');
 
     const cfCkRow = cfDiscount > 0 ? `
@@ -398,6 +407,7 @@ ${stages.constStages.map(renderSingleRow).join('')}`;
     <td class="text-end" style="color:var(--text-muted);">—</td>
     <td class="text-end" style="color:var(--text-muted);">—</td>
     <td class="text-end" style="font-weight:700;color:#7ecfff;">${fmt(cfDiscount)} VNĐ</td>
+    <td></td>
 </tr>` : '';
 
     const elResult = document.getElementById('resultContent');
@@ -467,16 +477,16 @@ ${stages.constStages.map(renderSingleRow).join('')}`;
 <!-- Khối Biểu đồ Trực quan -->
 <div class="row g-3 mb-3">
     <div class="col-md-5">
-        <div class="card-custom h-100">
-            <div class="card-title" style="color:#f3e5ab;"><i class="bi bi-pie-chart-fill me-2"></i>Cơ Cấu Giá Trị Căn ${aptCodeStr}</div>
+        <div class="card-custom h-100 chart-box-white" style="background:#ffffff !important; border:1px solid #e2e8f0; color:#0f172a;">
+            <div class="card-title" style="color:#0f172a !important;"><i class="bi bi-pie-chart-fill me-2" style="color:#d97706;"></i>Cơ Cấu Giá Trị Căn ${aptCodeStr}</div>
             <div style="height:250px; position:relative;">
                 <canvas id="chart-breakdown-canvas"></canvas>
             </div>
         </div>
     </div>
     <div class="col-md-7">
-        <div class="card-custom h-100">
-            <div class="card-title" style="color:#f3e5ab;"><i class="bi bi-bar-chart-line-fill me-2"></i>So Sánh Chi Phí Các Gói Thanh Toán</div>
+        <div class="card-custom h-100 chart-box-white" style="background:#ffffff !important; border:1px solid #e2e8f0; color:#0f172a;">
+            <div class="card-title" style="color:#0f172a !important;"><i class="bi bi-bar-chart-line-fill me-2" style="color:#d97706;"></i>So Sánh Chi Phí Các Gói Thanh Toán</div>
             <div style="height:250px; position:relative;">
                 <canvas id="chart-methods-canvas"></canvas>
             </div>
@@ -544,16 +554,18 @@ ${PA && PA.p_const > 0 ? `
                     <th class="text-end">% CK</th>
                     <th class="text-end">Quà / Cố định</th>
                     <th class="text-end">Giá trị quy đổi (VNĐ)</th>
+                    <th class="text-center">Loại Ưu Đãi</th>
                 </tr>
             </thead>
             <tbody>
                 ${ckRows}
                 ${cfCkRow}
-                <tr style="background:rgba(39,174,96,0.08);font-weight:800;">
-                    <td style="color:#5dd88a;">TỔNG CHIẾT KHẤU</td>
-                    <td class="text-end" style="color:#5dd88a;">${ckPct.toFixed(1)}%</td>
-                    <td class="text-end" style="color:#5dd88a;">${fmt(ckVnd)} VNĐ</td>
-                    <td class="text-end" style="color:var(--accent-light);font-size:1rem;">${fmt(totalCkAll)} VNĐ</td>
+                <tr style="background:rgba(16,185,129,0.22); font-weight:800; border-top: 2px solid #10b981;">
+                    <td style="color:#34d399; font-weight:800;">TỔNG CHIẾT KHẤU</td>
+                    <td class="text-end" style="color:#34d399; font-weight:800;">${ckPct.toFixed(1)}%</td>
+                    <td class="text-end" style="color:#34d399; font-weight:800;">${fmt(ckVnd)} VNĐ</td>
+                    <td class="text-end" style="color:#4ade80; font-size:1.05rem; font-weight:800;">${fmt(totalCkAll)} VNĐ</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -677,8 +689,8 @@ ${d.supportMonths > 0 ? `
 </div>` : ''}
 
 <!-- Biểu đồ dư nợ & lãi vay -->
-<div class="card-custom mb-3">
-    <div class="card-title" style="color:#ffd166;"><i class="bi bi-graph-up-arrow me-2"></i>Biểu Đồ Diễn Biến Dư Nợ &amp; Lãi Vay Theo Năm</div>
+<div class="card-custom mb-3 chart-box-white" style="background:#ffffff !important; border:1px solid #e2e8f0; color:#0f172a;">
+    <div class="card-title" style="color:#0f172a !important;"><i class="bi bi-graph-up-arrow me-2" style="color:#d97706;"></i>Biểu Đồ Diễn Biến Dư Nợ &amp; Lãi Vay Theo Năm</div>
     <div style="height:260px; position:relative;">
         <canvas id="chart-loan-canvas"></canvas>
     </div>
@@ -800,7 +812,7 @@ function renderCompare2FullTab() {
                         if (idx === 0) {
                             return `<tr>
                                 <td class="stage-col" rowspan="${s.subItems.length}" style="vertical-align:middle;">Đợt ${s.no}&nbsp;<span class="badge-stage ${s.badge}">${s.label}</span></td>
-                                <td class="date-col" rowspan="${s.subItems.length}" style="vertical-align:middle;">${fmtDate(s.date)}</td>
+                                <td class="date-col" rowspan="${s.subItems.length}" style="vertical-align:middle;">${s.dateLabel || fmtDate(s.date)}</td>
                                 <td class="amount">${fmt(item.gross)}</td>
                                 <td class="discount">—</td>
                                 <td class="net-amount">${fmt(item.gross)}</td>
@@ -817,7 +829,7 @@ function renderCompare2FullTab() {
                     const labelCell = s.label ? `Đợt ${s.no}&nbsp;<span class="badge-stage ${s.badge}">${s.label}</span>` : `—`;
                     return `<tr>
                         <td class="stage-col">${labelCell}</td>
-                        <td class="date-col">${fmtDate(s.date)}</td>
+                        <td class="date-col">${s.dateLabel || fmtDate(s.date)}</td>
                         <td class="amount">${fmt(s.gross)}</td>
                         <td class="discount">${s.ck > 0 ? '–&nbsp;' + fmt(s.ck) : '—'}</td>
                         <td class="net-amount">${fmt(s.net)}</td>
@@ -828,25 +840,32 @@ function renderCompare2FullTab() {
             let stagesHtml = '';
             if (stages.isSplit) {
                 stagesHtml = `
-                    <tr style="background:rgba(212,175,55,0.18);"><td colspan="5" style="color:#f3e5ab;font-weight:800;text-align:center;"><i class="bi bi-geo-alt-fill me-1"></i> TIẾN ĐỘ TIỀN ĐẤT</td></tr>
+                    <tr class="stage-section-header-land"><td colspan="5" style="font-weight:800;text-align:center;"><i class="bi bi-geo-alt-fill me-1"></i> TIẾN ĐỘ TIỀN ĐẤT</td></tr>
                     ${renderTableRows(stages.landStages)}
-                    <tr style="background:rgba(255,209,102,0.18);"><td colspan="5" style="color:#ffd166;font-weight:800;text-align:center;"><i class="bi bi-tools me-1"></i> TIẾN ĐỘ XÂY DỰNG</td></tr>
+                    <tr class="stage-section-header-const"><td colspan="5" style="font-weight:800;text-align:center;"><i class="bi bi-tools me-1"></i> TIẾN ĐỘ XÂY DỰNG</td></tr>
                     ${renderTableRows(stages.constStages)}
                 `;
             } else {
                 stagesHtml = renderTableRows(stages);
             }
 
-            const ckRows = ckDetails.map(d => `<tr>
+            const ckRows = ckDetails.map(d => {
+                let badge = '';
+                if (d.deductType === 'price') badge = `<span style="background:rgba(74,222,128,0.18);color:#4ade80;font-size:0.70rem;font-weight:800;padding:2px 6px;border-radius:20px;border:1px solid #4ade80;white-space:nowrap;">✂️ Trừ giá HĐ</span>`;
+                else if (d.deductType === 'cashback') badge = `<span style="background:rgba(251,191,36,0.18);color:#fbbf24;font-size:0.70rem;font-weight:800;padding:2px 6px;border-radius:20px;border:1px solid #fbbf24;white-space:nowrap;">💵 Hoàn tiền</span>`;
+                else if (d.deductType === 'gift') badge = `<span style="background:rgba(167,139,250,0.18);color:#a78bfa;font-size:0.70rem;font-weight:800;padding:2px 6px;border-radius:20px;border:1px solid #a78bfa;white-space:nowrap;">🎁 Quà/Voucher</span>`;
+                return `<tr>
                 <td>${d.label}</td>
                 <td class="text-end" style="color:#4ade80;font-weight:700;">${d.pct > 0 ? d.pct + '%' : '—'}</td>
-                <td class="text-end" style="font-weight:800;color:#f3e5ab;">${fmt(d.vnd)} VNĐ</td>
-            </tr>`).join('');
+                <td class="text-end val-gold-theme" style="font-weight:800;">${fmt(d.vnd)} VNĐ</td>
+                <td class="text-center" style="white-space:nowrap;">${badge}</td>
+            </tr>`;
+            }).join('');
 
             return `
             <div class="card-custom h-100 mb-0">
-                <div style="border-bottom:2px solid ${titleColor}; padding-bottom:10px; margin-bottom:16px;">
-                    <h5 style="color:${titleColor}; font-weight:800; margin:0;"><i class="bi bi-house-fill me-2"></i>${titleLabel}: ${displayCode}</h5>
+                <div class="card-panel-header" style="border-bottom:2px solid ${titleColor}; padding-bottom:10px; margin-bottom:16px;">
+                    <h5 class="card-panel-title" style="color:${titleColor}; font-weight:800; margin:0;"><i class="bi bi-house-fill me-2"></i>${titleLabel}: ${displayCode}</h5>
                     <div style="font-size:0.83rem; color:var(--text-muted); margin-top:4px;">${S.typeLabel} &bull; ${methodLabelMap[S.paymentMethod] || S.paymentMethod}</div>
                 </div>
                 
@@ -854,7 +873,7 @@ function renderCompare2FullTab() {
                     <div class="col-6">
                         <div class="summary-box" style="padding:10px 12px;">
                             <div class="s-label" style="font-size:0.75rem;">Giá chưa VAT</div>
-                            <div class="s-value" style="color:#f3e5ab; font-size:0.95rem; font-weight:800;">${fmt(S.propValue)}</div>
+                            <div class="s-value" style="font-size:0.95rem; font-weight:800;">${fmt(S.propValue)}</div>
                         </div>
                     </div>
                     <div class="col-6">
@@ -866,7 +885,7 @@ function renderCompare2FullTab() {
                     <div class="col-6">
                         <div class="summary-box loan-box" style="padding:10px 12px;">
                             <div class="s-label" style="font-size:0.75rem;">Thực trả CĐT</div>
-                            <div class="s-value" style="color:#ffe79a; font-size:0.95rem; font-weight:800;">${fmt(S.totalKHtoCDT)}</div>
+                            <div class="s-value" style="font-size:0.95rem; font-weight:800;">${fmt(S.totalKHtoCDT)}</div>
                         </div>
                     </div>
                     <div class="col-6">
@@ -878,7 +897,7 @@ function renderCompare2FullTab() {
                 </div>
                 
                 <div class="mb-4">
-                    <div style="font-weight:700; color:#f3e5ab; font-size:0.9rem; margin-bottom:8px;"><i class="bi bi-tag-fill me-1"></i>Chi tiết chiết khấu &amp; Quà tặng</div>
+                    <div class="sec-heading-theme" style="font-weight:700; font-size:0.9rem; margin-bottom:8px;"><i class="bi bi-tag-fill me-1"></i>Chi tiết chiết khấu &amp; Quà tặng</div>
                     <div style="overflow-x:auto;">
                         <table class="result-table" style="font-size:0.78rem;">
                             <thead>
@@ -886,14 +905,16 @@ function renderCompare2FullTab() {
                                     <th>Hạng mục chiết khấu</th>
                                     <th class="text-end">% CK</th>
                                     <th class="text-end">Giá trị quy đổi</th>
+                                    <th class="text-center">Loại Ưu Đãi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 ${ckRows}
-                                <tr style="background:rgba(212,175,55,0.15); font-weight:800;">
-                                    <td style="color:#f3e5ab;">TỔNG CHIẾT KHẤU</td>
-                                    <td class="text-end" style="color:#4ade80;">${S.ckPct.toFixed(1)}%</td>
-                                    <td class="text-end" style="color:#ffe79a;">${fmt(S.totalCkAll)} VNĐ</td>
+                                <tr style="background:rgba(16,185,129,0.22); font-weight:800; border-top: 2px solid #10b981; border-bottom: 1px solid #10b981;">
+                                    <td style="color:#34d399; font-weight:800; font-size:0.85rem;">TỔNG CHIẾT KHẤU</td>
+                                    <td class="text-end" style="color:#34d399; font-weight:800; font-size:0.85rem;">${S.ckPct.toFixed(1)}%</td>
+                                    <td class="text-end" style="color:#4ade80; font-size:0.92rem; font-weight:800;">${fmt(S.totalCkAll)} VNĐ</td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -901,7 +922,7 @@ function renderCompare2FullTab() {
                 </div>
 
                 <div>
-                    <div style="font-weight:700; color:#ffd166; font-size:0.9rem; margin-bottom:8px;"><i class="bi bi-list-check me-1"></i>Lịch thanh toán chi tiết</div>
+                    <div class="sec-heading-theme" style="font-weight:700; font-size:0.9rem; margin-bottom:8px;"><i class="bi bi-list-check me-1"></i>Lịch thanh toán chi tiết</div>
                     <div style="overflow-x:auto;">
                         <table class="result-table" style="font-size:0.78rem;">
                             <thead>
@@ -913,7 +934,15 @@ function renderCompare2FullTab() {
                                     <th class="text-end">Thực trả</th>
                                 </tr>
                             </thead>
-                            <tbody>${stagesHtml}</tbody>
+                            <tbody>
+                                ${stagesHtml}
+                                <tr style="background:rgba(16,185,129,0.22); font-weight:800; border-top: 2px solid #10b981; border-bottom: 1px solid #10b981;">
+                                    <td colspan="2" style="color:#34d399; text-align:right; font-size:0.83rem;">TỔNG CỘNG KH TRẢ</td>
+                                    <td class="text-end" style="color:#ffffff; font-size:0.85rem;">${fmt(S.totalGross)}</td>
+                                    <td class="text-end" style="color:#34d399; font-size:0.85rem;">– ${fmt(S.totalCkAll)}</td>
+                                    <td class="text-end" style="color:#4ade80; font-size:0.95rem; font-weight:800;">${fmt(S.totalKHtoCDT)}</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -930,7 +959,9 @@ function renderCompare2FullTab() {
 
         const diffVal = res2.S.grandTotal - res1.S.grandTotal;
         const diffText = diffVal === 0 ? 'Hai căn có tổng chi phí bằng nhau' : (diffVal > 0 ? `Căn B (${code2}) cao hơn Căn A (${code1}) là ${fmt(diffVal)} VNĐ` : `Căn B (${code2}) tiết kiệm hơn Căn A (${code1}) là ${fmt(Math.abs(diffVal))} VNĐ`);
-        const diffColor = diffVal > 0 ? '#f87171' : '#4ade80';
+        const diffAccent = diffVal > 0 ? '#ef4444' : (diffVal < 0 ? '#10b981' : '#64748b');
+        const diffTextColor = diffVal > 0 ? '#dc2626' : (diffVal < 0 ? '#15803d' : '#334155');
+        const diffIcon = diffVal > 0 ? 'bi-exclamation-triangle-fill' : (diffVal < 0 ? 'bi-check-circle-fill' : 'bi-info-circle-fill');
 
         // --- Bảng Ma Trận Dòng Tiền Song Song (Timeline Cash-Flow Comparison Matrix) ---
         const renderCashFlowComparisonMatrix = (r1, r2, c1, c2) => {
@@ -948,7 +979,7 @@ function renderCompare2FullTab() {
                 const s2 = stages2[i] || null;
 
                 const label1 = s1 ? (s1.label || `Đợt ${s1.no}`) : (s2 ? (s2.label || `Đợt ${s2.no}`) : `Đợt ${i + 1}`);
-                const date1Str = s1 ? fmtDate(s1.date) : (s2 ? fmtDate(s2.date) : '—');
+                const date1Str = s1 ? (s1.dateLabel || fmtDate(s1.date)) : (s2 ? (s2.dateLabel || fmtDate(s2.date)) : '—');
 
                 const net1 = s1 ? (s1.net || 0) : 0;
                 const net2 = s2 ? (s2.net || 0) : 0;
@@ -959,11 +990,11 @@ function renderCompare2FullTab() {
                 const diffNet = net2 - net1;
                 let diffBadge = '';
                 if (diffNet === 0) {
-                    diffBadge = `<span class="badge" style="background:rgba(255,255,255,0.1); color:#cbd5e1; font-weight:600;">Bằng nhau</span>`;
+                    diffBadge = `<span class="badge badge-equal">Bằng nhau</span>`;
                 } else if (diffNet > 0) {
-                    diffBadge = `<span class="badge" style="background:rgba(239,68,68,0.15); color:#f87171; font-weight:700;">${c2} cao hơn +${fmt(diffNet)}</span>`;
+                    diffBadge = `<span class="badge badge-diff-high">${c2} cao hơn +${fmt(diffNet)}</span>`;
                 } else {
-                    diffBadge = `<span class="badge" style="background:rgba(74,222,128,0.15); color:#4ade80; font-weight:700;">${c2} thấp hơn –${fmt(Math.abs(diffNet))}</span>`;
+                    diffBadge = `<span class="badge badge-diff-low">${c2} thấp hơn –${fmt(Math.abs(diffNet))}</span>`;
                 }
 
                 rowsHtml += `
@@ -984,7 +1015,7 @@ function renderCompare2FullTab() {
 
             const totalDiff = r2.S.totalKHtoCDT - r1.S.totalKHtoCDT;
             const totalBadge = totalDiff === 0
-                ? '<span class="badge bg-secondary">Bằng nhau</span>'
+                ? '<span class="badge badge-equal">Bằng nhau</span>'
                 : (totalDiff > 0
                     ? `<span class="badge" style="background:#ef4444; color:#fff;">TỔNG B CAO HƠN +${fmt(totalDiff)} VNĐ</span>`
                     : `<span class="badge" style="background:#16a34a; color:#fff;">TỔNG B THẤP HƠN –${fmt(Math.abs(totalDiff))} VNĐ</span>`);
@@ -1014,11 +1045,11 @@ function renderCompare2FullTab() {
                         </thead>
                         <tbody>
                             ${rowsHtml}
-                            <tr style="background:rgba(13,46,38,0.4); font-weight:800; border-top:2px solid #ffd166;">
-                                <td colspan="2" style="color:#ffd166; font-size:0.92rem;">TỔNG CỘNG TRẢ CĐT (SAU CK)</td>
-                                <td class="text-end" style="color:#f3e5ab; font-size:1.05rem;">${fmt(r1.S.totalKHtoCDT)} VNĐ</td>
-                                <td class="text-end" style="color:#ffd166; font-size:1.05rem;">${fmt(r2.S.totalKHtoCDT)} VNĐ</td>
-                                <td class="text-center" colspan="2" style="font-size:0.9rem;">${totalBadge}</td>
+                            <tr style="background: linear-gradient(135deg, #0d2e26 0%, #154d40 100%) !important; font-weight:800; border-top:3px solid #ffd166;">
+                                <td colspan="2" style="color:#ffffff !important; font-size:0.92rem; vertical-align:middle;">TỔNG CỘNG TRẢ CĐT (SAU CK)</td>
+                                <td class="text-end" style="color:#fef08a !important; font-size:1.08rem; vertical-align:middle;">${fmt(r1.S.totalKHtoCDT)} VNĐ</td>
+                                <td class="text-end" style="color:#ffd166 !important; font-size:1.08rem; vertical-align:middle;">${fmt(r2.S.totalKHtoCDT)} VNĐ</td>
+                                <td class="text-center" colspan="2" style="font-size:0.9rem; vertical-align:middle;">${totalBadge}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1029,12 +1060,27 @@ function renderCompare2FullTab() {
         const matrixHtml = renderCashFlowComparisonMatrix(res1, res2, code1, code2);
 
         const fullCompareHtml = `
-        <div class="alert mb-3" style="background:rgba(212,175,55,0.18); border:1px solid rgba(212,175,55,0.4); border-radius:12px; color:#ffffff;">
-            <i class="bi bi-info-circle-fill me-2" style="color:var(--accent-light);"></i>
-            <strong>ĐÁNH GIÁ TỔNG QUAN:</strong> <span style="color:${diffColor}; font-weight:800;">${diffText}</span>
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div style="font-weight:800; font-size:1.1rem; color:var(--accent-light);">
+                <i class="bi bi-layout-split me-2"></i>KẾT QUẢ SO SÁNH SONG SONG: ${code1} vs ${code2}
+            </div>
+            <button type="button" class="btn btn-warning fw-bold px-3 py-2 shadow" 
+                    style="background:linear-gradient(135deg, #ffd166 0%, #f3a83b 100%); color:#0d2e26; border:none; border-radius:8px;" 
+                    onclick="exportCompare2Image()">
+                <i class="bi bi-camera-fill me-1"></i> Xuất Ảnh PNG So Sánh (HD)
+            </button>
         </div>
-        <div class="card-custom mb-4">
-            <div class="card-title" style="color:#ffd166;"><i class="bi bi-radar me-2"></i>Biểu Đồ Radar So Sánh Đa Chiều (${code1} vs ${code2})</div>
+        <div class="card-custom mb-3 p-3 chart-box-white" style="background:#ffffff !important; border:1px solid #e2e8f0; border-left: 5px solid ${diffAccent} !important; border-radius:12px; color:#0f172a;">
+            <div class="d-flex align-items-center gap-2" style="font-size:0.95rem;">
+                <i class="bi ${diffIcon} me-1" style="color:${diffAccent}; font-size:1.25rem;"></i>
+                <div>
+                    <strong style="color:#0f172a;">ĐÁNH GIÁ TỔNG QUAN:</strong> 
+                    <span style="color:${diffTextColor}; font-weight:800;">${diffText}</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-custom mb-4 chart-box-white" style="background:#ffffff !important; border:1px solid #e2e8f0; color:#0f172a;">
+            <div class="card-title" style="color:#0f172a !important;"><i class="bi bi-radar me-2" style="color:#d97706;"></i>Biểu Đồ Radar So Sánh Đa Chiều (${code1} vs ${code2})</div>
             <div style="height:260px; position:relative;">
                 <canvas id="chart-radar-canvas"></canvas>
             </div>
