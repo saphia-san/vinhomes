@@ -570,71 +570,70 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
         grandTotal, loanData, showBankSim, PA
     };
 
-    if (returnOnly) return { S: resultDataS, stages, ckDetails };
+    // ---- Tính dữ liệu so sánh 3 phương thức cho biểu đồ ----
+    const results = {};
+    const plans = (apt.type === 'finished') ? SP.interestSupport.finished : SP.interestSupport.roughAndGianXay;
+    const methodsToCompare = [
+        { id: 'own-early', label: '💰 TTS – Vốn tự có', m: 'own-early', pIdx: null },
+        { id: 'own-normal', label: '📋 Tiến độ thường', m: 'own-normal', pIdx: null }
+    ];
 
-    // ---- Bảng so sánh 3 phương thức ----
-    let comparisonHTML = '';
-    if (!overrideMethod) {
-        const plans = (apt.type === 'finished') ? SP.interestSupport.finished : SP.interestSupport.roughAndGianXay;
-        const methodsToCompare = [
-            { id: 'own-early', label: '💰 TTS – Vốn tự có', m: 'own-early', pIdx: null },
-            { id: 'own-normal', label: '📋 Tiến độ thường', m: 'own-normal', pIdx: null }
-        ];
-
-        plans.forEach((p, idx) => {
-            methodsToCompare.push({
-                id: 'bank-' + idx,
-                label: `🏦 Vay HTLS ${p.months}T`,
-                m: 'bank',
-                pIdx: idx
-            });
+    plans.forEach((p, idx) => {
+        methodsToCompare.push({
+            id: 'bank-' + idx,
+            label: `🏦 Vay HTLS ${p.months}T`,
+            m: 'bank',
+            pIdx: idx
         });
+    });
 
-        const results = {};
+    if (!returnOnly) {
         const prevSelected = (typeof selectedApt !== 'undefined') ? selectedApt : null;
 
         methodsToCompare.forEach(mc => {
             if (typeof selectedApt !== 'undefined') selectedApt = apt;
-            const res = calculate(true, true, mc.m, mc.pIdx);
+            const res = calculate(true, true, mc.m, mc.pIdx, apt);
             if (res) results[mc.id] = res.S;
         });
 
-        resultDataS.comparisonResults = results;
-
         if (typeof selectedApt !== 'undefined') selectedApt = prevSelected;
-
-        const ths = methodsToCompare.map(mc => {
-            const isCur = mc.m === paymentMethod && (mc.m !== 'bank' || mc.pIdx === supportPlanIdx);
-            const style = isCur ? 'background:rgba(41,128,185,0.25);color:#7ecfff;border-bottom:2px solid #7ecfff;' : '';
-            return `<th class="text-end" style="min-width:140px;${style}">${mc.label} ${isCur ? '(Đang chọn)' : ''}</th>`;
-        }).join('');
-
-        const rowFn = (label, fn, extraStyle = '') => {
-            const tds = methodsToCompare.map(mc => {
-                const isCur = mc.m === paymentMethod && (mc.m !== 'bank' || mc.pIdx === supportPlanIdx);
-                const tdStyle = isCur ? 'color:#7ecfff;font-weight:700;' : '';
-                const val = results[mc.id] ? fn(results[mc.id]) : '—';
-                return `<td class="text-end" style="${tdStyle}${extraStyle}">${val}</td>`;
-            }).join('');
-            return `<tr><td>${label}</td>${tds}</tr>`;
-        };
-
-        comparisonHTML = `
-        <div class="card-custom mb-3">
-            <div class="card-title" style="font-size:1.05rem;"><i class="bi bi-layout-split me-2"></i>Bảng Tóm Tắt So Sánh Các Phương Thức Thanh Toán</div>
-            <div style="overflow-x:auto;">
-                <table class="result-table">
-                    <thead><tr><th style="min-width:200px;">Chỉ tiêu (VNĐ)</th>${ths}</tr></thead>
-                    <tbody>
-                        ${rowFn('Giá trị BĐS gốc', S => fmt(S.propValue))}
-                        ${rowFn('Tổng chiết khấu', S => fmt(S.totalCkAll), 'color:#5dd88a;')}
-                        ${rowFn('Thực trả cho CĐT (sau CK)', S => fmt(S.totalKHtoCDT), 'font-weight:600;')}
-                        ${rowFn('Tổng chi phí (CĐT + Vay NH)', S => fmt(S.grandTotal), 'font-size:1.1rem; color:#f39c12;')}
-                    </tbody>
-                </table>
-            </div>
-        </div>`;
     }
+    resultDataS.comparisonResults = results;
+
+    if (returnOnly) return { S: resultDataS, stages, ckDetails };
+
+    // ---- Bảng so sánh 3 phương thức ----
+    const ths = methodsToCompare.map(mc => {
+        const isCur = mc.m === paymentMethod && (mc.m !== 'bank' || mc.pIdx === supportPlanIdx);
+        const style = isCur ? 'background:rgba(41,128,185,0.25);color:#7ecfff;border-bottom:2px solid #7ecfff;' : '';
+        return `<th class="text-end" style="min-width:140px;${style}">${mc.label} ${isCur ? '(Đang chọn)' : ''}</th>`;
+    }).join('');
+
+    const rowFn = (label, fn, extraStyle = '') => {
+        const tds = methodsToCompare.map(mc => {
+            const isCur = mc.m === paymentMethod && (mc.m !== 'bank' || mc.pIdx === supportPlanIdx);
+            const tdStyle = isCur ? 'color:#7ecfff;font-weight:700;' : '';
+            const val = results[mc.id] ? fn(results[mc.id]) : '—';
+            return `<td class="text-end" style="${tdStyle}${extraStyle}">${val}</td>`;
+        }).join('');
+        return `<tr><td>${label}</td>${tds}</tr>`;
+    };
+
+    const comparisonHTML = `
+    <div class="card-custom mb-3">
+        <div class="card-title" style="font-size:1.05rem;"><i class="bi bi-layout-split me-2"></i>Bảng Tóm Tắt So Sánh Các Phương Thức Thanh Toán</div>
+        <div style="overflow-x:auto;">
+            <table class="result-table">
+                <thead><tr><th style="min-width:200px;">Chỉ tiêu (VNĐ)</th>${ths}</tr></thead>
+                <tbody>
+                    ${rowFn('Giá trị BĐS gốc', S => fmt(S.propValue))}
+                    ${rowFn('Tổng chiết khấu', S => fmt(S.totalCkAll), 'color:#5dd88a;')}
+                    ${rowFn('Thực trả cho CĐT (sau CK)', S => fmt(S.totalKHtoCDT), 'font-weight:600;')}
+                    ${rowFn('Tổng chi phí (CĐT + Vay NH)', S => fmt(S.grandTotal), 'font-size:1.1rem; color:#f39c12;')}
+                </tbody>
+            </table>
+        </div>
+    </div>`;
 
     resultDataS.stages = stages;
     resultDataS.ckDetails = ckDetails;
