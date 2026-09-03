@@ -1482,7 +1482,7 @@ function selectAndCalculateUnit(macan, method, supportIdx) {
         if (typeof showTab === 'function') {
             showTab('result');
         }
-        
+
         // Direct DOM safeguard for Chrome local file rendering
         const elRes = document.getElementById('tab-result');
         if (elRes) {
@@ -1494,7 +1494,7 @@ function selectAndCalculateUnit(macan, method, supportIdx) {
             try {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (e) {
-                try { window.scrollTo(0, 0); } catch (ex) {}
+                try { window.scrollTo(0, 0); } catch (ex) { }
             }
         }
     }
@@ -1526,11 +1526,11 @@ function runFinancialMatcher() {
     // -------- Đọc Promo Checkboxes từ phần Gợi Ý Căn --------
     const getCheck = (id) => { const el = document.getElementById(id); return el ? el.checked : false; };
     const finPromos = {
-        goldGift:    getCheck('fin_promo_goldGift'),
+        goldGift: getCheck('fin_promo_goldGift'),
         earlyMoveIn: getCheck('fin_promo_earlyMoveIn'),
-        noBlnh:      getCheck('fin_promo_noBlnh'),
-        aquafield:   getCheck('fin_promo_aquafield'),
-        voucher:     getCheck('fin_promo_voucher'),
+        noBlnh: getCheck('fin_promo_noBlnh'),
+        aquafield: getCheck('fin_promo_aquafield'),
+        voucher: getCheck('fin_promo_voucher'),
         goldGiftCount: (() => { const el = document.getElementById('fin_goldGiftCount'); return el ? el.value : 'auto'; })(),
         oldHousePrice: (() => { const el = document.getElementById('fin_oldHousePrice'); return el ? el.value : ''; })(),
         voucherPercent: (() => { const el = document.getElementById('fin_voucherPercent'); return el ? el.value : '8'; })(),
@@ -1565,11 +1565,11 @@ function runFinancialMatcher() {
 
     // Lưu lại giá trị gốc của form chính trước khi sync
     const savedMain = {
-        goldGift:    getCheck('promo_goldGift'),
+        goldGift: getCheck('promo_goldGift'),
         earlyMoveIn: getCheck('promo_earlyMoveIn'),
-        noBlnh:      getCheck('promo_noBlnh'),
-        aquafield:   getCheck('promo_aquafield'),
-        voucher:     getCheck('promo_voucher'),
+        noBlnh: getCheck('promo_noBlnh'),
+        aquafield: getCheck('promo_aquafield'),
+        voucher: getCheck('promo_voucher'),
         goldGiftCount: (() => { const el = document.getElementById('goldGiftCount'); return el ? el.value : 'auto'; })(),
         oldHousePrice: (() => { const el = document.getElementById('oldHousePrice'); return el ? el.value : ''; })(),
         voucherPercent: (() => { const el = document.getElementById('voucherPercent'); return el ? el.value : '8'; })(),
@@ -1868,8 +1868,8 @@ function openLocationSpotlight(macan) {
 
     if (!coords) {
         const dict = (typeof EXACT_UNIT_MAP_COORDINATES !== 'undefined') ? EXACT_UNIT_MAP_COORDINATES
-                    : (typeof window !== 'undefined' && window.EXACT_UNIT_MAP_COORDINATES) ? window.EXACT_UNIT_MAP_COORDINATES
-                    : null;
+            : (typeof window !== 'undefined' && window.EXACT_UNIT_MAP_COORDINATES) ? window.EXACT_UNIT_MAP_COORDINATES
+                : null;
         if (dict) {
             const rawNoDash = cleanCode.replace(/[^A-Z0-9]/g, '');
             for (let k in dict) {
@@ -1896,17 +1896,17 @@ function openLocationSpotlight(macan) {
             <ul class="nav nav-pills mb-3 gap-2 justify-content-center align-items-center flex-wrap" id="spotlightModeTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active fw-bold btn-sm px-3" id="spot-crop-tab" data-bs-toggle="pill" data-bs-target="#spot-crop-pane" type="button" role="tab">
-                        <i class="bi bi-crop me-1"></i>1. Ảnh Cắt HD 300DPI
+                        <i class="bi bi-crop me-1"></i>1. Ảnh Vị Trí Căn
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link fw-bold btn-sm px-3" id="spot-cad-tab" data-bs-toggle="pill" data-bs-target="#spot-cad-pane" type="button" role="tab" onclick="scrollInteractiveCadMap(${coords.x}, ${coords.y})">
-                        <i class="bi bi-map-fill me-1"></i>2. Sơ Đồ 2D CAD Trực Tiếp
+                        <i class="bi bi-map-fill me-1"></i>2. Sơ Đồ 2D Trực Tiếp
                     </button>
                 </li>
                 <li class="nav-item">
-                    <a href="assets/VHSP.pdf" download="VHSP_So_Do_Phan_Lo_CDT.pdf" target="_blank" class="btn btn-outline-warning fw-bold btn-sm px-3 text-decoration-none d-inline-flex align-items-center" title="Tải File PDF Sơ Đồ Gốc CĐT">
-                        <i class="bi bi-download me-1"></i>📥 Tải File PDF Gốc CĐT
+                    <a href="assets/VHSP.pdf" download="VHSP_So_Do_Phan_Lo_CDT.pdf" target="_blank" class="btn btn-outline-warning fw-bold btn-sm px-3 text-decoration-none d-inline-flex align-items-center" title="Tải File PDF Sơ Đồ Gốc">
+                        <i class="bi bi-download me-1"></i>📥 Tải File PDF Gốc
                     </a>
                 </li>
             </ul>
@@ -1917,7 +1917,7 @@ function openLocationSpotlight(macan) {
                     <div class="row g-3">
                         <div class="col-12 col-lg-7 text-center">
                             <div class="border border-warning rounded-3 overflow-hidden bg-black p-1 shadow-lg">
-                                <img src="${spotImgSrc}" class="img-fluid rounded-2 w-100" style="max-height: 480px; object-fit: contain;" alt="Vị trí ${cleanCode}">
+                                <img src="${spotImgSrc}" onerror="this.onerror=null; this.src='assets/pdf-masterplan.jpg';" class="img-fluid rounded-2 w-100" style="max-height: 480px; object-fit: contain;" alt="Vị trí ${cleanCode}">
                             </div>
                         </div>
                         <div class="col-12 col-lg-5">
@@ -1966,7 +1966,7 @@ function openLocationSpotlight(macan) {
 
                     <div class="position-relative overflow-auto rounded-3 border border-warning shadow-lg" id="interactiveMapViewport" style="height: 640px; max-height: 70vh; background: #051410; scrollbar-width: thin;">
                         <div style="position: relative; width: 3600px; height: 2548px; transition: transform 0.2s ease-out;" id="interactiveMapInner">
-                            <img src="assets/pdf_2d_masterplan_hd.jpg" style="width: 100%; height: 100%; object-fit: fill; display: block;" alt="Sơ đồ 2D CAD HD">
+                            <img src="assets/pdf_2d_masterplan_hd.jpg" onerror="this.onerror=null; this.src='assets/pdf-masterplan.jpg';" style="width: 100%; height: 100%; object-fit: fill; display: block;" alt="Sơ đồ 2D CAD HD">
                             <!-- Live Glowing Pin Marker -->
                             <div style="position: absolute; left: ${coords.x}%; top: ${coords.y}%; transform: translate(-50%, -100%); pointer-events: none; z-index: 10;">
                                 <div class="px-3 py-1 rounded-pill shadow-lg fw-bold text-dark d-flex align-items-center gap-1"
@@ -2010,7 +2010,7 @@ function closeLocationSpotlightModal() {
             const modal = bootstrap.Modal.getInstance(modalEl);
             if (modal) modal.hide();
         }
-    } catch (e) {}
+    } catch (e) { }
     modalEl.style.display = 'none';
     modalEl.classList.remove('show');
     document.body.classList.remove('modal-open');

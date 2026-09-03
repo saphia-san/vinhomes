@@ -340,7 +340,7 @@ function renderAllMatchedCards() {
     const container = document.getElementById('finMatcherResultsContainer');
     if (!container || !allMatchingResults) return;
 
-    const typeLabels = { rough: '🧱 Bàn Giao Thô', finished: '🏠 Hoàn Thiện', gianXay: '🏗️ Giãn Xây Q4/2028' };
+    const typeLabels = { rough: 'Bàn Giao Thô', finished: 'Hoàn Thiện', gianXay: 'Giãn Xây Q4/2028' };
     const elM = document.getElementById('finMethod');
     const mVal = elM ? elM.value : 'all';
 
@@ -355,22 +355,22 @@ function renderAllMatchedCards() {
 
         // XÁC ĐỊNH SỐ CHỈ VÀNG THEO CSBH V07 & V08 (Tổng giá gốc gồm VAT và KPBT)
         const origAllin = (calcRes && calcRes.S && calcRes.S.PA && calcRes.S.PA.allin) ? calcRes.S.PA.allin : (u.priceBeforeVat || 0);
-        let goldText = '🥇 Quà Vàng 1 Chỉ (15 Tr)';
+        let goldText = 'Quà Vàng 1 Chỉ (15 Tr)';
         if (origAllin >= 20e9) {
-            goldText = '🥇 Quà Vàng 5 Chỉ (75 Tr)';
+            goldText = 'Quà Vàng 5 Chỉ (75 Tr)';
         } else if (origAllin >= 10e9) {
-            goldText = '🥇 Quà Vàng 3 Chỉ (45 Tr)';
+            goldText = 'Quà Vàng 3 Chỉ (45 Tr)';
         }
 
         // Badges đặc quyền gọn gàng
         const isVOS = (u.macan === 'TL10-53' || u.macan === 'TL10-22');
-        const vosBadge = isVOS ? `<span class="badge bg-warning text-dark fw-bold shadow-sm px-2 py-0.5" style="font-size: 0.72rem;"><i class="bi bi-house-check-fill me-1"></i>VOS: -5% HĐMB + 5% tiền mặt</span>` : '';
-        const goldBadge = `<span class="badge bg-danger bg-gradient text-white fw-bold shadow-sm px-2 py-0.5" style="font-size: 0.72rem;"><i class="bi bi-gift-fill me-1"></i>${goldText}</span>`;
-        const gianXayBadge = u.type === 'gianXay' ? `<span class="badge bg-info text-dark fw-bold shadow-sm px-2 py-0.5" style="font-size: 0.72rem;"><i class="bi bi-hourglass-split me-1"></i>Giãn Xây Q4/2028</span>` : '';
+        const vosBadge = isVOS ? `<span class="badge bg-warning text-dark fw-bold shadow-sm px-2 py-0.5" style="font-size: 0.72rem;">VOS: -5% HĐMB + 5% tiền mặt</span>` : '';
+        const goldBadge = `<span class="badge bg-danger bg-gradient text-white fw-bold shadow-sm px-2 py-0.5" style="font-size: 0.72rem;">${goldText}</span>`;
+        const gianXayBadge = u.type === 'gianXay' ? `<span class="badge bg-info text-dark fw-bold shadow-sm px-2 py-0.5" style="font-size: 0.72rem;">Giãn Xây Q4/2028</span>` : '';
 
         const monthlyRow = (max_monthly_payment > 0)
             ? `<div class="d-flex justify-content-between align-items-center py-0.5">
-                <span class="text-light opacity-90 fw-medium">💳 Trả góp/tháng:</span>
+                <span class="text-light opacity-90 fw-medium">Trả góp/tháng:</span>
                 <strong class="text-info font-monospace fw-bold" style="font-size: 0.88rem;">${fmt(max_monthly_payment)}&nbsp;<span class="fw-normal" style="font-size: 0.75rem;">/tháng</span></strong>
                </div>`
             : '';
@@ -389,7 +389,7 @@ function renderAllMatchedCards() {
                                 <span class="badge bg-dark text-warning border border-warning border-opacity-40 px-2 py-0.5" style="font-size: 0.72rem;">${typeLabels[u.type] || 'Bàn Giao Hoàn Thiện'}</span>
                             </div>
                             <span class="badge ${msBgColor} px-2 py-1 fw-bold shadow-sm" style="font-size: 0.8rem;">
-                                🎯 ${final_score}% Khớp
+                                ${final_score}% Khớp
                             </span>
                         </div>
 
@@ -397,7 +397,7 @@ function renderAllMatchedCards() {
                         <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
                             <div class="d-flex align-items-center gap-1 flex-wrap">
                                 <span class="badge bg-success bg-gradient text-white px-2 py-0.5" style="font-size: 0.72rem;">
-                                    <i class="bi bi-circle-fill me-1" style="font-size:5px;"></i>Đang mở bán
+                                    Đang mở bán
                                 </span>
                                 ${goldBadge}
                                 ${vosBadge}
@@ -407,7 +407,7 @@ function renderAllMatchedCards() {
                                        style="width: 1rem; height: 1rem;" 
                                        onchange="toggleCompareUnit('${u.macan}')" ${isChecked ? 'checked' : ''}>
                                 <label class="form-check-label text-warning extra-small fw-bold mb-0 cursor-pointer" for="chk_cmp_${u.macan}" style="font-size: 0.78rem;">
-                                    ⚖️ Tick So Sánh
+                                    Tick So Sánh
                                 </label>
                             </div>
                         </div>
@@ -415,15 +415,15 @@ function renderAllMatchedCards() {
                         <!-- Spec Grid (Glassmorphism gọn gàng) -->
                         <div class="p-2.5 rounded-3 mb-2" style="background: rgba(3, 20, 16, 0.85); border: 1px solid rgba(255, 209, 102, 0.2); font-size: 0.82rem; line-height: 1.6;">
                             <div class="d-flex justify-content-between align-items-center py-0.5">
-                                <span class="text-light opacity-75">📐 Diện tích Đất / Xây:</span>
+                                <span class="text-light opacity-75">Diện tích Đất / Xây:</span>
                                 <strong class="text-white fw-bold">${u.dtDat} m² &nbsp;•&nbsp; ${u.dtXay} m²</strong>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-0.5">
-                                <span class="text-light opacity-75">🏷️ Giá Gốc CĐT:</span>
+                                <span class="text-light opacity-75">Giá Gốc CĐT:</span>
                                 <strong class="text-info font-monospace fw-bold">${fmt(u.priceBeforeVat)}&nbsp;<span class="fw-normal opacity-85" style="font-size: 0.75rem;">VNĐ</span></strong>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-0.5 border-top border-secondary border-opacity-20 mt-1 pt-1">
-                                <span class="text-warning fw-bold">✨ Thực Trả CĐT (Net):</span>
+                                <span class="text-warning fw-bold">Thực Trả CĐT (Net):</span>
                                 <strong class="text-warning font-monospace fw-bold" style="font-size: 0.9rem; text-shadow: 0 0 8px rgba(255,209,102,0.3);">${fmt(net_price)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">VNĐ</span></strong>
                             </div>
                         </div>
@@ -431,11 +431,11 @@ function renderAllMatchedCards() {
                         <!-- Financial Box (Khung Vốn & Dòng Tiền & PTTT Đang Tính) -->
                         <div class="p-2.5 rounded-3 mb-2.5" style="background: rgba(255, 209, 102, 0.07); border: 1px dashed rgba(255, 209, 102, 0.45); font-size: 0.82rem; line-height: 1.6;">
                             <div class="d-flex justify-content-between align-items-center py-0.5 border-bottom border-warning border-opacity-20 mb-1 pb-1">
-                                <span class="text-light opacity-90 fw-bold">📌 Phương thức tính:</span>
+                                <span class="text-light opacity-90 fw-bold">Phương thức tính:</span>
                                 <span class="badge bg-warning text-dark fw-bold shadow-sm" style="font-size: 0.74rem;">${methodLabel}</span>
                             </div>
                             <div class="d-flex justify-content-between align-items-center py-0.5">
-                                <span class="text-white fw-bold">💰 Vốn ban đầu cần có:</span>
+                                <span class="text-white fw-bold">Vốn ban đầu cần có:</span>
                                 <strong class="text-warning font-monospace fw-bold" style="font-size: 0.88rem;">${fmt(initial_capital)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">VNĐ</span></strong>
                             </div>
                             ${monthlyRow}
@@ -446,7 +446,7 @@ function renderAllMatchedCards() {
                     <div class="mt-3 pt-1">
                         <button type="button" class="btn btn-warning w-100 fw-extrabold shadow-sm py-2.5 text-dark btn-calc-unit" onclick="selectAndCalculateUnit('${u.macan}', '${targetMethod}', ${targetSupportIdx})" 
                                 style="border-radius: 10px; background: linear-gradient(135deg, #ffd166 0%, #f39c12 100%); border: none; font-size: 0.88rem; font-weight: 800; letter-spacing: 0.2px; margin-top: 4px;">
-                            ⚡ BẤM TÍNH CHI TIẾT CĂN NÀY
+                            BẤM TÍNH CHI TIẾT CĂN NÀY
                         </button>
                     </div>
                 </div>
