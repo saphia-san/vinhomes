@@ -138,16 +138,18 @@ function renderPriceBreakdownChart(canvasId, PA, S) {
                     position: 'bottom',
                     labels: {
                         color: C.textColor,
-                        font: { family: 'Plus Jakarta Sans', size: 12, weight: '800' },
-                        padding: 12,
-                        usePointStyle: true
+                        font: { family: 'Plus Jakarta Sans', size: 11, weight: '700' },
+                        padding: 16,
+                        boxWidth: 10,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
                     }
                 },
                 tooltip: {
                     backgroundColor: 'rgba(15,23,42,0.95)',
-                    titleFont: { size: 14, family: 'Plus Jakarta Sans', weight: 'bold' },
-                    bodyFont: { size: 13, family: 'Plus Jakarta Sans' },
-                    padding: 12,
+                    titleFont: { size: 13, family: 'Plus Jakarta Sans', weight: 'bold' },
+                    bodyFont: { size: 12, family: 'Plus Jakarta Sans' },
+                    padding: 10,
                     borderColor: 'rgba(255,255,255,0.1)',
                     borderWidth: 1,
                     cornerRadius: 8,
@@ -159,8 +161,8 @@ function renderPriceBreakdownChart(canvasId, PA, S) {
                     }
                 }
             },
-            cutout: '75%',
-            layout: { padding: 10 }
+            cutout: '68%',
+            layout: { padding: { top: 4, bottom: 20, left: 4, right: 4 } }
         }
     });
 }

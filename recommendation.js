@@ -355,23 +355,23 @@ function renderAllMatchedCards() {
 
         // XÁC ĐỊNH SỐ CHỈ VÀNG THEO CSBH V07 & V08 (Tổng giá gốc gồm VAT và KPBT)
         const origAllin = (calcRes && calcRes.S && calcRes.S.PA && calcRes.S.PA.allin) ? calcRes.S.PA.allin : (u.priceBeforeVat || 0);
-        let goldText = 'Quà Vàng 1 Chỉ (15 Tr)';
+        let goldText = 'Quà 1 Chỉ Vàng';
         if (origAllin >= 20e9) {
-            goldText = 'Quà Vàng 5 Chỉ (75 Tr)';
+            goldText = 'Quà 5 Chỉ Vàng';
         } else if (origAllin >= 10e9) {
-            goldText = 'Quà Vàng 3 Chỉ (45 Tr)';
+            goldText = 'Quà 3 Chỉ Vàng';
         }
 
-        // Badges đặc quyền gọn gàng
+        // Badges đặc quyền gọn gàng với padding thoải mái
         const isVOS = (u.macan === 'TL10-53' || u.macan === 'TL10-22');
-        const vosBadge = isVOS ? `<span class="badge bg-warning text-dark fw-bold shadow-sm px-2 py-0.5" style="font-size: 0.72rem;">VOS: -5% HĐMB + 5% tiền mặt</span>` : '';
-        const goldBadge = `<span class="badge bg-danger bg-gradient text-white fw-bold shadow-sm px-2 py-0.5" style="font-size: 0.72rem;">${goldText}</span>`;
-        const gianXayBadge = u.type === 'gianXay' ? `<span class="badge bg-info text-dark fw-bold shadow-sm px-2 py-0.5" style="font-size: 0.72rem;">Giãn Xây Q4/2028</span>` : '';
+        const vosBadge = isVOS ? `<span class="badge bg-warning text-dark fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;">VOS: -5% HĐMB + 5% tiền mặt</span>` : '';
+        const goldBadge = `<span class="badge gold-gift-badge fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px; background: linear-gradient(135deg, #ffd166 0%, #f59e0b 100%); color: #04120e !important; font-weight: 800;">${goldText}</span>`;
+        const gianXayBadge = u.type === 'gianXay' ? `<span class="badge bg-info text-dark fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;">Giãn Xây Q4/2028</span>` : '';
 
         const monthlyRow = (max_monthly_payment > 0)
-            ? `<div class="d-flex justify-content-between align-items-center py-0.5">
+            ? `<div class="d-flex justify-content-between align-items-center py-1">
                 <span class="text-light opacity-90 fw-medium">Trả góp/tháng:</span>
-                <strong class="text-info font-monospace fw-bold" style="font-size: 0.88rem;">${fmt(max_monthly_payment)}&nbsp;<span class="fw-normal" style="font-size: 0.75rem;">/tháng</span></strong>
+                <strong class="text-info font-monospace fw-bold" style="font-size: 0.88rem;">${fmt(max_monthly_payment)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">/tháng</span></strong>
                </div>`
             : '';
 
@@ -380,25 +380,23 @@ function renderAllMatchedCards() {
         return `
             <div class="col-12 col-md-6 col-lg-4 mb-3">
                 <div class="card-recommendation-item rounded-4 h-100 d-flex flex-column justify-content-between shadow position-relative"
-                     style="background: linear-gradient(160deg, #092e26 0%, #041a14 100%); border: 1.5px solid rgba(255, 209, 102, 0.35); border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.4); padding: 14px 16px;">
+                     style="background: linear-gradient(160deg, #092e26 0%, #041a14 100%); border: 1.5px solid rgba(255, 209, 102, 0.35); border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.4); padding: 16px 18px;">
                     <div>
                         <!-- Header: Mã Căn & Match Score -->
-                        <div class="d-flex justify-content-between align-items-center mb-2 pb-1.5 border-bottom border-secondary border-opacity-30">
+                        <div class="d-flex justify-content-between align-items-center mb-2.5 pb-2 border-bottom border-secondary border-opacity-30">
                             <div class="d-flex align-items-center gap-2">
                                 <h5 class="fw-extrabold mb-0 text-warning" style="font-size: 1.25rem; letter-spacing: 0.3px; text-shadow: 0 0 8px rgba(255,209,102,0.3);">${u.macan}</h5>
-                                <span class="badge bg-dark text-warning border border-warning border-opacity-40 px-2 py-0.5" style="font-size: 0.72rem;">${typeLabels[u.type] || 'Bàn Giao Hoàn Thiện'}</span>
+                                <span class="badge type-badge ${u.type === 'gianXay' ? 'type-badge-gianxay' : (u.type === 'rough' ? 'type-badge-rough' : 'type-badge-finished')} px-2.5 py-1 fw-bold" style="font-size: 0.72rem; border-radius: 10px;">${typeLabels[u.type] || 'Bàn Giao Hoàn Thiện'}</span>
                             </div>
-                            <span class="badge ${msBgColor} px-2 py-1 fw-bold shadow-sm" style="font-size: 0.8rem;">
+                            <span class="badge ${msBgColor} px-2.5 py-1 fw-bold shadow-sm" style="font-size: 0.8rem; border-radius: 10px;">
                                 ${final_score}% Khớp
                             </span>
                         </div>
 
-                        <!-- Badges & Ô Tick So Sánh (Hàng ngắn gọn) -->
-                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
-                            <div class="d-flex align-items-center gap-1 flex-wrap">
-                                <span class="badge bg-success bg-gradient text-white px-2 py-0.5" style="font-size: 0.72rem;">
-                                    Đang mở bán
-                                </span>
+                        <!-- Badges & Ô Tick So Sánh (Thêm mt-2.5 pt-0.5 để không đụng đường viền trên) -->
+                        <div class="d-flex justify-content-between align-items-center mb-2.5 mt-2.5 pt-0.5 flex-wrap gap-1.5">
+                            <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                <span class="badge bg-success bg-gradient text-white px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;">Đang mở bán</span>
                                 ${goldBadge}
                                 ${vosBadge}
                             </div>
@@ -412,40 +410,40 @@ function renderAllMatchedCards() {
                             </div>
                         </div>
 
-                        <!-- Spec Grid (Glassmorphism gọn gàng) -->
-                        <div class="p-2.5 rounded-3 mb-2" style="background: rgba(3, 20, 16, 0.85); border: 1px solid rgba(255, 209, 102, 0.2); font-size: 0.82rem; line-height: 1.6;">
-                            <div class="d-flex justify-content-between align-items-center py-0.5">
+                        <!-- Spec Grid (Glassmorphism rộng rãi, không bị chạm viền) -->
+                        <div class="rounded-3 mb-2.5" style="background: rgba(3, 20, 16, 0.85); border: 1px solid rgba(255, 209, 102, 0.25); padding: 12px 14px; font-size: 0.82rem; line-height: 1.65;">
+                            <div class="d-flex justify-content-between align-items-center py-1">
                                 <span class="text-light opacity-75">Diện tích Đất / Xây:</span>
                                 <strong class="text-white fw-bold">${u.dtDat} m² &nbsp;•&nbsp; ${u.dtXay} m²</strong>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center py-0.5">
+                            <div class="d-flex justify-content-between align-items-center py-1">
                                 <span class="text-light opacity-75">Giá Gốc CĐT:</span>
                                 <strong class="text-info font-monospace fw-bold">${fmt(u.priceBeforeVat)}&nbsp;<span class="fw-normal opacity-85" style="font-size: 0.75rem;">VNĐ</span></strong>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center py-0.5 border-top border-secondary border-opacity-20 mt-1 pt-1">
+                            <div class="d-flex justify-content-between align-items-center py-1 border-top border-secondary border-opacity-25 mt-1 pt-1.5">
                                 <span class="text-warning fw-bold">Thực Trả CĐT (Net):</span>
-                                <strong class="text-warning font-monospace fw-bold" style="font-size: 0.9rem; text-shadow: 0 0 8px rgba(255,209,102,0.3);">${fmt(net_price)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">VNĐ</span></strong>
+                                <strong class="text-warning font-monospace fw-bold" style="font-size: 0.92rem; text-shadow: 0 0 8px rgba(255,209,102,0.3);">${fmt(net_price)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">VNĐ</span></strong>
                             </div>
                         </div>
 
-                        <!-- Financial Box (Khung Vốn & Dòng Tiền & PTTT Đang Tính) -->
-                        <div class="p-2.5 rounded-3 mb-2.5" style="background: rgba(255, 209, 102, 0.07); border: 1px dashed rgba(255, 209, 102, 0.45); font-size: 0.82rem; line-height: 1.6;">
-                            <div class="d-flex justify-content-between align-items-center py-0.5 border-bottom border-warning border-opacity-20 mb-1 pb-1">
+                        <!-- Financial Box (Khung Vốn & Dòng Tiền) -->
+                        <div class="rounded-3 mb-2" style="background: rgba(255, 209, 102, 0.07); border: 1px dashed rgba(255, 209, 102, 0.45); padding: 12px 14px; font-size: 0.82rem; line-height: 1.65;">
+                            <div class="d-flex justify-content-between align-items-center py-1 border-bottom border-warning border-opacity-25 mb-1.5 pb-1.5">
                                 <span class="text-light opacity-90 fw-bold">Phương thức tính:</span>
-                                <span class="badge bg-warning text-dark fw-bold shadow-sm" style="font-size: 0.74rem;">${methodLabel}</span>
+                                <span class="badge bg-warning text-dark fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.74rem; border-radius: 10px;">${methodLabel}</span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center py-0.5">
+                            <div class="d-flex justify-content-between align-items-center py-1">
                                 <span class="text-white fw-bold">Vốn ban đầu cần có:</span>
-                                <strong class="text-warning font-monospace fw-bold" style="font-size: 0.88rem;">${fmt(initial_capital)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">VNĐ</span></strong>
+                                <strong class="text-warning font-monospace fw-bold" style="font-size: 0.9rem;">${fmt(initial_capital)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">VNĐ</span></strong>
                             </div>
                             ${monthlyRow}
                         </div>
                     </div>
 
-                    <!-- Button CTA với khoảng cách căn chỉnh chuẩn không đụng viền -->
-                    <div class="mt-3 pt-1">
+                    <!-- Button CTA -->
+                    <div class="mt-1.5">
                         <button type="button" class="btn btn-warning w-100 fw-extrabold shadow-sm py-2.5 text-dark btn-calc-unit" onclick="selectAndCalculateUnit('${u.macan}', '${targetMethod}', ${targetSupportIdx})" 
-                                style="border-radius: 10px; background: linear-gradient(135deg, #ffd166 0%, #f39c12 100%); border: none; font-size: 0.88rem; font-weight: 800; letter-spacing: 0.2px; margin-top: 4px;">
+                                style="border-radius: 12px; background: linear-gradient(135deg, #ffd166 0%, #f39c12 100%); border: none; font-size: 0.88rem; font-weight: 800; letter-spacing: 0.2px; padding: 10px 16px;">
                             BẤM TÍNH CHI TIẾT CĂN NÀY
                         </button>
                     </div>

@@ -7,22 +7,28 @@
 let selectedApt = null;
 
 function toggleTheme() {
-    const isDark = document.body.classList.contains('dark-theme');
-    if (isDark) {
-        document.body.classList.remove('dark-theme');
-        document.body.classList.add('light-theme');
-    } else {
+    const isLight = document.body.classList.contains('light-theme');
+    if (isLight) {
         document.body.classList.remove('light-theme');
         document.body.classList.add('dark-theme');
+    } else {
+        document.body.classList.remove('dark-theme');
+        document.body.classList.add('light-theme');
     }
     const nowLight = document.body.classList.contains('light-theme');
     const btn = document.getElementById('themeToggleBtn');
     if (btn) {
         btn.innerHTML = nowLight
-            ? '<i class="bi bi-moon-stars-fill" style="color:#2563eb;"></i><span class="d-none d-sm-inline ms-1"> Giao Diện Tối</span>'
-            : '<i class="bi bi-sun-fill" style="color:#d97706;"></i><span class="d-none d-sm-inline ms-1"> Giao Diện Sáng</span>';
+            ? '<i class="bi bi-moon-stars-fill me-1" style="color:#2563eb;"></i><span class="d-none d-sm-inline ms-1"> Giao Diện Tối</span>'
+            : '<i class="bi bi-sun-fill me-1" style="color:#ffd166;"></i><span class="d-none d-sm-inline ms-1"> Giao Diện Sáng</span>';
+        btn.className = nowLight
+            ? 'btn btn-outline-secondary rounded-3 px-3 py-2 fw-semibold'
+            : 'btn btn-outline-warning rounded-3 px-3 py-2 fw-semibold';
     }
-    try { localStorage.setItem('vhp_theme', nowLight ? 'light' : 'dark'); } catch (e) { }
+    try { 
+        localStorage.setItem('vhp_theme', nowLight ? 'light' : 'dark'); 
+        localStorage.setItem('vinhomes_theme', nowLight ? 'light' : 'dark'); 
+    } catch (e) { }
     if (typeof calculate === 'function') {
         try { calculate(true); } catch (e) { }
     }
@@ -277,11 +283,11 @@ function selectApt(macan) {
     if (document.getElementById('manualDtDat')) document.getElementById('manualDtDat').value = apt.dtDat;
     if (document.getElementById('manualDtXay')) document.getElementById('manualDtXay').value = apt.dtXay;
 
-    const typeLabel = { rough: '🧱 Thô', finished: '🏠 Hoàn thiện', gianXay: '🏗️ Giãn xây' };
+    const typeLabel = { rough: 'Thô', finished: 'Hoàn thiện', gianXay: 'Giãn xây' };
     if (document.getElementById('selectedCanLabel')) document.getElementById('selectedCanLabel').textContent = apt.macan;
-    let detail = `<span style="color:#cbd5e1;">${typeLabel[apt.type] || 'Hoàn thiện'} &nbsp;|&nbsp; DT Đất: ${apt.dtDat} m² &nbsp;|&nbsp; DT Xây: ${apt.dtXay} m²</span><br>`;
+    let detail = `<span class="apt-meta-text">${typeLabel[apt.type] || 'Hoàn thiện'} &nbsp;|&nbsp; DT Đất: ${apt.dtDat} m² &nbsp;|&nbsp; DT Xây: ${apt.dtXay} m²</span><br>`;
     detail += `<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-1">`;
-    detail += `<div><span style="color:#cbd5e1; font-size:0.9rem;">Giá trước VAT: </span><strong style="color:#ffd166; font-size:1.15rem; font-weight:800; text-shadow:0 0 10px rgba(255,209,102,0.3);">${fmt(apt.priceBeforeVat)} VNĐ</strong></div>`;
+    detail += `<div><span class="apt-price-label" style="font-size:0.9rem;">Giá trước VAT: </span><strong class="apt-price-val" style="font-size:1.15rem; font-weight:800;">${fmt(apt.priceBeforeVat)} VNĐ</strong></div>`;
     detail += `<button type="button" class="btn btn-sm btn-warning fw-bold px-3 shadow-sm" onclick="openLocationSpotlight('${apt.macan}')"><i class="bi bi-pin-map-fill me-1"></i>📍 Soi Vị Trí Căn Này</button>`;
     detail += `</div>`;
     if (document.getElementById('selectedCanDetail')) document.getElementById('selectedCanDetail').innerHTML = detail;
@@ -312,6 +318,35 @@ function clearSelected() {
     onTypeChange();
 }
 
+// Helper định dạng nhãn đợt thanh toán (Đặt cọc không có ngoặc, T+X ngày có ngoặc)
+function formatStageDisplay(s) {
+    if (!s || !s.label) return '';
+    let label = String(s.label).trim();
+
+    // 1) Đặt cọc -> KHÔNG để trong ngoặc
+    if (s.no === 1 || label.toLowerCase().includes('đặt cọc')) {
+        return `<span class="badge-stage ${s.badge}">Đặt cọc</span>`;
+    }
+
+    // 2) Nếu nhãn chứa T+X (ví dụ: Lần 3 (T+15), Vốn tự có thêm (T+15), Bắt đầu Xây (T+540), T+15, v.v...)
+    let tMatch = label.match(/\(?(T\+\d+)\)?/i);
+    if (tMatch) {
+        const tNum = tMatch[1].replace(/T\+/i, '');
+        return `<span class="badge-stage ${s.badge}">(T + ${tNum} ngày)</span>`;
+    }
+
+    // 3) Nếu là Lần X
+    if (/^Lần\s+\d+/i.test(label)) {
+        return `<span class="badge-stage ${s.badge}">(${label})</span>`;
+    }
+
+    // 4) Các nhãn khác: (Ký HĐMB), (Nhận bàn giao), (Sổ hồng), v.v.
+    if (label.startsWith('(') && label.endsWith(')')) {
+        return `<span class="badge-stage ${s.badge}">${label}</span>`;
+    }
+    return `<span class="badge-stage ${s.badge}">(${label})</span>`;
+}
+
 // --- Render Result Tab ---
 function renderResult(stages, ckDetails, S, comparisonHTML = '') {
     window.lastResultS = S;
@@ -327,40 +362,44 @@ function renderResult(stages, ckDetails, S, comparisonHTML = '') {
 
     let methodDetailText = '';
     if (paymentMethod === 'own-early') {
-        methodDetailText = '💰 Vốn tự có – Thanh toán sớm';
+        methodDetailText = 'Vốn tự có – Thanh toán sớm';
     } else if (paymentMethod === 'own-normal') {
-        methodDetailText = '📋 Vốn tự có – Tiến độ thường';
+        methodDetailText = 'Vốn tự có – Tiến độ thường';
     } else {
         const plans = (PA && PA.p_const > 0) ? ((SALES_POLICY && SALES_POLICY.interestSupport && SALES_POLICY.interestSupport.roughAndGianXay) || []) : ((SALES_POLICY && SALES_POLICY.interestSupport && SALES_POLICY.interestSupport.finished) || []);
         const plan = (plans && plans.length > 0) ? (plans[S.supportPlanIdx || 0] || plans[0]) : null;
         const planName = plan ? plan.label : 'HTLS 0%';
-        methodDetailText = `🏦 Vay ngân hàng (${planName})`;
+        methodDetailText = `Vay ngân hàng (${planName})`;
     }
 
     const methodLabel = methodDetailText;
 
     /* ---- Bảng lịch thanh toán ---- */
-    const renderSingleRow = s => `
-<tr>
-    <td class="stage-col">Đợt ${s.no}&nbsp;<span class="badge-stage ${s.badge}">${s.label}</span></td>
+    const renderSingleRow = s => {
+        const isStage1 = (s.no === 1 || (s.label && s.label.toLowerCase().includes('đặt cọc')));
+        const rowClass = isStage1 ? 'class="row-stage-deposit"' : '';
+        return `
+<tr ${rowClass}>
+    <td class="stage-col">Đợt ${s.no}&nbsp;${formatStageDisplay(s)}</td>
     <td class="date-col">${s.dateLabel || fmtDate(s.date)}</td>
     <td class="amount">${fmt(s.gross)}</td>
     <td class="discount">${s.ck > 0 ? '–&nbsp;' + fmt(s.ck) : '—'}</td>
     <td class="net-amount">${fmt(s.net)}</td>
     <td style="font-size:0.78rem;color:var(--text-muted);">${s.note || ''}</td>
 </tr>`;
+    };
 
     let stageRows = '';
     if (stages.isSplit) {
         stageRows = `
-<tr style="background:rgba(212,175,55,0.22); border-left:4px solid #d4af37;">
-    <td colspan="6" style="color:#f3e5ab; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
+<tr class="split-stage-header" style="background:rgba(52,211,153,0.2); border-left:4px solid #34d399;">
+    <td colspan="6" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
         <i class="bi bi-geo-alt-fill me-2"></i>GIAI ĐOẠN 1: TIẾN ĐỘ THANH TOÁN TIỀN ĐẤT
     </td>
 </tr>
 ${stages.landStages.map(renderSingleRow).join('')}
-<tr style="background:rgba(52,211,153,0.2); border-left:4px solid #34d399;">
-    <td colspan="6" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
+<tr class="split-stage-header" style="background:rgba(52,211,153,0.2); border-left:4px solid #34d399;">
+    <td colspan="6" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
         <i class="bi bi-tools me-2"></i>GIAI ĐOẠN 2: TIẾN ĐỘ THANH TOÁN XÂY DỰNG
     </td>
 </tr>
@@ -851,18 +890,20 @@ function renderCompare2FullTab() {
             };
 
             const renderTableRows = (arr) => arr.map(s => {
+                const isStage1 = (s.no === 1 || (s.label && s.label.toLowerCase().includes('đặt cọc')));
+                const rowClass = isStage1 ? 'class="row-stage-deposit"' : '';
                 if (s.subItems && s.subItems.length > 0) {
                     return s.subItems.map((item, idx) => {
                         if (idx === 0) {
-                            return `<tr>
-                                <td class="stage-col" rowspan="${s.subItems.length}" style="vertical-align:middle;">Đợt ${s.no}&nbsp;<span class="badge-stage ${s.badge}">${s.label}</span></td>
+                            return `<tr ${rowClass}>
+                                <td class="stage-col" rowspan="${s.subItems.length}" style="vertical-align:middle;">Đợt ${s.no}&nbsp;${formatStageDisplay(s)}</td>
                                 <td class="date-col" rowspan="${s.subItems.length}" style="vertical-align:middle;">${s.dateLabel || fmtDate(s.date)}</td>
                                 <td class="amount">${fmt(item.gross)}</td>
                                 <td class="discount">—</td>
                                 <td class="net-amount">${fmt(item.gross)}</td>
                             </tr>`;
                         } else {
-                            return `<tr>
+                            return `<tr ${rowClass}>
                                 <td class="amount">${fmt(item.gross)}</td>
                                 <td class="discount">—</td>
                                 <td class="net-amount">${fmt(item.gross)}</td>
@@ -870,8 +911,8 @@ function renderCompare2FullTab() {
                         }
                     }).join('');
                 } else {
-                    const labelCell = s.label ? `Đợt ${s.no}&nbsp;<span class="badge-stage ${s.badge}">${s.label}</span>` : `—`;
-                    return `<tr>
+                    const labelCell = s.label ? `Đợt ${s.no}&nbsp;${formatStageDisplay(s)}` : `—`;
+                    return `<tr ${rowClass}>
                         <td class="stage-col">${labelCell}</td>
                         <td class="date-col">${s.dateLabel || fmtDate(s.date)}</td>
                         <td class="amount">${fmt(s.gross)}</td>
@@ -1338,8 +1379,8 @@ function showHistoryModal() {
             onclick="restoreHistoryItem('${r.id}')" 
             title="Bấm để tải lại cấu hình căn này">
             <td style="font-size:12px; color:${timeColor}; white-space:nowrap; padding:10px;">${r.time}</td>
-            <td style="padding:10px;">
-                <span class="badge" style="background:${macanBg}; color:${macanColor}; font-weight:800; font-size:12px; border:1px solid #fde68a; padding:4px 8px;">
+            <td style="padding:10px; white-space:nowrap;">
+                <span class="badge" style="background:${macanBg}; color:${macanColor}; font-weight:800; font-size:12px; border:1px solid #fde68a; padding:4px 8px; white-space:nowrap; display:inline-block;">
                     ${r.macan}
                 </span>
             </td>
@@ -1361,16 +1402,16 @@ function showHistoryModal() {
             title: `<span style="color:#0d2e26; font-weight:800;"><i class="bi bi-clock-history me-2"></i>Lịch Sử Báo Giá</span>`,
             background: modalBg,
             color: modalTextColor,
-            html: `<div style="max-height:420px; overflow-y:auto; overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:10px; border:1px solid ${rowBorderColor}; background:#ffffff;">
-                <table class="table align-middle m-0" style="font-size:13px; text-align:left; background:#ffffff; color:#0f172a;">
+            html: `<div style="max-height:420px; overflow-y:auto; overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:10px; border:1px solid ${rowBorderColor}; background:#ffffff;">
+                <table class="table align-middle m-0" style="min-width:650px; font-size:13px; text-align:left; background:#ffffff; color:#0f172a;">
                     <thead style="position:sticky; top:0; background:${tableHeaderBg}; color:${tableHeaderColor}; z-index:2; border-bottom:2px solid #cbd5e1;">
                         <tr>
-                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Thời gian</th>
-                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Mã Căn</th>
-                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700;">PTTT</th>
-                            <th class="text-end" style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Giá chưa VAT</th>
-                            <th class="text-end" style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Thực trả CĐT</th>
-                            <th class="text-center" style="padding:10px; color:${tableHeaderColor}; font-weight:700;">Thao tác</th>
+                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thời gian</th>
+                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Mã Căn</th>
+                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">PTTT</th>
+                            <th class="text-end" style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Giá chưa VAT</th>
+                            <th class="text-end" style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thực trả CĐT</th>
+                            <th class="text-center" style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody style="color:#0f172a; background:#ffffff;">${tbody}</tbody>
@@ -1401,32 +1442,24 @@ function switchSubInputTab(tabName) {
 
     if (!matcherContent || !calcContent || !matcherBtn || !calcBtn) return;
 
-    const isLight = document.body.classList.contains('light-theme');
-    const activeBg = 'linear-gradient(135deg, #ffd166 0%, #f39c12 100%)';
-
     if (tabName === 'matcher') {
         matcherContent.style.display = 'block';
         calcContent.style.display = 'none';
 
-        matcherBtn.style.background = activeBg;
-        matcherBtn.style.color = '#04120e';
-        matcherBtn.style.fontWeight = '800';
-
-        calcBtn.style.background = 'transparent';
-        calcBtn.style.color = isLight ? '#0f172a' : '#f8fafc';
-        calcBtn.style.fontWeight = '600';
+        matcherBtn.classList.add('active');
+        calcBtn.classList.remove('active');
     } else {
         matcherContent.style.display = 'none';
         calcContent.style.display = 'block';
 
-        calcBtn.style.background = activeBg;
-        calcBtn.style.color = '#04120e';
-        calcBtn.style.fontWeight = '800';
-
-        matcherBtn.style.background = 'transparent';
-        matcherBtn.style.color = isLight ? '#0f172a' : '#f8fafc';
-        matcherBtn.style.fontWeight = '600';
+        calcBtn.classList.add('active');
+        matcherBtn.classList.remove('active');
     }
+
+    matcherBtn.style.background = '';
+    matcherBtn.style.color = '';
+    calcBtn.style.background = '';
+    calcBtn.style.color = '';
 }
 window.switchSubInputTab = switchSubInputTab;
 
@@ -1518,7 +1551,7 @@ function runFinancialMatcher() {
     if (!wrap || !container) return;
 
     const data = (typeof APARTMENT_DATA !== 'undefined' ? APARTMENT_DATA : []);
-    const typeLabels = { rough: '🧱 Bàn Giao Thô', finished: '🏠 Hoàn Thiện', gianXay: '🏗️ Giãn Xây Q4/2028' };
+    const typeLabels = { rough: 'Bàn Giao Thô', finished: 'Hoàn Thiện', gianXay: 'Giãn Xây Q4/2028' };
 
     const maxBudget = (bVal !== 'all') ? parseInt(bVal) * 1_000_000 : Infinity;
     const maxMonthly = (cfVal !== 'all') ? parseInt(cfVal) * 1_000_000 : Infinity;
@@ -1805,7 +1838,7 @@ function getUnitSpotlightInfo(macan) {
     if (code.startsWith('AS')) {
         zoneName = "Phân Khu Ánh Sáng (Sầm uất & Hiện đại)";
         const roadNum = code.split('-')[0].replace('AS', '');
-        roadInfo = `Mặt tiền đường Ánh Sáng ${roadNum} (Lộ giới 13m - 29m)`;
+        roadInfo = `Mặt tiền đường Ánh Sáng ${roadNum} (Lộ giới 13m - 19m)`;
         amenities = [
             "🌿 Kế bên Công viên Ánh Sáng & Mảng xanh nội khu mát mẻ",
             "🏊‍♂️ Gần Bể bơi Resort ngoài trời & Cụm sân Thể thao Pickleball",
@@ -1815,17 +1848,17 @@ function getUnitSpotlightInfo(macan) {
     } else if (code.startsWith('TL')) {
         zoneName = "Phân Khu Tương Lai (Thừa hưởng ngàn tiện ích)";
         const roadNum = code.split('-')[0].replace('TL', '');
-        roadInfo = `Mặt tiền đường Tương Lai ${roadNum} (Lộ giới 13m - 29m)`;
+        roadInfo = `Mặt tiền đường Tương Lai ${roadNum} (Lộ giới 13m - 23m)`;
         amenities = [
             "🌳 Trực diện Công viên Tương Lai & Hồ cảnh quan thơ mộng",
             "🏋️‍♂️ Cụm sân thể thao ngoài trời, khu Gym & Sân chơi trẻ em",
             "🏫 Gần Trường học quốc tế & Trung tâm y tế Vinmec",
-            "🚗 Giao thông kết nối nhanh ra Đại lộ trung tâm 39m"
+            "🚗 Giao thông kết nối nhanh ra Đại lộ trung tâm (Lộ giới 32m - 40m)"
         ];
     } else if (code.startsWith('DLCV') || code.startsWith('ĐLCV')) {
-        zoneName = "Phân Khu Đại Lộc (Vị trí Vàng kề Công Viên)";
+        zoneName = "Phân Khu Đại Lộ Công Viên (Vị trí Vàng kề Công Viên)";
         const roadNum = code.split('-')[0].replace('ĐLCV', '').replace('DLCV', '');
-        roadInfo = `Đại Lộc Công Viên ${roadNum} (Mặt tiền công viên xanh mát)`;
+        roadInfo = `Mặt tiền Đại Lộ Công Viên ${roadNum} (Lộ giới 32m - 40m)`;
         amenities = [
             "🌲 Trực diện Công viên trung tâm & Hồ điều hòa 14ha",
             "⛵ Gần Bến du thuyền xa hoa & Vườn nướng BBQ ngoài trời",
@@ -1881,15 +1914,68 @@ function openLocationSpotlight(macan) {
         }
     }
 
-    if (!coords) {
-        coords = { macan: cleanCode, x: 42.0, y: 55.0, name: "Căn " + cleanCode };
-    }
+    const hasCoords = !!coords;
+    const coordX = hasCoords ? coords.x : 0;
+    const coordY = hasCoords ? coords.y : 0;
 
     if (false) {
         // Obsolete warning
     } else {
         const spotImgSrc = `assets/spotlight/spotlight_${altCode}.jpg?v=` + Date.now();
         const info = getUnitSpotlightInfo(cleanCode);
+
+        const tab2Content = hasCoords ? `
+            <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-2 rounded-3 border border-warning" style="background:#061e18;">
+                <div class="small text-warning fw-bold">
+                    <i class="bi bi-geo-alt-fill me-1"></i>Sơ Đồ 2D CAD HD Toàn Khu (Căn ${cleanCode})
+                </div>
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-outline-warning fw-bold" onclick="zoomInteractiveCadMap(1.25)">
+                        <i class="bi bi-zoom-in me-1"></i>Phóng To
+                    </button>
+                    <button type="button" class="btn btn-outline-warning fw-bold" onclick="zoomInteractiveCadMap(0.8)">
+                        <i class="bi bi-zoom-out me-1"></i>Thu Nhỏ
+                    </button>
+                    <button type="button" class="btn btn-outline-warning fw-bold" onclick="scrollInteractiveCadMap(${coordX}, ${coordY})">
+                        <i class="bi bi-crosshair me-1"></i>Về Tâm Căn ${cleanCode}
+                    </button>
+                    <button type="button" class="btn btn-warning text-dark fw-bold" onclick="showFullMasterplanZoom()">
+                        <i class="bi bi-arrows-fullscreen me-1"></i>Xem Toàn Sơ Đồ
+                    </button>
+                </div>
+            </div>
+
+            <div class="position-relative overflow-auto rounded-3 border border-warning shadow-lg" id="interactiveMapViewport" style="height: 640px; max-height: 70vh; background: #051410; scrollbar-width: thin;">
+                <div style="position: relative; width: 3600px; height: 2548px; transition: transform 0.2s ease-out;" id="interactiveMapInner">
+                    <img src="assets/pdf_2d_masterplan_hd.jpg" onerror="this.onerror=null; this.src='assets/pdf-masterplan.jpg';" style="width: 100%; height: 100%; object-fit: fill; display: block;" alt="Sơ đồ 2D CAD HD">
+                    <!-- Live Glowing Pin Marker -->
+                    <div style="position: absolute; left: ${coordX}%; top: ${coordY}%; transform: translate(-50%, -100%); pointer-events: none; z-index: 10;">
+                        <div class="px-2.5 py-0.5 rounded-pill shadow-lg fw-bold text-dark d-flex align-items-center gap-1"
+                             style="background: #ffd166; border: 1.5px solid #ffffff; font-size: 13.5px; white-space: nowrap; box-shadow: 0 0 18px rgba(255,209,102,0.9) !important;">
+                            📍 ${cleanCode}
+                        </div>
+                        <div class="mx-auto" style="width: 2px; height: 14px; background: linear-gradient(to bottom, #ffd166, #ef4444);"></div>
+                        <div class="rounded-circle mx-auto" style="width: 8px; height: 8px; background: #ef4444; border: 1.5px solid #ffffff; box-shadow: 0 0 6px #ef4444;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-2 small text-warning">
+                <i class="bi bi-arrows-move me-1"></i> Giữ chuột / vuốt tay để cuộn toàn sơ đồ 2D CAD HD. Bạn có thể nhấn <strong>"Xem Toàn Sơ Đồ"</strong> để xem bao quát dự án!
+            </div>
+        ` : `
+            <div class="p-5 text-center d-flex flex-column align-items-center justify-content-center rounded-3 border border-warning shadow-lg" style="min-height: 480px; background: rgba(255,209,102,0.04);">
+                <i class="bi bi-geo-alt text-warning display-3 mb-3"></i>
+                <h4 class="fw-bold text-warning mb-2.5">Xin Lỗi: Chưa Cập Nhật Tọa Độ Sơ Đồ 2D Căn ${cleanCode}</h4>
+                <p class="mb-3" style="max-width: 500px; line-height: 1.6; color: #cbd5e1 !important; font-size: 0.95rem;">
+                    Tọa độ vị trí chính xác trên Sơ đồ 2D CAD HD của căn <strong>${cleanCode}</strong> hiện đang được tiếp tục cập nhật. Dữ liệu vị trí chi tiết của căn này sẽ hiển thị ngay khi bổ sung!
+                </p>
+                <div class="d-flex gap-2 justify-content-center">
+                    <button type="button" class="btn btn-warning text-dark fw-bold px-4 py-2 shadow" onclick="switchToFullCadViewer()">
+                        <i class="bi bi-arrows-fullscreen me-1"></i> Xem Bao Quát Sơ Đồ 2D Toàn Khu
+                    </button>
+                </div>
+            </div>
+        `;
 
         contentEl.innerHTML = `
             <!-- Multi-mode Nav Tabs -->
@@ -1900,7 +1986,7 @@ function openLocationSpotlight(macan) {
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fw-bold btn-sm px-3" id="spot-cad-tab" data-bs-toggle="pill" data-bs-target="#spot-cad-pane" type="button" role="tab" onclick="scrollInteractiveCadMap(${coords.x}, ${coords.y})">
+                    <button class="nav-link fw-bold btn-sm px-3" id="spot-cad-tab" data-bs-toggle="pill" data-bs-target="#spot-cad-pane" type="button" role="tab" onclick="scrollInteractiveCadMap(${coordX}, ${coordY})">
                         <i class="bi bi-map-fill me-1"></i>2. Sơ Đồ 2D Trực Tiếp
                     </button>
                 </li>
@@ -1917,25 +2003,25 @@ function openLocationSpotlight(macan) {
                     <div class="row g-3">
                         <div class="col-12 col-lg-7 text-center">
                             <div class="border border-warning rounded-3 overflow-hidden bg-black p-1 shadow-lg">
-                                <img src="${spotImgSrc}" onerror="this.onerror=null; this.src='assets/pdf-masterplan.jpg';" class="img-fluid rounded-2 w-100" style="max-height: 480px; object-fit: contain;" alt="Vị trí ${cleanCode}">
+                                <img src="${spotImgSrc}" onerror="handleSpotlightImgError(this, '${cleanCode}', ${coordX}, ${coordY}, ${hasCoords})" class="img-fluid rounded-2 w-100" style="max-height: 480px; object-fit: contain;" alt="Vị trí ${cleanCode}">
                             </div>
                         </div>
                         <div class="col-12 col-lg-5">
-                            <div class="border border-secondary rounded-3 p-3 bg-dark h-100 d-flex flex-column justify-content-between" style="background:#08221b !important;">
+                            <div class="border rounded-4 shadow-lg h-100 d-flex flex-column justify-content-between" style="background: linear-gradient(160deg, #07201a 0%, #031410 100%) !important; border: 1.5px solid rgba(255, 209, 102, 0.35) !important; padding: 24px 22px !important;">
                                 <div>
-                                    <h6 class="fw-bold text-warning mb-3"><i class="bi bi-geo-alt-fill me-1"></i>Thông Tin Chi Tiết &amp; Tiện Ích:</h6>
-                                    <ul class="list-unstyled text-light small mb-3" style="line-height: 1.9;">
-                                        <li class="mb-1"><strong>Mã căn:</strong> <span class="text-warning fw-bold fs-6">${cleanCode}</span></li>
-                                        <li class="mb-1"><strong>Phân khu:</strong> <span class="text-light fw-bold">${info.zoneName}</span></li>
-                                        <li class="mb-2"><strong>Vị trí:</strong> <span class="text-info">${info.roadInfo}</span></li>
+                                    <h6 class="fw-bold mb-3.5 mt-1" style="color: #ffd166; font-size: 1.05rem; text-shadow: 0 0 8px rgba(255,209,102,0.3);"><i class="bi bi-geo-alt-fill me-1"></i>Thông Tin Chi Tiết &amp; Tiện Ích:</h6>
+                                    <ul class="list-unstyled small mb-3.5" style="line-height: 2.1; color: #f1f5f9;">
+                                        <li class="mb-2"><span style="color: rgba(241,245,249,0.65);">Mã căn:</span> <strong style="color: #ffd166;" class="fs-6 ms-1">${cleanCode}</strong></li>
+                                        <li class="mb-2"><span style="color: rgba(241,245,249,0.65);">Phân khu:</span> <strong style="color: #f1f5f9;" class="ms-1">${info.zoneName}</strong></li>
+                                        <li class="mb-2.5 d-flex align-items-start gap-1 flex-wrap"><span style="color: rgba(241,245,249,0.65); min-width: 45px;" class="mt-1">Vị trí:</span> <span style="color: #f1f5f9; background: rgba(255,209,102,0.12); padding: 5px 14px; border-radius: 10px; border: 1px solid rgba(255,209,102,0.35); display: inline-block; line-height: 1.5;" class="fw-semibold ms-1">${info.roadInfo}</span></li>
                                     </ul>
-                                    <h6 class="fw-bold text-info fs-7 mb-2"><i class="bi bi-stars me-1"></i>Tiện Ích Nổi Bật Lân Cận:</h6>
-                                    <ul class="list-unstyled text-light small" style="line-height: 1.8;">
-                                        ${info.amenities.map(a => `<li class="mb-1">${a}</li>`).join('')}
+                                    <h6 class="fw-bold mb-2.5 mt-2" style="color: #ffd166; font-size: 0.98rem; letter-spacing: 0.2px;"><i class="bi bi-stars me-1"></i>Tiện Ích Nổi Bật Lân Cận:</h6>
+                                    <ul class="list-unstyled small mb-0" style="line-height: 1.95; color: #f1f5f9; opacity: 0.95;">
+                                        ${info.amenities.map(a => `<li class="mb-1.5">${a}</li>`).join('')}
                                     </ul>
                                 </div>
-                                <div class="alert alert-dark mb-0 py-2 px-3 small border-secondary text-muted" style="background: rgba(255,255,255,0.05);">
-                                    <i class="bi bi-info-circle me-1 text-warning"></i> Chuyển sang Tab 2 để soi trực tiếp trên sơ đồ 2D toàn khu.
+                                <div class="alert alert-dark mb-0 py-2.5 px-3.5 small mt-4" style="background: rgba(255,209,102,0.08); border: 1px dashed rgba(255,209,102,0.35); color: #ffd166; border-radius: 12px; line-height: 1.5;">
+                                    <i class="bi bi-info-circle me-1"></i> Chuyển sang Tab 2 để soi trực tiếp trên sơ đồ 2D toàn khu.
                                 </div>
                             </div>
                         </div>
@@ -1944,43 +2030,7 @@ function openLocationSpotlight(macan) {
 
                 <!-- TAB 2: SO TRUC TIEP TREN SO DO 2D CAD HD -->
                 <div class="tab-pane fade" id="spot-cad-pane" role="tabpanel">
-                    <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-2 rounded-3 border border-warning" style="background:#061e18;">
-                        <div class="small text-warning fw-bold">
-                            <i class="bi bi-geo-alt-fill me-1"></i>Sơ Đồ 2D CAD HD Toàn Khu (Căn ${cleanCode})
-                        </div>
-                        <div class="btn-group btn-group-sm">
-                            <button type="button" class="btn btn-outline-warning fw-bold" onclick="zoomInteractiveCadMap(1.25)">
-                                <i class="bi bi-zoom-in me-1"></i>Phóng To
-                            </button>
-                            <button type="button" class="btn btn-outline-warning fw-bold" onclick="zoomInteractiveCadMap(0.8)">
-                                <i class="bi bi-zoom-out me-1"></i>Thu Nhỏ
-                            </button>
-                            <button type="button" class="btn btn-outline-warning fw-bold" onclick="scrollInteractiveCadMap(${coords.x}, ${coords.y})">
-                                <i class="bi bi-crosshair me-1"></i>Về Tâm Căn ${cleanCode}
-                            </button>
-                            <button type="button" class="btn btn-warning text-dark fw-bold" onclick="showFullMasterplanZoom()">
-                                <i class="bi bi-arrows-fullscreen me-1"></i>Xem Toàn Sơ Đồ
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="position-relative overflow-auto rounded-3 border border-warning shadow-lg" id="interactiveMapViewport" style="height: 640px; max-height: 70vh; background: #051410; scrollbar-width: thin;">
-                        <div style="position: relative; width: 3600px; height: 2548px; transition: transform 0.2s ease-out;" id="interactiveMapInner">
-                            <img src="assets/pdf_2d_masterplan_hd.jpg" onerror="this.onerror=null; this.src='assets/pdf-masterplan.jpg';" style="width: 100%; height: 100%; object-fit: fill; display: block;" alt="Sơ đồ 2D CAD HD">
-                            <!-- Live Glowing Pin Marker -->
-                            <div style="position: absolute; left: ${coords.x}%; top: ${coords.y}%; transform: translate(-50%, -100%); pointer-events: none; z-index: 10;">
-                                <div class="px-3 py-1 rounded-pill shadow-lg fw-bold text-dark d-flex align-items-center gap-1"
-                                     style="background: #ffd166; border: 2px solid #ffffff; font-size: 15px; white-space: nowrap; box-shadow: 0 0 25px rgba(255,209,102,1) !important;">
-                                    📍 ${cleanCode}
-                                </div>
-                                <div class="mx-auto" style="width: 4px; height: 20px; background: linear-gradient(to bottom, #ffd166, #ff0000);"></div>
-                                <div class="rounded-circle mx-auto" style="width: 16px; height: 16px; background: #ff0000; border: 2px solid #ffffff; box-shadow: 0 0 12px #ff0000;"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center mt-2 small text-warning">
-                        <i class="bi bi-arrows-move me-1"></i> Giữ chuột / vuốt tay để cuộn toàn sơ đồ 2D CAD HD. Bạn có thể nhấn <strong>"Xem Toàn Sơ Đồ"</strong> để xem bao quát dự án!
-                    </div>
+                    ${tab2Content}
                 </div>
             </div>
         `;
@@ -1999,6 +2049,68 @@ function openLocationSpotlight(macan) {
         modalEl.style.display = 'block';
         modalEl.classList.add('show');
         document.body.classList.add('modal-open');
+    }
+}
+
+function handleSpotlightImgError(imgEl, code, x, y, hasCoords) {
+    const parent = imgEl ? imgEl.parentElement : null;
+    if (!parent) return;
+
+    if (hasCoords) {
+        parent.innerHTML = `
+            <div class="p-4 text-center d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 380px; background: rgba(255,209,102,0.06); border: 1.5px dashed rgba(255,209,102,0.4); border-radius: 14px;">
+                <i class="bi bi-geo-alt-fill text-warning display-4 mb-3"></i>
+                <h5 class="fw-bold text-warning mb-2">Chưa Có Ảnh Cắt Chi Tiết Căn ${code}</h5>
+                <p class="small mb-3" style="max-width: 420px; line-height: 1.6; color: #cbd5e1 !important;">
+                    Bộ thư viện <code>assets/spotlight/</code> hiện chưa có file ảnh cắt riêng cho căn <strong>${code}</strong>. Hệ thống tự động chuyển sang <strong>Sơ đồ 2D CAD HD</strong> để soi vị trí trực tiếp.
+                </p>
+                <button type="button" class="btn btn-warning fw-bold px-4 py-2 shadow-lg" onclick="switchToSpotlightCadTab(${x}, ${y})">
+                    <i class="bi bi-map-fill me-1"></i> SOI TRỰC TIẾP TRÊN SƠ ĐỒ 2D CAD HD >>
+                </button>
+            </div>
+        `;
+        setTimeout(() => {
+            switchToSpotlightCadTab(x, y);
+        }, 450);
+    } else {
+        parent.innerHTML = `
+            <div class="p-4 text-center d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 380px; background: rgba(255,209,102,0.06); border: 1.5px dashed rgba(255,209,102,0.4); border-radius: 14px;">
+                <i class="bi bi-exclamation-triangle-fill text-warning display-4 mb-3"></i>
+                <h5 class="fw-bold text-warning mb-2" style="font-size: 1.25rem;">Chưa Cập Nhật Vị Trí Căn ${code}</h5>
+                <p class="spotlight-fallback-text mb-3.5" style="max-width: 480px; line-height: 1.65; font-size: 0.95rem; color: #f8fafc !important; font-weight: 500;">
+                    Rất tiếc, căn <strong class="text-warning fw-bold">${code}</strong> hiện chưa có file ảnh cắt chi tiết và chưa cập nhật tọa độ trên sơ đồ 2D CAD HD. Dữ liệu vị trí căn này sẽ được cập nhật ngay khi bổ sung!
+                </p>
+                <button type="button" class="btn btn-outline-warning fw-bold px-3.5 py-2 btn-sm" onclick="switchToFullCadViewer()">
+                    <i class="bi bi-arrows-fullscreen me-1"></i> Xem Bao Quát Sơ Đồ 2D Dự Án
+                </button>
+            </div>
+        `;
+    }
+}
+
+function switchToFullCadViewer() {
+    const cadTabBtn = document.getElementById('spot-cad-tab');
+    if (cadTabBtn) {
+        if (typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+            const tab = bootstrap.Tab.getOrCreateInstance(cadTabBtn);
+            tab.show();
+        } else {
+            cadTabBtn.click();
+        }
+        showFullMasterplanZoom();
+    }
+}
+
+function switchToSpotlightCadTab(x, y) {
+    const cadTabBtn = document.getElementById('spot-cad-tab');
+    if (cadTabBtn) {
+        if (typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+            const tab = bootstrap.Tab.getOrCreateInstance(cadTabBtn);
+            tab.show();
+        } else {
+            cadTabBtn.click();
+        }
+        scrollInteractiveCadMap(x, y);
     }
 }
 
