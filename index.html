@@ -1450,7 +1450,7 @@
                 }
             </style>
             <!-- Dedicated Mobile Responsive & Performance Stylesheet -->
-            <link rel="stylesheet" href="mobile.css?v=20260903_1105_LANDSCAPE_FULL_WIDTH">
+            <link rel="stylesheet" href="mobile.css?v=20260903_1235_NO_SQUISH">
 
             <!-- Quick Anchor Navigation Bar -->
             <div class="d-flex align-items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-thin"
@@ -3616,7 +3616,7 @@
                         <!-- 1. Vốn tự có sẵn có (Thanh trượt Kéo Nút Tròn) -->
                         <div class="col-12 col-md-6 col-lg-3">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label fw-bold fin-form-label small mb-0">💰 Vốn Tự Có Sẵn Có:</label>
+                                <label class="form-label fw-bold fin-form-label small mb-0">Vốn Tự Có Sẵn Có:</label>
                                 <span class="badge bg-warning text-dark fw-bold shadow-sm" id="finBudgetValDisplay" style="font-size: 0.84rem;">3.5 Tỷ VNĐ</span>
                             </div>
                             <input type="range" class="form-range custom-gold-slider" id="finBudget" min="0" max="15000" step="100" value="3500" oninput="updateFinSliderDisplays(); runFinancialMatcher();">
@@ -3630,7 +3630,7 @@
                         <!-- 2. Dòng tiền trả hàng tháng (Thanh trượt Kéo Nút Tròn) -->
                         <div class="col-12 col-md-6 col-lg-3">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label fw-bold fin-form-label small mb-0">💳 Dòng Tiền Hàng Tháng:</label>
+                                <label class="form-label fw-bold fin-form-label small mb-0">Dòng Tiền Hàng Tháng:</label>
                                 <span class="badge bg-info text-dark fw-bold shadow-sm" id="finCashflowValDisplay" style="font-size: 0.84rem;">50 Triệu/tháng</span>
                             </div>
                             <input type="range" class="form-range custom-gold-slider" id="finMonthlyCashflow" min="0" max="200" step="5" value="50" oninput="updateFinSliderDisplays(); runFinancialMatcher();">
@@ -3643,23 +3643,23 @@
 
                         <!-- 3. Phương thức thanh toán ưu tiên -->
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label class="form-label fw-bold fin-form-label small">📋 Phương Thức Ưu Tiên:</label>
+                            <label class="form-label fw-bold fin-form-label small">Phương Thức Ưu Tiên:</label>
                             <select class="form-select bg-dark text-white border-warning" id="finMethod">
                                 <option value="all">-- Tất cả PTTT --</option>
-                                <option value="own-early">💰 TTS 100% (Sớm)</option>
-                                <option value="own-normal">📋 Tiến Độ Thường</option>
-                                <option value="bank">🏦 Vay HTLS (Bank 70%)</option>
+                                <option value="own-early">TTS 100% (Sớm)</option>
+                                <option value="own-normal">Tiến Độ Thường</option>
+                                <option value="bank">Vay HTLS (Bank 70%)</option>
                             </select>
                         </div>
 
                         <!-- 4. Tính chất bàn giao & loại hình -->
                         <div class="col-12 col-md-6 col-lg-3">
-                            <label class="form-label fw-bold fin-form-label small">🏗️ Bàn Giao &amp; Loại Hình:</label>
+                            <label class="form-label fw-bold fin-form-label small">Bàn Giao &amp; Loại Hình:</label>
                             <select class="form-select bg-dark text-white border-warning" id="finType">
                                 <option value="all">-- Tất cả loại hình --</option>
-                                <option value="gianXay">🏗️ Giãn xây (Nhận nhà Q4/2028)</option>
-                                <option value="rough">🧱 Bàn giao Thô</option>
-                                <option value="finished">🏠 Hoàn Thiện</option>
+                                <option value="gianXay">Giãn xây (Nhận nhà Q4/2028)</option>
+                                <option value="rough">Bàn giao Thô</option>
+                                <option value="finished">Hoàn Thiện</option>
                             </select>
                         </div>
                     </div>
@@ -3673,25 +3673,25 @@
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="fin_promo_earlyMoveIn" onchange="runFinancialMatcher()">
-                                    <label class="form-check-label fin-check-label small" for="fin_promo_earlyMoveIn">🏠 Cam kết về ở sớm (CK 10% – 5% trừ HĐ, 5% hoàn tiền)</label>
+                                    <label class="form-check-label fin-check-label small" for="fin_promo_earlyMoveIn">Cam kết về ở sớm (CK 10% – 5% trừ HĐ, 5% hoàn tiền)</label>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="fin_promo_noBlnh" onchange="runFinancialMatcher()">
-                                    <label class="form-check-label fin-check-label small" for="fin_promo_noBlnh">🛡️ Từ chối Bảo lãnh Ngân hàng (CK 0.5%)</label>
+                                    <label class="form-check-label fin-check-label small" for="fin_promo_noBlnh">Từ chối Bảo lãnh Ngân hàng (CK 0.5%)</label>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="fin_promo_aquafield" onchange="runFinancialMatcher()">
-                                    <label class="form-check-label fin-check-label small" for="fin_promo_aquafield">🏊 Quà tặng Aquafield Voucher (20.000.000 VNĐ)</label>
+                                    <label class="form-check-label fin-check-label small" for="fin_promo_aquafield">Quà tặng Aquafield Voucher (20.000.000 VNĐ)</label>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="fin_promo_voucher" onchange="runFinancialMatcher()">
-                                    <label class="form-check-label fin-check-label small" for="fin_promo_voucher">🎟️ Voucher mua nhà (theo giá nhà cũ)</label>
+                                    <label class="form-check-label fin-check-label small" for="fin_promo_voucher">Voucher mua nhà (theo giá nhà cũ)</label>
                                 </div>
                                 <div id="fin_voucherWrap" class="mt-1 ms-4" style="display:none;">
                                     <div class="row g-1">
@@ -3714,7 +3714,7 @@
                     <!-- Nút Tìm Kiếm Nổi Bật -->
                     <div class="text-center mb-4">
                         <button type="button" class="btn btn-warning btn-lg fw-bold px-5 py-2 shadow-lg" onclick="runFinancialMatcher()" style="border-radius: 30px; font-size: 1.1rem; color: #051410;">
-                            <i class="bi bi-search me-2"></i>🔍 TÌM CĂN PHÙ HỢP NGAY
+                            <i class="bi bi-search me-2"></i>TÌM CĂN PHÙ HỢP NGAY
                         </button>
                     </div>
 
@@ -4267,10 +4267,10 @@
     <script src="config.js?v=20260830_2332"></script>
     <script src="calculator.js?v=20260903_1050_FIXED_CHART"></script>
     <script src="charts.js?v=20260903_1200_LEGEND_EXPAND"></script>
-    <script src="export_card.js?v=20260831_1435"></script>
+    <script src="export_card.js?v=20260903_1232_EXPORT_CARD_RESPONSIVE"></script>
     <script src="map_coordinates.js?v=20260903_1130_CACHE_BUST"></script>
-    <script src="ui.js?v=20260903_1208_SPOTLIGHT_FALLBACK"></script>
-    <script src="recommendation.js?v=20260903_1204_NO_BADGE_BREAK"></script>
+    <script src="ui.js?v=20260903_1224_SPOTLIGHT_ONERROR"></script>
+    <script src="recommendation.js?v=20260903_1240_CLEAN_SUBTAB1"></script>
 
     <script>
         function activatePdfIframe() {

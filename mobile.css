@@ -385,20 +385,108 @@
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 1040 !important;
-    width: calc(100% - 24px) !important;
-    max-width: 520px !important;
-    height: 48px !important;
+    width: calc(100% - 16px) !important;
+    max-width: 500px !important;
+    height: 46px !important;
     background: rgba(5, 25, 20, 0.96) !important;
     border: 1.5px solid #ffd166 !important;
-    border-radius: 25px !important;
-    padding: 4px 12px !important;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.75), 0 0 12px rgba(255, 209, 102, 0.3) !important;
+    border-radius: 23px !important;
+    padding: 3px 8px !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 209, 102, 0.3) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    gap: 6px !important;
+    gap: 4px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.cmp-left-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+}
+
+.cmp-count-tag {
+    background: rgba(0, 0, 0, 0.5) !important;
+    color: #ffd166 !important;
+    border: 1px solid rgba(255, 209, 102, 0.4) !important;
+    border-radius: 10px !important;
+    padding: 2px 6px !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    word-wrap: normal !important;
+    flex-shrink: 0 !important;
+}
+
+.cmp-codes-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    min-width: 0 !important;
+}
+
+.cmp-code-pill {
+    background: #ffd166 !important;
+    color: #0d2e26 !important;
+    border-radius: 10px !important;
+    padding: 2px 6px !important;
+    font-size: 0.75rem !important;
+    font-weight: 800 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    letter-spacing: 0.2px !important;
+    white-space: nowrap !important;
+    word-break: keep-all !important;
+    word-wrap: normal !important;
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
+}
+
+.cmp-code-sep {
+    color: #ffd166 !important;
+    font-weight: bold !important;
+    font-size: 0.7rem !important;
+    flex-shrink: 0 !important;
+}
+
+.cmp-right-btns {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+}
+
+.cmp-action-btn {
+    border-radius: 18px !important;
+    white-space: nowrap !important;
+    font-size: 0.74rem !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #ffd166 0%, #f39c12 100%) !important;
+    color: #0d2e26 !important;
+    border: none !important;
+    padding: 4px 10px !important;
+    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.4) !important;
+    cursor: pointer !important;
+}
+
+.cmp-close-btn {
+    background: transparent !important;
+    border: none !important;
+    color: #ffd166 !important;
+    font-size: 1.1rem !important;
+    padding: 0 2px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    opacity: 0.9 !important;
 }
 
 body.light-theme #finCompareStickyBar {
@@ -461,5 +549,52 @@ body.light-theme #finCompareStickyBar {
         bottom: 54px !important;
         height: 42px !important;
         max-width: 600px !important;
+    }
+}
+
+/* ==========================================================================
+   EXPORT MODAL RESPONSIVE SCALING (MOBILE & IPAD / TABLET)
+   ========================================================================== */
+#exportCardModal .modal-dialog,
+#exportCompareCardModal .modal-dialog {
+    max-width: 96% !important;
+    width: 96% !important;
+    margin: 12px auto !important;
+}
+
+#exportCardModal .modal-content,
+#exportCompareCardModal .modal-content {
+    border-radius: 16px !important;
+}
+
+#exportCardModal .modal-body,
+#exportCompareCardModal .modal-body {
+    padding: 14px 10px !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+}
+
+#quotationCardPreview,
+#compareQuotationCardPreview {
+    padding: 8px 4px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#quotationRenderCapture,
+#compareQuotationRenderCapture {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Tablet / iPad Portrait Optimization */
+@media (min-width: 576px) and (max-width: 991px) {
+    #exportCardModal .modal-dialog,
+    #exportCompareCardModal .modal-dialog {
+        max-width: 92% !important;
+        width: 92% !important;
     }
 }

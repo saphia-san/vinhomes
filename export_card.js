@@ -147,7 +147,7 @@ function updateQuotationPreview() {
     }
 
     container.innerHTML = `
-<div id="quotationRenderCapture" style="width:760px; padding:36px; ${bgStyle} font-family:'Plus Jakarta Sans', sans-serif; border-radius:20px; border:3px solid ${goldColor}; box-shadow:0 20px 60px rgba(0,0,0,0.6); margin:0 auto; box-sizing:border-box;">
+<div id="quotationRenderCapture" style="width:100%; max-width:760px; min-width:320px; padding:24px 18px; ${bgStyle} font-family:'Plus Jakarta Sans', sans-serif; border-radius:20px; border:3px solid ${goldColor}; box-shadow:0 20px 60px rgba(0,0,0,0.6); margin:0 auto; box-sizing:border-box;">
     
     <!-- Header Banner Logo & Tên Dự Án -->
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid ${goldColor}; padding-bottom:20px; margin-bottom:24px;">
@@ -294,21 +294,21 @@ function createExportModalHTML() {
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="closeExportModal()"></button>
             </div>
             <div class="modal-body">
-                <div class="row g-3 mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label text-warning small font-weight-bold">Tên Chuyên Viên Tư Vấn (Sale):</label>
-                        <input type="text" id="exportSaleName" class="form-control form-control-sm" value="Nguyễn Văn A" oninput="updateQuotationPreview()">
+                <div class="row g-2 mb-3">
+                    <div class="col-4">
+                        <label class="form-label text-warning small font-weight-bold mb-1">Sale:</label>
+                        <input type="text" id="exportSaleName" class="form-control form-control-sm px-2" value="Nguyễn Văn A" oninput="updateQuotationPreview()">
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-warning small font-weight-bold">Số Điện Thoại Sale:</label>
-                        <input type="text" id="exportSalePhone" class="form-control form-control-sm" value="0901 234 567" oninput="updateQuotationPreview()">
+                    <div class="col-4">
+                        <label class="form-label text-warning small font-weight-bold mb-1">SĐT Sale:</label>
+                        <input type="text" id="exportSalePhone" class="form-control form-control-sm px-2" value="0901 234 567" oninput="updateQuotationPreview()">
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-warning small font-weight-bold">Tên Khách Hàng:</label>
-                        <input type="text" id="exportCustomerName" class="form-control form-control-sm" value="Anh/Chị Khách Hàng" oninput="updateQuotationPreview()">
+                    <div class="col-4">
+                        <label class="form-label text-warning small font-weight-bold mb-1">Khách Hàng:</label>
+                        <input type="text" id="exportCustomerName" class="form-control form-control-sm px-2" value="Anh/Chị Khách Hàng" oninput="updateQuotationPreview()">
                     </div>
-                    <div class="col-md-12">
-                        <label class="form-label text-warning small font-weight-bold">Tone Màu Thẻ Báo Giá:</label>
+                    <div class="col-12">
+                        <label class="form-label text-warning small font-weight-bold mb-1">Tone Màu Thẻ Báo Giá:</label>
                         <select id="exportTheme" class="form-select form-select-sm" onchange="updateQuotationPreview()">
                             <option value="gold">🏆 Hoàng Gia Emerald Gold (Đen Tuyền & Vàng Kim - Khuyên Dùng)</option>
                             <option value="dark">🌿 Dark Emerald Classic (Xanh Lục Bảo)</option>
@@ -401,7 +401,7 @@ function updateCompareQuotationPreview() {
     const todayStr = new Date().toLocaleDateString('vi-VN');
 
     previewBox.innerHTML = `
-<div id="compareQuotationRenderCapture" style="width:1150px; padding:32px; background: linear-gradient(145deg, #061a15 0%, #0d2e26 50%, #051410 100%); color: #ffffff; font-family:'Plus Jakarta Sans', sans-serif; border-radius:20px; border:3px solid #ffd166; box-shadow:0 20px 60px rgba(0,0,0,0.6); margin:0 auto; box-sizing:border-box;">
+<div id="compareQuotationRenderCapture" style="width:100%; max-width:1150px; min-width:340px; padding:24px 18px; background: linear-gradient(145deg, #061a15 0%, #0d2e26 50%, #051410 100%); color: #ffffff; font-family:'Plus Jakarta Sans', sans-serif; border-radius:20px; border:3px solid #ffd166; box-shadow:0 20px 60px rgba(0,0,0,0.6); margin:0 auto; box-sizing:border-box;">
     
     <!-- Top Header Banner -->
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ffd166; padding-bottom:18px; margin-bottom:20px;">
@@ -525,18 +525,18 @@ function createExportCompareModalHTML() {
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="closeExportCompareModal()"></button>
             </div>
             <div class="modal-body">
-                <div class="row g-3 mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label text-warning small font-weight-bold">Tên Chuyên Viên Tư Vấn (Sale):</label>
-                        <input type="text" id="exportCmpSaleName" class="form-control form-control-sm" value="Nguyễn Văn A" oninput="updateCompareQuotationPreview()">
+                <div class="row g-2 mb-3">
+                    <div class="col-4">
+                        <label class="form-label text-warning small font-weight-bold mb-1">Sale:</label>
+                        <input type="text" id="exportCmpSaleName" class="form-control form-control-sm px-2" value="Nguyễn Văn A" oninput="updateCompareQuotationPreview()">
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-warning small font-weight-bold">Số Điện Thoại Sale:</label>
-                        <input type="text" id="exportCmpSalePhone" class="form-control form-control-sm" value="0901 234 567" oninput="updateCompareQuotationPreview()">
+                    <div class="col-4">
+                        <label class="form-label text-warning small font-weight-bold mb-1">SĐT Sale:</label>
+                        <input type="text" id="exportCmpSalePhone" class="form-control form-control-sm px-2" value="0901 234 567" oninput="updateCompareQuotationPreview()">
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-warning small font-weight-bold">Tên Khách Hàng:</label>
-                        <input type="text" id="exportCmpCustomerName" class="form-control form-control-sm" value="Anh/Chị Khách Hàng" oninput="updateCompareQuotationPreview()">
+                    <div class="col-4">
+                        <label class="form-label text-warning small font-weight-bold mb-1">Khách Hàng:</label>
+                        <input type="text" id="exportCmpCustomerName" class="form-control form-control-sm px-2" value="Anh/Chị Khách Hàng" oninput="updateCompareQuotationPreview()">
                     </div>
                 </div>
 
