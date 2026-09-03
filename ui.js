@@ -1403,7 +1403,7 @@ function showHistoryModal() {
             color: modalTextColor,
             html: `<div id="historyTableWrap" style="
                     width:100%;
-                    overflow-x:scroll;
+                    overflow-x:auto;
                     overflow-y:auto;
                     -webkit-overflow-scrolling:touch;
                     touch-action:pan-x pan-y;
@@ -1415,9 +1415,9 @@ function showHistoryModal() {
                     scrollbar-width:thin;
                     scrollbar-color:#0d2e26 #e2e8f0;
                 ">
-                <table style="
+                <table id="historyTable" style="
                     min-width:720px;
-                    width:720px;
+                    width:100%;
                     font-size:13px;
                     text-align:left;
                     background:#ffffff;
@@ -1427,18 +1427,18 @@ function showHistoryModal() {
                 ">
                     <thead style="position:sticky; top:0; background:${tableHeaderBg}; color:${tableHeaderColor}; z-index:2; border-bottom:2px solid #cbd5e1;">
                         <tr>
-                            <th style="width:145px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thời gian</th>
-                            <th style="width:105px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Mã Căn</th>
-                            <th style="width:160px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">PTTT</th>
-                            <th style="width:125px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:right;">Giá chưa VAT</th>
-                            <th style="width:125px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:right;">Thực trả CĐT</th>
-                            <th style="width:90px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:center;">Thao tác</th>
+                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thời gian</th>
+                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Mã Căn</th>
+                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">PTTT</th>
+                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:right;">Giá chưa VAT</th>
+                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:right;">Thực trả CĐT</th>
+                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:center;">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody style="color:#0f172a; background:#ffffff;">${tbody}</tbody>
                 </table>
             </div>
-            <div style="font-size:11px; color:#475569; font-weight:600; margin-top:8px; text-align:center;">
+            <div id="historyScrollHint" style="font-size:11px; color:#475569; font-weight:600; margin-top:8px; text-align:center; display:none;">
                 <i class="bi bi-arrows-expand-horizontal me-1" style="color:#2563eb;"></i>👉 Vuốt sang phải để xem thêm cột
             </div>`,
             width: 820,
@@ -1448,11 +1448,17 @@ function showHistoryModal() {
             cancelButtonColor: '#e74c3c',
             cancelButtonText: '🗑️ Xóa toàn bộ lịch sử',
             didOpen: () => {
-                // Attach touch scroll handler directly on the wrap element
                 const wrap = document.getElementById('historyTableWrap');
-                if (wrap) {
-                    wrap.addEventListener('touchstart', (e) => { e._histTouchStartX = e.touches[0].clientX; }, { passive: true });
-                    wrap.addEventListener('touchmove', (e) => { e.stopPropagation(); }, { passive: true });
+                const hint = document.getElementById('historyScrollHint');
+                const isMobile = window.innerWidth < 768;
+
+                // Chỉ hiện hint và bật touch scroll trên mobile
+                if (isMobile) {
+                    if (hint) hint.style.display = 'block';
+                    if (wrap) {
+                        wrap.addEventListener('touchstart', (e) => { e._histTouchStartX = e.touches[0].clientX; }, { passive: true });
+                        wrap.addEventListener('touchmove', (e) => { e.stopPropagation(); }, { passive: true });
+                    }
                 }
             }
         }).then(res => {
