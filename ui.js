@@ -328,23 +328,22 @@ function formatStageDisplay(s) {
         return `<span class="badge-stage ${s.badge}">Đặt cọc</span>`;
     }
 
-    // 2) Nếu nhãn chứa T+X (ví dụ: Lần 3 (T+15), Vốn tự có thêm (T+15), Bắt đầu Xây (T+540), T+15, v.v...)
+    // 2) Nếu nhãn chứa T+X -> CHỈ loại này mới bỏ vào ngoặc (T + X ngày)
     let tMatch = label.match(/\(?(T\+\d+)\)?/i);
     if (tMatch) {
         const tNum = tMatch[1].replace(/T\+/i, '');
         return `<span class="badge-stage ${s.badge}">(T + ${tNum} ngày)</span>`;
     }
 
-    // 3) Nếu là Lần X
-    if (/^Lần\s+\d+/i.test(label)) {
-        return `<span class="badge-stage ${s.badge}">(${label})</span>`;
-    }
-
-    // 4) Các nhãn khác: (Ký HĐMB), (Nhận bàn giao), (Sổ hồng), v.v.
+    // 3) Nếu nhãn đã có ngoặc sẵn -> giữ nguyên, không bọc thêm
     if (label.startsWith('(') && label.endsWith(')')) {
+        // Bỏ ngoặc ra để hiển thị không có ngoặc
+        label = label.slice(1, -1).trim();
         return `<span class="badge-stage ${s.badge}">${label}</span>`;
     }
-    return `<span class="badge-stage ${s.badge}">(${label})</span>`;
+
+    // 4) Tất cả nhãn khác: Ký HĐMB, Thông báo CĐT, Nhận bàn giao, Sổ hồng, v.v. -> KHÔNG ngoặc
+    return `<span class="badge-stage ${s.badge}">${label}</span>`;
 }
 
 // --- Render Result Tab ---
@@ -1402,29 +1401,60 @@ function showHistoryModal() {
             title: `<span style="color:#0d2e26; font-weight:800;"><i class="bi bi-clock-history me-2"></i>Lịch Sử Báo Giá</span>`,
             background: modalBg,
             color: modalTextColor,
-            html: `<div class="history-modal-table-wrap">
-                <table class="table history-modal-table align-middle m-0">
+            html: `<div id="historyTableWrap" style="
+                    width:100%;
+                    overflow-x:scroll;
+                    overflow-y:auto;
+                    -webkit-overflow-scrolling:touch;
+                    touch-action:pan-x pan-y;
+                    max-height:420px;
+                    border-radius:10px;
+                    border:1px solid #cbd5e1;
+                    background:#ffffff;
+                    display:block;
+                    scrollbar-width:thin;
+                    scrollbar-color:#0d2e26 #e2e8f0;
+                ">
+                <table style="
+                    min-width:720px;
+                    width:720px;
+                    font-size:13px;
+                    text-align:left;
+                    background:#ffffff;
+                    color:#0f172a;
+                    border-collapse:collapse;
+                    margin:0;
+                ">
                     <thead style="position:sticky; top:0; background:${tableHeaderBg}; color:${tableHeaderColor}; z-index:2; border-bottom:2px solid #cbd5e1;">
                         <tr>
-                            <th style="width:145px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Thời gian</th>
-                            <th style="width:105px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Mã Căn</th>
-                            <th style="width:160px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">PTTT</th>
-                            <th class="text-end" style="width:125px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Giá chưa VAT</th>
-                            <th class="text-end" style="width:125px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Thực trả CĐT</th>
-                            <th class="text-center" style="width:90px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Thao tác</th>
+                            <th style="width:145px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thời gian</th>
+                            <th style="width:105px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Mã Căn</th>
+                            <th style="width:160px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">PTTT</th>
+                            <th style="width:125px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:right;">Giá chưa VAT</th>
+                            <th style="width:125px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:right;">Thực trả CĐT</th>
+                            <th style="width:90px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:center;">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody style="color:#0f172a; background:#ffffff;">${tbody}</tbody>
                 </table>
             </div>
-            <div class="text-muted small mt-2 d-block d-md-none text-center" style="font-size:11px; color:#475569 !important; font-weight:600;">
-                <i class="bi bi-arrows-expand-horizontal me-1" style="color:#2563eb;"></i>👉 Vuốt / trượt ngang bảng để xem đầy đủ các cột
+            <div style="font-size:11px; color:#475569; font-weight:600; margin-top:8px; text-align:center;">
+                <i class="bi bi-arrows-expand-horizontal me-1" style="color:#2563eb;"></i>👉 Vuốt sang phải để xem thêm cột
             </div>`,
             width: 820,
+            allowTouchMove: false,
             showCancelButton: true,
             confirmButtonText: 'Đóng',
             cancelButtonColor: '#e74c3c',
-            cancelButtonText: '🗑️ Xóa toàn bộ lịch sử'
+            cancelButtonText: '🗑️ Xóa toàn bộ lịch sử',
+            didOpen: () => {
+                // Attach touch scroll handler directly on the wrap element
+                const wrap = document.getElementById('historyTableWrap');
+                if (wrap) {
+                    wrap.addEventListener('touchstart', (e) => { e._histTouchStartX = e.touches[0].clientX; }, { passive: true });
+                    wrap.addEventListener('touchmove', (e) => { e.stopPropagation(); }, { passive: true });
+                }
+            }
         }).then(res => {
             if (res.dismiss === Swal.DismissReason.cancel) {
                 localStorage.removeItem('vhp_history');
