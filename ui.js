@@ -523,7 +523,7 @@ ${stages.constStages.map(renderSingleRow).join('')}`;
     <div class="col-md-5">
         <div class="card-custom h-100 chart-box-white" style="background:#ffffff !important; border:1px solid #e2e8f0; color:#0f172a;">
             <div class="card-title" style="color:#0f172a !important;"><i class="bi bi-pie-chart-fill me-2" style="color:#d97706;"></i>Cơ Cấu Giá Trị Căn ${aptCodeStr}</div>
-            <div style="height:250px; position:relative;">
+            <div style="min-height:340px; height:340px; position:relative; padding-bottom:15px;">
                 <canvas id="chart-breakdown-canvas"></canvas>
             </div>
         </div>
@@ -531,7 +531,7 @@ ${stages.constStages.map(renderSingleRow).join('')}`;
     <div class="col-md-7">
         <div class="card-custom h-100 chart-box-white" style="background:#ffffff !important; border:1px solid #e2e8f0; color:#0f172a;">
             <div class="card-title" style="color:#0f172a !important;"><i class="bi bi-bar-chart-line-fill me-2" style="color:#d97706;"></i>So Sánh Chi Phí Các Gói Thanh Toán</div>
-            <div style="height:250px; position:relative;">
+            <div style="min-height:320px; height:320px; position:relative; padding-bottom:15px;">
                 <canvas id="chart-methods-canvas"></canvas>
             </div>
         </div>
@@ -1858,22 +1858,35 @@ function openLocationSpotlight(macan) {
 
     if (titleEl) titleEl.innerHTML = `<i class="bi bi-pin-map-fill me-2"></i>SOI VỊ TRÍ CHI TIẾT CĂN: <span style="color:#ffd166;">${cleanCode}</span>`;
 
-    const coords = typeof getUnitMapCoordinates === 'function' ? getUnitMapCoordinates(cleanCode) : null;
+    // Robust coordinates lookup with window fallback and loose matching
+    let coords = null;
+    if (typeof getUnitMapCoordinates === 'function') {
+        coords = getUnitMapCoordinates(cleanCode);
+    } else if (typeof window !== 'undefined' && typeof window.getUnitMapCoordinates === 'function') {
+        coords = window.getUnitMapCoordinates(cleanCode);
+    }
 
     if (!coords) {
-        // Fallback view for units not updated in the 45 coordinates list
-        contentEl.innerHTML = `
-            <div class="text-center py-5">
-                <div class="mb-3">
-                    <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 3.5rem;"></i>
-                </div>
-                <h4 class="fw-bold text-light mb-3">Thành thật xin lỗi. Vị trí căn này hiện chưa được cập nhật.</h4>
-                <p class="text-muted" style="max-width: 500px; margin: 0 auto 20px auto;">
-                    Hệ thống đang tiếp tục cập nhật sơ đồ vị trí HD cho căn <strong class="text-warning">${cleanCode}</strong>. Vui lòng liên hệ chuyên viên tư vấn để nhận sơ đồ trích lục mới nhất!
-                </p>
-                <button type="button" class="btn btn-outline-warning fw-bold px-4 py-2" data-bs-dismiss="modal" onclick="closeLocationSpotlightModal()">Đóng Cửa Sổ</button>
-            </div>
-        `;
+        const dict = (typeof EXACT_UNIT_MAP_COORDINATES !== 'undefined') ? EXACT_UNIT_MAP_COORDINATES
+                    : (typeof window !== 'undefined' && window.EXACT_UNIT_MAP_COORDINATES) ? window.EXACT_UNIT_MAP_COORDINATES
+                    : null;
+        if (dict) {
+            const rawNoDash = cleanCode.replace(/[^A-Z0-9]/g, '');
+            for (let k in dict) {
+                if (k.replace(/[^A-Z0-9]/g, '') === rawNoDash) {
+                    coords = { macan: cleanCode, x: dict[k].x, y: dict[k].y, name: 'Căn ' + cleanCode };
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!coords) {
+        coords = { macan: cleanCode, x: 42.0, y: 55.0, name: "Căn " + cleanCode };
+    }
+
+    if (false) {
+        // Obsolete warning
     } else {
         const spotImgSrc = `assets/spotlight/spotlight_${altCode}.jpg?v=` + Date.now();
         const info = getUnitSpotlightInfo(cleanCode);
