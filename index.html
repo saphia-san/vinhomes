@@ -308,6 +308,13 @@
             color: #ffffff !important;
         }
 
+        /* Recommendation card spacing on mobile */
+        @media (max-width: 767px) {
+            #finMatcherResultsContainer .col-12 {
+                margin-bottom: 20px !important;
+            }
+        }
+
         /* Main Search Button in Sub-Tab 1 */
         body.light-theme #subTabMatcher button.btn-warning {
             background: linear-gradient(135deg, #0d2e26 0%, #154d40 100%) !important;
@@ -1344,6 +1351,89 @@
         body.light-theme .split-stage-title {
             color: #137333 !important;
             font-weight: 800 !important;
+        }
+
+        /* History Modal Mobile Horizontal Scrollbar & Table Fixes */
+        .history-modal-table-wrap {
+            width: 100% !important;
+            max-height: 420px !important;
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            display: block !important;
+        }
+
+        .history-modal-table-wrap::-webkit-scrollbar {
+            height: 8px !important;
+            width: 8px !important;
+        }
+
+        .history-modal-table-wrap::-webkit-scrollbar-thumb {
+            background: #0d2e26 !important;
+            border-radius: 4px !important;
+        }
+
+        .history-modal-table-wrap::-webkit-scrollbar-track {
+            background: #e2e8f0 !important;
+        }
+
+        .history-modal-table {
+            min-width: 720px !important;
+            width: 720px !important;
+            table-layout: fixed !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+            margin: 0 !important;
+        }
+
+        .history-modal-table th,
+        .history-modal-table td {
+            white-space: nowrap !important;
+            padding: 10px 12px !important;
+            vertical-align: middle !important;
+        }
+
+        .history-modal-table .badge-macan {
+            white-space: nowrap !important;
+            display: inline-block !important;
+            padding: 4px 10px !important;
+            font-size: 13px !important;
+            font-weight: 800 !important;
+            background: #fef3c7 !important;
+            color: #0d2e26 !important;
+            border: 1px solid #fde68a !important;
+            border-radius: 6px !important;
+        }
+
+        .swal2-html-container {
+            overflow-x: auto !important;
+            max-width: 100% !important;
+        }
+
+        /* Highly Prominent CĐT Hỗ Trợ Pill Badge */
+        .cdt-support-badge {
+            display: inline-block !important;
+            margin-left: 5px !important;
+            padding: 2px 7px !important;
+            font-size: 0.72rem !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.2px !important;
+            border-radius: 6px !important;
+            background: #dcfce7 !important;
+            color: #15803d !important;
+            border: 1px solid #86efac !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+            vertical-align: middle !important;
+            white-space: nowrap !important;
+        }
+
+        body.dark-theme .cdt-support-badge {
+            background: rgba(52, 211, 153, 0.25) !important;
+            color: #34d399 !important;
+            border: 1px solid rgba(52, 211, 153, 0.5) !important;
         }
 
         /* Mobile History Modal Responsive Width & Touch Scroll */
@@ -4531,8 +4621,8 @@
     <script src="charts.js?v=20260903_1312_LEGEND_PADDING_FIX"></script>
     <script src="export_card.js?v=20260903_1232_EXPORT_CARD_RESPONSIVE"></script>
     <script src="map_coordinates.js?v=20260903_1130_CACHE_BUST"></script>
-    <script src="ui.js?v=20260903_1527_HANDOVER_HEADER_NOTE_BRIGHT_FIX"></script>
-    <script src="recommendation.js?v=20260903_1441_GOLD_GIFT_GOLDEN_BADGE_FIX"></script>
+    <script src="ui.js?v=20260903_1538_CDT_SUPPORT_BADGE_PROMINENT_FIX"></script>
+    <script src="recommendation.js?v=20260903_1544_STICKY_BAR_CLOSE_FIX"></script>
 
     <script>
         function activatePdfIframe() {

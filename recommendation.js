@@ -483,11 +483,12 @@ function updateCompareStickyBar() {
     }
 
     if (selectedCompareUnits.length === 0) {
-        bar.style.display = 'none';
+        bar.style.setProperty('display', 'none', 'important');
+        bar.innerHTML = '';
         return;
     }
 
-    bar.style.display = 'flex';
+    bar.style.removeProperty('display');
 
     const unitPills = selectedCompareUnits.map(code => 
         `<span class="cmp-code-pill">${code}</span>`

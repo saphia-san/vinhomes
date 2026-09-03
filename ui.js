@@ -721,9 +721,9 @@ function renderLoan(d) {
     <td class="text-center">${r.m}</td>
     <td class="date-col">${fmtDate(r.date)}</td>
     <td class="text-end" style="color:#f8fafc;font-weight:600;">${fmt(r.principal)}</td>
-    <td class="text-end" style="color:${r.supported ? '#4ade80' : '#f87171'};font-weight:700;">
+    <td class="text-end" style="color:${r.supported ? '#16a34a' : '#ef4444'};font-weight:700;">
         ${fmt(r.interest)}
-        ${r.supported ? '<span class="badge-stage badge-progress ms-1" style="font-size:0.65rem;">CĐT hỗ trợ</span>' : ''}
+        ${r.supported ? '<span class="cdt-support-badge"><i class="bi bi-shield-check me-1"></i>CĐT hỗ trợ</span>' : ''}
     </td>
     <td class="text-end" style="font-weight:800;color:${r.supported ? '#4ade80' : '#ffe79a'};">${fmt(r.khTotal)}</td>
     <td class="text-end" style="color:#cbd5e1;">${fmt(r.balance)}</td>
@@ -1378,16 +1378,16 @@ function showHistoryModal() {
         <tr style="cursor:pointer; border-bottom: 1px solid ${rowBorderColor}; background: #ffffff;" 
             onclick="restoreHistoryItem('${r.id}')" 
             title="Bấm để tải lại cấu hình căn này">
-            <td style="font-size:12px; color:${timeColor}; white-space:nowrap; padding:10px;">${r.time}</td>
-            <td style="padding:10px; white-space:nowrap;">
-                <span class="badge" style="background:${macanBg}; color:${macanColor}; font-weight:800; font-size:12px; border:1px solid #fde68a; padding:4px 8px; white-space:nowrap; display:inline-block;">
+            <td style="font-size:12px; color:${timeColor}; white-space:nowrap; padding:10px 12px;">${r.time}</td>
+            <td style="padding:10px 12px; white-space:nowrap;">
+                <span class="badge-macan">
                     ${r.macan}
                 </span>
             </td>
-            <td style="font-size:12px; font-weight:600; color:${modalTextColor}; white-space:nowrap; padding:10px;">${methodLabelMap[r.paymentMethod] || r.paymentMethod}</td>
-            <td class="text-end" style="font-size:12px; font-weight:600; color:${priceColor}; white-space:nowrap; padding:10px;">${fmt(r.propValue)}</td>
-            <td class="text-end" style="color:${totalColor}; font-weight:800; font-size:13px; white-space:nowrap; padding:10px;">${fmt(r.totalKHtoCDT)}</td>
-            <td class="text-center" style="white-space:nowrap; padding:10px;">
+            <td style="font-size:12px; font-weight:600; color:${modalTextColor}; white-space:nowrap; padding:10px 12px;">${methodLabelMap[r.paymentMethod] || r.paymentMethod}</td>
+            <td class="text-end" style="font-size:12px; font-weight:600; color:${priceColor}; white-space:nowrap; padding:10px 12px;">${fmt(r.propValue)}</td>
+            <td class="text-end" style="color:${totalColor}; font-weight:800; font-size:13px; white-space:nowrap; padding:10px 12px;">${fmt(r.totalKHtoCDT)}</td>
+            <td class="text-center" style="white-space:nowrap; padding:10px 12px;">
                 <button class="btn btn-sm py-1 px-2 fw-bold" 
                         style="font-size:11px; background:#0d2e26; color:#ffffff; border:none; border-radius:6px;" 
                         onclick="event.stopPropagation(); restoreHistoryItem('${r.id}')">
@@ -1402,20 +1402,23 @@ function showHistoryModal() {
             title: `<span style="color:#0d2e26; font-weight:800;"><i class="bi bi-clock-history me-2"></i>Lịch Sử Báo Giá</span>`,
             background: modalBg,
             color: modalTextColor,
-            html: `<div style="max-height:420px; overflow-y:auto; overflow-x:auto; -webkit-overflow-scrolling:touch; width:100%; border-radius:10px; border:1px solid ${rowBorderColor}; background:#ffffff;">
-                <table class="table align-middle m-0" style="min-width:650px; font-size:13px; text-align:left; background:#ffffff; color:#0f172a;">
+            html: `<div class="history-modal-table-wrap">
+                <table class="table history-modal-table align-middle m-0">
                     <thead style="position:sticky; top:0; background:${tableHeaderBg}; color:${tableHeaderColor}; z-index:2; border-bottom:2px solid #cbd5e1;">
                         <tr>
-                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thời gian</th>
-                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Mã Căn</th>
-                            <th style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">PTTT</th>
-                            <th class="text-end" style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Giá chưa VAT</th>
-                            <th class="text-end" style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thực trả CĐT</th>
-                            <th class="text-center" style="padding:10px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thao tác</th>
+                            <th style="width:145px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Thời gian</th>
+                            <th style="width:105px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Mã Căn</th>
+                            <th style="width:160px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">PTTT</th>
+                            <th class="text-end" style="width:125px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Giá chưa VAT</th>
+                            <th class="text-end" style="width:125px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Thực trả CĐT</th>
+                            <th class="text-center" style="width:90px; padding:10px 12px; color:${tableHeaderColor}; font-weight:700;">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody style="color:#0f172a; background:#ffffff;">${tbody}</tbody>
                 </table>
+            </div>
+            <div class="text-muted small mt-2 d-block d-md-none text-center" style="font-size:11px; color:#475569 !important; font-weight:600;">
+                <i class="bi bi-arrows-expand-horizontal me-1" style="color:#2563eb;"></i>👉 Vuốt / trượt ngang bảng để xem đầy đủ các cột
             </div>`,
             width: 820,
             showCancelButton: true,
