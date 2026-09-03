@@ -481,24 +481,6 @@ function updateCompareStickyBar() {
     if (!bar) {
         bar = document.createElement('div');
         bar.id = 'finCompareStickyBar';
-        bar.style.cssText = `
-            position: fixed;
-            bottom: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1050;
-            width: 92%;
-            max-width: 750px;
-            background: linear-gradient(135deg, #07261f 0%, #0c3d32 100%);
-            border: 2px solid #ffd166;
-            border-radius: 30px;
-            padding: 10px 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s ease;
-        `;
         document.body.appendChild(bar);
     }
 
@@ -510,23 +492,23 @@ function updateCompareStickyBar() {
     bar.style.display = 'flex';
 
     const unitBadges = selectedCompareUnits.map(code => 
-        `<span class="badge bg-warning text-dark fw-bold me-1">${code}</span>`
-    ).join('');
+        `<span class="badge bg-warning text-dark fw-bold px-2 py-0.5" style="white-space:nowrap; font-size:0.78rem; letter-spacing:0.3px; display:inline-block;">${code}</span>`
+    ).join('<span class="text-warning fw-bold small mx-1">•</span>');
 
-    const btnDisabled = selectedCompareUnits.length < 2 ? 'disabled style="opacity:0.6;"' : '';
-    const btnText = selectedCompareUnits.length < 2 ? 'Tick thêm 1 căn nữa' : '🚀 XEM SO SÁNH GIÁ 2 CĂN';
+    const btnDisabled = selectedCompareUnits.length < 2 ? 'disabled style="opacity:0.6; cursor:not-allowed;"' : '';
+    const btnText = selectedCompareUnits.length < 2 ? 'Tick 1 căn nữa' : '🚀 So Sánh 2 Căn';
 
     bar.innerHTML = `
-        <div class="d-flex align-items-center gap-2 overflow-hidden">
-            <span class="fw-bold text-warning small me-1" style="white-space: nowrap;">⚖️ Đã chọn (${selectedCompareUnits.length}/2):</span>
-            <div class="d-flex flex-wrap">${unitBadges}</div>
+        <div class="d-flex align-items-center gap-1 overflow-hidden" style="white-space:nowrap; min-width:0;">
+            <span class="badge bg-dark text-warning border border-warning px-2 py-1 fw-bold me-1 flex-shrink-0" style="font-size:0.75rem; white-space:nowrap;">⚖️ ${selectedCompareUnits.length}/2</span>
+            <div class="d-flex align-items-center gap-1 text-truncate" style="white-space:nowrap;">${unitBadges}</div>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <button type="button" class="btn btn-warning fw-bold btn-sm text-dark px-3 py-1.5" ${btnDisabled} onclick="goToSystemCompareTab()" style="border-radius: 20px; white-space: nowrap;">
+        <div class="d-flex align-items-center gap-1 ms-auto flex-shrink-0" style="white-space:nowrap;">
+            <button type="button" class="btn btn-warning fw-bold btn-sm text-dark px-2.5 py-1" ${btnDisabled} onclick="goToSystemCompareTab()" style="border-radius: 20px; white-space: nowrap; font-size:0.78rem; font-weight:800; background:linear-gradient(135deg, #ffd166 0%, #f39c12 100%); border:none; box-shadow: 0 2px 8px rgba(243,156,18,0.4);">
                 ${btnText}
             </button>
-            <button type="button" class="btn btn-outline-light btn-sm rounded-circle p-1" onclick="clearSelectedCompareUnits()" title="Bỏ chọn tất cả">
-                <i class="bi bi-x-lg"></i>
+            <button type="button" class="btn btn-link text-light btn-sm p-0 ms-1" onclick="clearSelectedCompareUnits()" title="Bỏ chọn tất cả" style="font-size:1.2rem; text-decoration:none; opacity:0.85; line-height:1;">
+                <i class="bi bi-x-circle-fill text-warning"></i>
             </button>
         </div>
     `;
