@@ -61,6 +61,27 @@
             --accent-light: #0d2e26;
         }
 
+        .custom-gold-slider {
+            accent-color: #ffd166;
+            height: 6px;
+        }
+        .custom-gold-slider::-webkit-slider-thumb {
+            background: #ffd166 !important;
+            border: 2px solid #07261f !important;
+            box-shadow: 0 0 10px rgba(255, 209, 102, 0.9) !important;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .custom-gold-slider::-moz-range-thumb {
+            background: #ffd166 !important;
+            border: 2px solid #07261f !important;
+            box-shadow: 0 0 10px rgba(255, 209, 102, 0.9) !important;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
         /* --- STICKY FLOATING TAB BAR WITH GLASSMORPHISM (DESKTOP MASTERPIECE) --- */
         .sticky-nav-container {
             position: sticky;
@@ -147,11 +168,55 @@
             padding-bottom: 24px;
         }
 
-        .hidden-section {
-            display: none !important;
+        .fin-form-label {
+            color: #f8fafc;
+        }
+        body.light-theme .fin-form-label {
+            color: #0f172a !important;
         }
 
-        body.light-theme .text-white:not(.keep-text-white) {
+        .fin-check-label {
+            color: #cbd5e1;
+        }
+        body.light-theme .fin-check-label {
+            color: #1e293b !important;
+        }
+
+        body.light-theme .text-white:not(.keep-text-white),
+        body.light-theme .text-light {
+            color: #0f172a !important;
+        }
+
+        body.light-theme select.bg-dark,
+        body.light-theme .form-select.bg-dark {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        body.light-theme .card-recommendation-item {
+            background: #ffffff !important;
+            border: 1.5px solid #cbd5e1 !important;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
+            color: #0f172a !important;
+        }
+
+        body.light-theme .card-recommendation-item div[style*="background: rgba(3, 20, 16"],
+        body.light-theme .card-recommendation-item div[style*="background:rgba(3,20,16"] {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+
+        body.light-theme .card-recommendation-item div[style*="background: rgba(255, 209, 102"],
+        body.light-theme .card-recommendation-item div[style*="background:rgba(255,209,102"] {
+            background: #fefce8 !important;
+            border: 1px dashed #ca8a04 !important;
+            color: #0f172a !important;
+        }
+
+        body.light-theme .card-recommendation-item .text-light,
+        body.light-theme .card-recommendation-item .text-white {
             color: #0f172a !important;
         }
 
@@ -1089,10 +1154,13 @@
 
         .tab-pane:not(.active) {
             display: none !important;
+            opacity: 0 !important;
         }
 
         .tab-pane.active {
             display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         footer {
@@ -1394,8 +1462,6 @@
                         style="color:#ffd166;"></i>Tháp Biểu Tượng</a>
                 <a href="#sec-hero" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
                         class="bi bi-map me-1"></i>Mặt Bằng Tổng Thể</a>
-                <a href="#sec-pdf-map" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
-                        class="bi bi-search me-1"></i>Soi Căn PDF 4K</a>
                 <a href="#sec-vi-tri" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
                         class="bi bi-geo-alt me-1"></i>Vị Trí</a>
                 <a href="#sec-tien-ich" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
@@ -1609,51 +1675,6 @@
                         style="color: #f1f5f9; font-size: 1.15rem; font-weight: 600; margin-bottom: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
                         Quy hoạch đại đô thị tri thức 1.080 ha - Vinhomes Sài Gòn Park Hóc Môn
                     </p>
-                </div>
-            </div>
-
-            <!-- 2.05 TRÌNH XEM SOI CĂN VECTOR PDF GỐC (SALER TỰ ZOOM NÉT CĂNG 100%) -->
-            <div id="sec-pdf-map" class="card-custom sec-card-theme mb-5 p-3 p-md-4"
-                style="border-left: 6px solid #ffd166;">
-                <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-                    <div>
-                        <span class="badge mb-2"
-                            style="background:#ffd166; color:#0d2e26; font-size:0.85rem; font-weight:800; padding: 6px 14px;">
-                            <i class="bi bi-file-earmark-pdf-fill me-1"></i> SƠ ĐỒ MẶT BẰNG QUY HOẠCH PHÂN LÔ PDF GỐC
-                        </span>
-                        <h3 class="fw-bold mb-0"
-                            style="font-size:1.5rem; font-family:'Be Vietnam Pro', sans-serif; text-transform: uppercase;">
-                            <i class="bi bi-map-fill me-2" style="color:#ffd166;"></i>Bản Đồ Quy Hoạch Phân Lô Chi Tiết
-                            (Vector PDF Cực Nét)
-                        </h3>
-                    </div>
-
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <a href="assets/VHSP.pdf" target="_blank"
-                            class="btn btn-sm btn-warning fw-bold px-3 py-2 shadow-sm" style="border-radius:8px;">
-                            <i class="bi bi-box-arrow-up-right me-1"></i> Mở PDF Trong Thẻ Mới
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Khung Trình Xem Vector PDF Gốc Trực Quan Cực Nét (On-Demand Loading) -->
-                <div id="pdfViewerFrameContainer"
-                    class="position-relative rounded-4 overflow-hidden border shadow-lg d-flex flex-column align-items-center justify-content-center p-4 text-center"
-                    style="border:2px solid rgba(255,209,102,0.4) !important; background:#051410; min-height: 480px;">
-                    <i class="bi bi-file-earmark-pdf-fill text-warning mb-2" style="font-size: 3.5rem;"></i>
-                    <h4 class="fw-bold text-white mb-2" style="font-size:1.25rem;">Bản Đồ Quy Hoạch Phân Lô Chi Tiết
-                        (PDF Gốc 13.3MB)</h4>
-                    <p class="text-white-50 small mb-4" style="max-width: 460px; font-size:0.88rem;">Bấm nút bên dưới để
-                        tải và xem sơ đồ quy hoạch PDF gốc sắc nét vector 100%.</p>
-                    <div class="d-flex gap-2 flex-wrap justify-content-center">
-                        <button type="button" class="btn btn-warning fw-bold px-4 py-2 shadow"
-                            onclick="activatePdfIframe()">
-                            <i class="bi bi-play-circle-fill me-1"></i> ▶️ Mở Xem Sơ Đồ PDF Trực Tiếp
-                        </button>
-                        <a href="assets/VHSP.pdf" target="_blank" class="btn btn-outline-warning fw-bold px-3 py-2">
-                            <i class="bi bi-box-arrow-up-right me-1"></i> Mở Thẻ Mới
-                        </a>
-                    </div>
                 </div>
             </div>
 
@@ -2441,8 +2462,6 @@
                                         style="aspect-ratio: 16/10; object-fit: cover; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s ease;"
                                         onclick="switchMainImage('sec-tien-ich-global-village-main-img', this)">
                                 </div>
-                            </div>
-                        </div>
                             </div>
                         </div>
                     </div>
@@ -3567,6 +3586,155 @@
         </div>
         <!-- TAB 1: INPUT FORM -->
         <div id="tab-input" class="tab-pane fade">
+            <!-- SUB-TABS NAVIGATION (GỢI Ý CĂN VS TÍNH TOÁN CĂN CỤ THỂ) -->
+            <div class="d-flex justify-content-center mb-4">
+                <div class="sub-nav-wrapper p-1.5 rounded-pill shadow-sm" style="background: rgba(4, 26, 20, 0.85); border: 1.5px solid rgba(255, 209, 102, 0.4); display: inline-flex; gap: 6px;">
+                    <button type="button" class="btn btn-sub-tab active px-4 py-2 rounded-pill fw-bold" id="subTabMatcherBtn" onclick="switchSubInputTab('matcher')" style="font-size: 0.92rem; transition: all 0.25s ease; background: linear-gradient(135deg, #ffd166 0%, #f39c12 100%); color: #04120e; border: none; font-weight: 800;">
+                        ✨ Gợi Ý Căn Phù Hợp theo Tài Chính
+                    </button>
+                    <button type="button" class="btn btn-sub-tab px-4 py-2 rounded-pill fw-bold" id="subTabCalcBtn" onclick="switchSubInputTab('calc')" style="font-size: 0.92rem; transition: all 0.25s ease; background: transparent; color: #f8fafc; border: none;">
+                        🧮 Tính Toán Căn Cụ Thể (Nhập Mã Căn)
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 1: GỢI Ý CĂN PHÙ HỢP -->
+            <div id="subTabMatcher" class="sub-tab-content">
+                <!-- SECTION GỢI Ý CĂN PHÙ HỢP THEO TÀI CHÍNH KHÁCH HÀNG -->
+                <div class="card-custom mb-4" style="background: rgba(13, 46, 38, 0.9); border: 1px solid rgba(255, 209, 102, 0.4); border-radius: 18px;">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                        <h4 class="fw-bold mb-0" style="color: #ffd166; font-size: 1.25rem;">
+                            <i class="bi bi-sliders me-2"></i>Gợi Ý Căn Phù Hợp Theo Tài Chính Khách Hàng
+                        </h4>
+                        <span class="badge bg-warning text-dark fw-bold px-3 py-2" style="border-radius: 20px;">
+                            <i class="bi bi-magic me-1"></i> Tự Động Lọc Giỏ Hàng
+                        </span>
+                    </div>
+                    <p class="text-muted small mb-3">Nhập số tiền vốn tự có sẵn có hoặc nhu cầu bàn giao để hệ thống tự động đề xuất những căn khớp tốt nhất trong giỏ hàng:</p>
+
+                    <div class="row g-3 mb-3">
+                        <!-- 1. Vốn tự có sẵn có (Thanh trượt Kéo Nút Tròn) -->
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label fw-bold fin-form-label small mb-0">💰 Vốn Tự Có Sẵn Có:</label>
+                                <span class="badge bg-warning text-dark fw-bold shadow-sm" id="finBudgetValDisplay" style="font-size: 0.84rem;">3.5 Tỷ VNĐ</span>
+                            </div>
+                            <input type="range" class="form-range custom-gold-slider" id="finBudget" min="0" max="15000" step="100" value="3500" oninput="updateFinSliderDisplays(); runFinancialMatcher();">
+                            <div class="d-flex justify-content-between text-muted" style="font-size: 0.75rem;">
+                                <span>Tất cả</span>
+                                <span>7.5 Tỷ</span>
+                                <span>15 Tỷ+</span>
+                            </div>
+                        </div>
+
+                        <!-- 2. Dòng tiền trả hàng tháng (Thanh trượt Kéo Nút Tròn) -->
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label fw-bold fin-form-label small mb-0">💳 Dòng Tiền Hàng Tháng:</label>
+                                <span class="badge bg-info text-dark fw-bold shadow-sm" id="finCashflowValDisplay" style="font-size: 0.84rem;">50 Triệu/tháng</span>
+                            </div>
+                            <input type="range" class="form-range custom-gold-slider" id="finMonthlyCashflow" min="0" max="200" step="5" value="50" oninput="updateFinSliderDisplays(); runFinancialMatcher();">
+                            <div class="d-flex justify-content-between text-muted" style="font-size: 0.75rem;">
+                                <span>Tất cả</span>
+                                <span>100 Tr/tháng</span>
+                                <span>200 Tr+</span>
+                            </div>
+                        </div>
+
+                        <!-- 3. Phương thức thanh toán ưu tiên -->
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label class="form-label fw-bold fin-form-label small">📋 Phương Thức Ưu Tiên:</label>
+                            <select class="form-select bg-dark text-white border-warning" id="finMethod">
+                                <option value="all">-- Tất cả PTTT --</option>
+                                <option value="own-early">💰 TTS 100% (Sớm)</option>
+                                <option value="own-normal">📋 Tiến Độ Thường</option>
+                                <option value="bank">🏦 Vay HTLS (Bank 70%)</option>
+                            </select>
+                        </div>
+
+                        <!-- 4. Tính chất bàn giao & loại hình -->
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label class="form-label fw-bold fin-form-label small">🏗️ Bàn Giao &amp; Loại Hình:</label>
+                            <select class="form-select bg-dark text-white border-warning" id="finType">
+                                <option value="all">-- Tất cả loại hình --</option>
+                                <option value="gianXay">🏗️ Giãn xây (Nhận nhà Q4/2028)</option>
+                                <option value="rough">🧱 Bàn giao Thô</option>
+                                <option value="finished">🏠 Hoàn Thiện</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Chương Trình Ưu Đãi & Khuyến Mãi (Áp vào tìm kiếm) -->
+                    <div class="p-3 mb-4 rounded-3" style="background: rgba(255,209,102,0.06); border: 1px dashed rgba(255,209,102,0.35);">
+                        <div class="fw-bold text-warning mb-3" style="font-size: 0.95rem;">
+                            <i class="bi bi-gift me-2"></i>Chương Trình Ưu Đãi &amp; Khuyến Mãi (Áp Dụng Khi Tìm Kiếm)
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="fin_promo_earlyMoveIn" onchange="runFinancialMatcher()">
+                                    <label class="form-check-label fin-check-label small" for="fin_promo_earlyMoveIn">🏠 Cam kết về ở sớm (CK 10% – 5% trừ HĐ, 5% hoàn tiền)</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="fin_promo_noBlnh" onchange="runFinancialMatcher()">
+                                    <label class="form-check-label fin-check-label small" for="fin_promo_noBlnh">🛡️ Từ chối Bảo lãnh Ngân hàng (CK 0.5%)</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="fin_promo_aquafield" onchange="runFinancialMatcher()">
+                                    <label class="form-check-label fin-check-label small" for="fin_promo_aquafield">🏊 Quà tặng Aquafield Voucher (20.000.000 VNĐ)</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="fin_promo_voucher" onchange="runFinancialMatcher()">
+                                    <label class="form-check-label fin-check-label small" for="fin_promo_voucher">🎟️ Voucher mua nhà (theo giá nhà cũ)</label>
+                                </div>
+                                <div id="fin_voucherWrap" class="mt-1 ms-4" style="display:none;">
+                                    <div class="row g-1">
+                                        <div class="col-8">
+                                            <input type="text" id="fin_oldHousePrice" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Giá nhà cũ (VNĐ)" oninput="formatNumberInput(this)">
+                                        </div>
+                                        <div class="col-4">
+                                            <select id="fin_voucherPercent" class="form-select form-select-sm bg-dark text-white border-secondary">
+                                                <option value="8">8%</option>
+                                                <option value="10">10%</option>
+                                                <option value="12">12%</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nút Tìm Kiếm Nổi Bật -->
+                    <div class="text-center mb-4">
+                        <button type="button" class="btn btn-warning btn-lg fw-bold px-5 py-2 shadow-lg" onclick="runFinancialMatcher()" style="border-radius: 30px; font-size: 1.1rem; color: #051410;">
+                            <i class="bi bi-search me-2"></i>🔍 TÌM CĂN PHÙ HỢP NGAY
+                        </button>
+                    </div>
+
+                    <!-- KẾT QUẢ DANH SÁCH CĂN PHÙ HỢP -->
+                    <div id="finMatcherResultsWrap" style="display: none;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0 text-warning" style="font-size: 1.15rem;">
+                                <i class="bi bi-stars me-1"></i>Căn Đề Xuất Phù Hợp Nhu Cầu (<span id="finMatchCount">0</span> căn):
+                            </h5>
+                        </div>
+                        <div class="row g-3" id="finMatcherResultsContainer">
+                            <!-- Dynamic matching unit cards -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB-TAB 2: TÍNH TOÁN CĂN CỤ THỂ -->
+            <div id="subTabCalc" class="sub-tab-content" style="display: none;">
+
             <div class="row g-4">
 
                 <!-- Col Left: Property Info -->
@@ -3694,7 +3862,7 @@
                             (CSBH V07)</div>
 
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" id="promo_goldGift">
+                            <input class="form-check-input" type="checkbox" id="promo_goldGift" checked>
                             <label class="form-check-label" for="promo_goldGift">🥇 Quà tặng Vàng (Ký HĐMB đến
                                 10/09/2026)</label>
                         </div>
@@ -3770,7 +3938,7 @@
 
                     </div>
                 </div>
-
+            </div>
             </div>
         </div>
 
@@ -4074,14 +4242,35 @@
         </div>
     </div>
 
+    <!-- Modal Soi Vị Trí Căn Ultra-HD 300 DPI với Ghim Giọt Nước Vàng Kim 3D -->
+    <div class="modal fade" id="locationSpotlightModal" tabindex="-1" aria-hidden="true" style="z-index: 1080 !important;">
+        <div class="modal-dialog modal-xl modal-dialog-centered" style="z-index: 1085 !important; max-width: 95vw; width: 1400px;">
+            <div class="modal-content" style="background:#07201a; color:#ffffff; border: 2px solid #ffd166; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);">
+                <div class="modal-header" style="border-bottom:1px solid rgba(255,209,102,0.3); background:#0d2e26; padding: 14px 24px; border-top-left-radius: 18px; border-top-right-radius: 18px;">
+                    <h5 class="modal-title fw-bold" style="color:#ffd166; font-size:1.2rem;" id="spotlightModalTitle">
+                        <i class="bi bi-pin-map-fill me-2"></i>SOI VỊ TRÍ CĂN HỘ
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="closeLocationSpotlightModal()"></button>
+                </div>
+                <div class="modal-body p-3 p-md-4">
+                    <div id="spotlightBodyContent">
+                        <!-- Dynamic Content via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="gallery_data.js?v=20260831_1532"></script>
     <script src="gallery_lightbox.js?v=20260829_1358"></script>
     <script src="data.js"></script>
     <script src="config.js?v=20260830_2332"></script>
-    <script src="calculator.js?v=20260831_1454"></script>
+    <script src="calculator.js?v=20260903_1020_REMOVE_PDF_CARD"></script>
     <script src="charts.js?v=20260831_0942"></script>
     <script src="export_card.js?v=20260831_1435"></script>
-    <script src="ui.js?v=20260831_1550"></script>
+    <script src="map_coordinates.js?v=20260831_1930"></script>
+    <script src="ui.js?v=20260903_1026_SYNC_PROMOS_TO_CALC"></script>
+    <script src="recommendation.js?v=20260903_1030_MATCH_PROMO_SYNC"></script>
 
     <script>
         function activatePdfIframe() {

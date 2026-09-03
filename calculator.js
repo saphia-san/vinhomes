@@ -28,7 +28,9 @@ function parseDate(str) {
 }
 
 function fmtDate(d) {
-    if (!d || isNaN(d.getTime())) return '';
+    if (!d) return '';
+    if (typeof d === 'string') return d;
+    if (!(d instanceof Date) || typeof d.getTime !== 'function' || isNaN(d.getTime())) return '';
     const day = String(d.getDate()).padStart(2, '0');
     const m = String(d.getMonth() + 1).padStart(2, '0');
     const y = d.getFullYear();
@@ -229,36 +231,33 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
     let currentLandPrice = baseLandPrice;
     let totalCkVnd = 0;
 
-    // a) Quà tặng Vàng
+    // a) Quà tặng Vàng (Theo CSBH V07 & V08 - Áp dụng theo Tổng Giá Gốc gồm VAT & KPBT)
     if (promoGoldGift) {
         const goldVal = doc && doc.getElementById('goldGiftCount') ? doc.getElementById('goldGiftCount').value : 'auto';
         let goldLabel = '🥇 Quà tặng Vàng';
+        let gVnd = 0;
         if (goldVal !== 'auto') {
             const count = parseInt(goldVal, 10);
-            const gVnd = count * 15_000_000;
+            gVnd = count * 15_000_000;
             goldLabel = `🥇 Quà tặng Vàng (${count} chỉ)`;
-            currentLandPrice -= gVnd;
-            totalCkVnd += gVnd;
-            ckDetails.push({ label: goldLabel, pct: 0, vnd: gVnd, deductType: 'gift' });
         } else {
             const origPA = breakdownPrice(baseLandPrice, apt.dtDat, apt.dtXay, apt.type, tienSDĐ, fixedKpbt);
-            const origAllin = origPA.allin;
+            const origAllin = origPA.allin; // Tổng giá gốc trước các chiết khấu (bao gồm VAT và KPBT)
             const gMap = SP.promotions.goldGift;
-            let gVnd = 0;
             if (origAllin >= 20e9) {
                 gVnd = gMap.over20b;
-                goldLabel = '🥇 Quà tặng Vàng (5 chỉ – căn từ 20 tỷ)';
+                goldLabel = '🥇 Quà tặng Vàng (5 chỉ – 75 triệu)';
             } else if (origAllin >= 10e9) {
                 gVnd = gMap.from10to20b;
-                goldLabel = '🥇 Quà tặng Vàng (3 chỉ – căn 10–20 tỷ)';
+                goldLabel = '🥇 Quà tặng Vàng (3 chỉ – 45 triệu)';
             } else {
                 gVnd = gMap.under10b;
-                goldLabel = '🥇 Quà tặng Vàng (1 chỉ – căn dưới 10 tỷ)';
+                goldLabel = '🥇 Quà tặng Vàng (1 chỉ – 15 triệu)';
             }
-            currentLandPrice -= gVnd;
-            totalCkVnd += gVnd;
-            ckDetails.push({ label: goldLabel, pct: 0, vnd: gVnd, deductType: 'gift' });
         }
+        currentLandPrice -= gVnd;
+        totalCkVnd += gVnd;
+        ckDetails.push({ label: goldLabel, pct: 0, vnd: gVnd, deductType: 'gift' });
     }
 
     // b) Chiết khấu % Chính Sách Thanh Toán (TTS & BLNH)
@@ -297,7 +296,7 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
     }
 
     // c) Chiết khấu Cam kết về ở sớm (5% tính trên Giá ĐÃ TRỪ CK TTS & BLNH)
-    if (promoEarlyMoveIn && apt.type !== 'gianXay') {
+    if (promoEarlyMoveIn && (apt.type !== 'gianXay' || apt.macan === 'TL10-53' || apt.macan === 'TL10-22')) {
         const earlyMoveInAmt = Math.round(currentLandPrice * (SP.promotions.earlyMoveIn / 100));
         currentLandPrice -= earlyMoveInAmt;
         totalCkVnd += earlyMoveInAmt;
