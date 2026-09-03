@@ -25,9 +25,9 @@ function toggleTheme() {
             ? 'btn btn-outline-secondary rounded-3 px-3 py-2 fw-semibold'
             : 'btn btn-outline-warning rounded-3 px-3 py-2 fw-semibold';
     }
-    try { 
-        localStorage.setItem('vhp_theme', nowLight ? 'light' : 'dark'); 
-        localStorage.setItem('vinhomes_theme', nowLight ? 'light' : 'dark'); 
+    try {
+        localStorage.setItem('vhp_theme', nowLight ? 'light' : 'dark');
+        localStorage.setItem('vinhomes_theme', nowLight ? 'light' : 'dark');
     } catch (e) { }
     if (typeof calculate === 'function') {
         try { calculate(true); } catch (e) { }
@@ -288,7 +288,7 @@ function selectApt(macan) {
     let detail = `<span class="apt-meta-text">${typeLabel[apt.type] || 'Hoàn thiện'} &nbsp;|&nbsp; DT Đất: ${apt.dtDat} m² &nbsp;|&nbsp; DT Xây: ${apt.dtXay} m²</span><br>`;
     detail += `<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-1">`;
     detail += `<div><span class="apt-price-label" style="font-size:0.9rem;">Giá trước VAT: </span><strong class="apt-price-val" style="font-size:1.15rem; font-weight:800;">${fmt(apt.priceBeforeVat)} VNĐ</strong></div>`;
-    detail += `<button type="button" class="btn btn-sm btn-warning fw-bold px-3 shadow-sm" onclick="openLocationSpotlight('${apt.macan}')"><i class="bi bi-pin-map-fill me-1"></i>📍 Soi Vị Trí Căn Này</button>`;
+    detail += `<button type="button" class="btn btn-sm btn-warning fw-bold px-3 shadow-sm" onclick="openLocationSpotlight('${apt.macan}')"><i class="bi bi-pin-map-fill me-1"></i>📍 Xem Vị Trí Căn Này</button>`;
     detail += `</div>`;
     if (document.getElementById('selectedCanDetail')) document.getElementById('selectedCanDetail').innerHTML = detail;
     if (document.getElementById('propInfoBox')) document.getElementById('propInfoBox').style.display = 'block';
@@ -1830,7 +1830,7 @@ function runFinancialMatcher() {
                     <!-- Nút hành động nhanh -->
                     <div class="pt-2 d-flex flex-column gap-2">
                         <button type="button" class="btn btn-warning w-100 fw-bold shadow-sm py-2" onclick="selectAndCalculateUnit('${u.macan}')" style="border-radius: 10px; color: #051410;">
-                            ⚡ Bấm Tính Chi Tiết Căn Này
+                            Tính Chi Tiết Căn Này
                         </button>
                     </div>
                 </div>
@@ -1841,7 +1841,7 @@ function runFinancialMatcher() {
 
 
 /* ==========================================================================
-   TÍNH NĂNG 2: SOI VỊ TRÍ CĂN ULTRA-HD 300 DPI VỚI GHIM GIỌT NƯỚC VÀNG KIM 3D
+   TÍNH NĂNG 2: XEM VỊ TRÍ CĂN ULTRA-HD 300 DPI VỚI GHIM GIỌT NƯỚC VÀNG KIM 3D
    ========================================================================== */
 function openLocationSpotlightFromInput() {
     const inputVal = document.getElementById('searchApt') ? document.getElementById('searchApt').value.trim() : '';
@@ -1851,11 +1851,11 @@ function openLocationSpotlightFromInput() {
             Swal.fire({
                 icon: 'info',
                 title: 'Vui lòng chọn hoặc nhập mã căn',
-                text: 'Hãy nhập mã căn (ví dụ: ĐLCV1-39, TL10-53...) để soi vị trí HD!',
+                text: 'Hãy nhập mã căn (ví dụ: ĐLCV1-39, TL10-53...) để xem vị trí HD!',
                 confirmButtonColor: '#ffd166'
             });
         } else {
-            alert('Vui lòng nhập mã căn (ví dụ: ĐLCV1-39, TL10-53...) để soi vị trí HD!');
+            alert('Vui lòng nhập mã căn (ví dụ: ĐLCV1-39, TL10-53...) để xem vị trí HD!');
         }
         return;
     }
@@ -1922,7 +1922,7 @@ function openLocationSpotlight(macan) {
         return;
     }
 
-    if (titleEl) titleEl.innerHTML = `<i class="bi bi-pin-map-fill me-2"></i>SOI VỊ TRÍ CHI TIẾT CĂN: <span style="color:#ffd166;">${cleanCode}</span>`;
+    if (titleEl) titleEl.innerHTML = `<i class="bi bi-pin-map-fill me-2"></i>XEM VỊ TRÍ CĂN CHI TIẾT: <span style="color:#ffd166;">${cleanCode}</span>`;
 
     // Robust coordinates lookup with window fallback and loose matching
     let coords = null;
@@ -1960,7 +1960,7 @@ function openLocationSpotlight(macan) {
         const tab2Content = hasCoords ? `
             <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-2 rounded-3 border border-warning" style="background:#061e18;">
                 <div class="small text-warning fw-bold">
-                    <i class="bi bi-geo-alt-fill me-1"></i>Sơ Đồ 2D CAD HD Toàn Khu (Căn ${cleanCode})
+                    <i class="bi bi-geo-alt-fill me-1"></i>Sơ Đồ 2D Toàn Khu (Căn ${cleanCode})
                 </div>
                 <div class="btn-group btn-group-sm">
                     <button type="button" class="btn btn-outline-warning fw-bold" onclick="zoomInteractiveCadMap(1.25)">
@@ -1980,7 +1980,7 @@ function openLocationSpotlight(macan) {
 
             <div class="position-relative overflow-auto rounded-3 border border-warning shadow-lg" id="interactiveMapViewport" style="height: 640px; max-height: 70vh; background: #051410; scrollbar-width: thin;">
                 <div style="position: relative; width: 3600px; height: 2548px; transition: transform 0.2s ease-out;" id="interactiveMapInner">
-                    <img src="assets/pdf_2d_masterplan_hd.jpg" onerror="this.onerror=null; this.src='assets/pdf-masterplan.jpg';" style="width: 100%; height: 100%; object-fit: fill; display: block;" alt="Sơ đồ 2D CAD HD">
+                    <img src="assets/pdf_2d_masterplan_hd.jpg" onerror="this.onerror=null; this.src='assets/pdf-masterplan.jpg';" style="width: 100%; height: 100%; object-fit: fill; display: block;" alt="Sơ đồ 2D">
                     <!-- Live Glowing Pin Marker -->
                     <div style="position: absolute; left: ${coordX}%; top: ${coordY}%; transform: translate(-50%, -100%); pointer-events: none; z-index: 10;">
                         <div class="px-2.5 py-0.5 rounded-pill shadow-lg fw-bold text-dark d-flex align-items-center gap-1"
@@ -1993,14 +1993,14 @@ function openLocationSpotlight(macan) {
                 </div>
             </div>
             <div class="text-center mt-2 small text-warning">
-                <i class="bi bi-arrows-move me-1"></i> Giữ chuột / vuốt tay để cuộn toàn sơ đồ 2D CAD HD. Bạn có thể nhấn <strong>"Xem Toàn Sơ Đồ"</strong> để xem bao quát dự án!
+                <i class="bi bi-arrows-move me-1"></i> Giữ chuột / vuốt tay để cuộn toàn sơ đồ 2D. Bạn có thể nhấn <strong>"Xem Toàn Sơ Đồ"</strong> để xem bao quát dự án!
             </div>
         ` : `
             <div class="p-5 text-center d-flex flex-column align-items-center justify-content-center rounded-3 border border-warning shadow-lg" style="min-height: 480px; background: rgba(255,209,102,0.04);">
                 <i class="bi bi-geo-alt text-warning display-3 mb-3"></i>
                 <h4 class="fw-bold text-warning mb-2.5">Xin Lỗi: Chưa Cập Nhật Tọa Độ Sơ Đồ 2D Căn ${cleanCode}</h4>
                 <p class="mb-3" style="max-width: 500px; line-height: 1.6; color: #cbd5e1 !important; font-size: 0.95rem;">
-                    Tọa độ vị trí chính xác trên Sơ đồ 2D CAD HD của căn <strong>${cleanCode}</strong> hiện đang được tiếp tục cập nhật. Dữ liệu vị trí chi tiết của căn này sẽ hiển thị ngay khi bổ sung!
+                    Tọa độ vị trí chính xác trên Sơ đồ 2D của căn <strong>${cleanCode}</strong> hiện đang được tiếp tục cập nhật. Dữ liệu vị trí chi tiết của căn này sẽ hiển thị ngay khi bổ sung!
                 </p>
                 <div class="d-flex gap-2 justify-content-center">
                     <button type="button" class="btn btn-warning text-dark fw-bold px-4 py-2 shadow" onclick="switchToFullCadViewer()">
@@ -2054,14 +2054,14 @@ function openLocationSpotlight(macan) {
                                     </ul>
                                 </div>
                                 <div class="alert alert-dark mb-0 py-2.5 px-3.5 small mt-4" style="background: rgba(255,209,102,0.08); border: 1px dashed rgba(255,209,102,0.35); color: #ffd166; border-radius: 12px; line-height: 1.5;">
-                                    <i class="bi bi-info-circle me-1"></i> Chuyển sang Tab 2 để soi trực tiếp trên sơ đồ 2D toàn khu.
+                                    <i class="bi bi-info-circle me-1"></i> Chuyển sang Tab 2 để xem trực tiếp trên sơ đồ 2D toàn khu.
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- TAB 2: SO TRUC TIEP TREN SO DO 2D CAD HD -->
+                <!-- TAB 2: SO TRUC TIEP TREN SO DO 2D-->
                 <div class="tab-pane fade" id="spot-cad-pane" role="tabpanel">
                     ${tab2Content}
                 </div>
@@ -2095,10 +2095,10 @@ function handleSpotlightImgError(imgEl, code, x, y, hasCoords) {
                 <i class="bi bi-geo-alt-fill text-warning display-4 mb-3"></i>
                 <h5 class="fw-bold text-warning mb-2">Chưa Có Ảnh Cắt Chi Tiết Căn ${code}</h5>
                 <p class="small mb-3" style="max-width: 420px; line-height: 1.6; color: #cbd5e1 !important;">
-                    Bộ thư viện <code>assets/spotlight/</code> hiện chưa có file ảnh cắt riêng cho căn <strong>${code}</strong>. Hệ thống tự động chuyển sang <strong>Sơ đồ 2D CAD HD</strong> để soi vị trí trực tiếp.
+                    Bộ thư viện <code>assets/spotlight/</code> hiện chưa có file ảnh cắt riêng cho căn <strong>${code}</strong>. Hệ thống tự động chuyển sang <strong>Sơ đồ 2D</strong> để xem vị trí trực tiếp.
                 </p>
                 <button type="button" class="btn btn-warning fw-bold px-4 py-2 shadow-lg" onclick="switchToSpotlightCadTab(${x}, ${y})">
-                    <i class="bi bi-map-fill me-1"></i> SOI TRỰC TIẾP TRÊN SƠ ĐỒ 2D CAD HD >>
+                    <i class="bi bi-map-fill me-1"></i> XEM TRỰC TIẾP TRÊN SƠ ĐỒ 2D >>
                 </button>
             </div>
         `;
@@ -2111,7 +2111,7 @@ function handleSpotlightImgError(imgEl, code, x, y, hasCoords) {
                 <i class="bi bi-exclamation-triangle-fill text-warning display-4 mb-3"></i>
                 <h5 class="fw-bold text-warning mb-2" style="font-size: 1.25rem;">Chưa Cập Nhật Vị Trí Căn ${code}</h5>
                 <p class="spotlight-fallback-text mb-3.5" style="max-width: 480px; line-height: 1.65; font-size: 0.95rem; color: #f8fafc !important; font-weight: 500;">
-                    Rất tiếc, căn <strong class="text-warning fw-bold">${code}</strong> hiện chưa có file ảnh cắt chi tiết và chưa cập nhật tọa độ trên sơ đồ 2D CAD HD. Dữ liệu vị trí căn này sẽ được cập nhật ngay khi bổ sung!
+                    Rất tiếc, căn <strong class="text-warning fw-bold">${code}</strong> hiện chưa có file ảnh cắt chi tiết và chưa cập nhật tọa độ trên sơ đồ 2D. Dữ liệu vị trí căn này sẽ được cập nhật ngay khi bổ sung!
                 </p>
                 <button type="button" class="btn btn-outline-warning fw-bold px-3.5 py-2 btn-sm" onclick="switchToFullCadViewer()">
                     <i class="bi bi-arrows-fullscreen me-1"></i> Xem Bao Quát Sơ Đồ 2D Dự Án
