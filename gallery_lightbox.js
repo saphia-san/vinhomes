@@ -142,7 +142,7 @@ function updateCustomModalDisplay() {
     }
     
     if (elImg) elImg.src = imgSrc;
-    if (elTitle) elTitle.innerHTML = `<i class="bi bi-images me-2 text-warning"></i>${activeTitle}`;
+    if (elTitle) elTitle.innerHTML = `<i class="bi bi-images me-2" style="color:#ffd166;"></i><span style="color:#ffd166 !important; font-weight:800;">${activeTitle}</span>`;
     if (elCounter) elCounter.innerText = `Ảnh ${currentImageIndex + 1} / ${currentImageList.length}`;
     
     if (elThumbnails && currentImageList.length > 1) {
@@ -177,7 +177,7 @@ function updateAlbumDisplay() {
     const elThumbnails = document.getElementById('albumLightboxThumbnails');
     
     if (elImg) elImg.src = imgSrc;
-    if (elTitle) elTitle.innerHTML = `<i class="bi bi-images me-2 text-warning"></i>${zoneTitle}`;
+    if (elTitle) elTitle.innerHTML = `<i class="bi bi-images me-2" style="color:#ffd166;"></i><span style="color:#ffd166 !important; font-weight:800;">${zoneTitle}</span>`;
     if (elCounter) elCounter.innerText = `Ảnh ${currentAlbumIndex + 1} / ${images.length}`;
     
     if (elThumbnails) {

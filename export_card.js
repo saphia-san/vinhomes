@@ -11,7 +11,7 @@ var currentExportSData = null;
 function openExportModal(S) {
     currentExportSData = S || window.lastResultS || (typeof lastResultS !== 'undefined' ? lastResultS : null);
     if (!currentExportSData) {
-        alert('Vui lòng chọn căn hộ và bấm Tính Toán trước khi xuất ảnh báo giá!');
+        alert('Vui lòng chọn căn và bấm Tính Toán trước khi xuất ảnh báo giá!');
         return;
     }
 
@@ -67,16 +67,14 @@ function updateQuotationPreview() {
         return d.toString();
     };
 
-    const methodLabel = S.paymentMethod === 'own-early' ? '💰 Vốn Tự Có – Thanh Toán Sớm 100%'
-        : S.paymentMethod === 'own-normal' ? '📋 Vốn Tự Có – Thanh Toán Theo Tiến Độ Thường'
+    const methodLabel = S.paymentMethod === 'own-early' ? '💰 Thanh Toán Sớm 100%'
+        : S.paymentMethod === 'own-normal' ? '📋 Vốn Tự Có – Thanh Toán Theo Tiến Độ Chuẩn'
             : '🏦 Vay Ngân Hàng Hỗ Trợ Lãi Suất 0%';
 
     const isWhite = theme === 'white';
     const bgStyle = isWhite
         ? 'background: #ffffff; color: #0f172a;'
-        : theme === 'dark'
-            ? 'background: linear-gradient(145deg, #061a15 0%, #0d2e26 100%); color: #ffffff;'
-            : 'background: linear-gradient(145deg, #09211a 0%, #0d2e26 50%, #051410 100%); color: #ffffff;';
+        : 'background: linear-gradient(145deg, #09211a 0%, #0d2e26 50%, #051410 100%); color: #ffffff;';
 
     const goldColor = isWhite ? '#b45309' : '#ffd166';
     const textColor = isWhite ? '#0f172a' : '#ffffff';
@@ -139,26 +137,26 @@ function updateQuotationPreview() {
     if (stages.length > 0) {
         scheduleRowsHTML = stages.map(s => `
             <tr style="border-bottom: 1px solid ${isWhite ? '#e2e8f0' : 'rgba(255,255,255,0.08)'}; font-size:0.82rem;">
-                <td style="padding:7px 10px; font-weight:700; color:${goldColor};">Đợt ${s.no} (${s.label})</td>
-                <td style="padding:7px 10px;">${fmtD(s.date)}</td>
-                <td style="padding:7px 10px; text-align:right; font-weight:600;">${fmt(s.gross)} VNĐ</td>
+                <td style="padding:8px 12px; font-weight:700; color:${goldColor}; word-break:break-word;">Đợt ${s.no} (${s.label})</td>
+                <td style="padding:8px 12px; text-align:center; white-space:nowrap;">${fmtD(s.date)}</td>
+                <td style="padding:8px 12px; text-align:right; font-weight:700; white-space:nowrap;">${fmt(s.gross)} VNĐ</td>
             </tr>
         `).join('');
     }
 
     container.innerHTML = `
-<div id="quotationRenderCapture" style="width:100%; max-width:760px; min-width:320px; padding:24px 18px; ${bgStyle} font-family:'Plus Jakarta Sans', sans-serif; border-radius:20px; border:3px solid ${goldColor}; box-shadow:0 20px 60px rgba(0,0,0,0.6); margin:0 auto; box-sizing:border-box;">
+<div id="quotationRenderCapture" style="width:720px; padding:24px 20px; ${bgStyle} font-family:'Plus Jakarta Sans', sans-serif; border-radius:20px; border:3px solid ${goldColor}; box-shadow:0 20px 60px rgba(0,0,0,0.6); margin:0 auto; box-sizing:border-box;">
     
     <!-- Header Banner Logo & Tên Dự Án -->
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid ${goldColor}; padding-bottom:20px; margin-bottom:24px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid ${goldColor}; padding-bottom:18px; margin-bottom:20px;">
         <div>
-            <div style="font-size:1.6rem; font-weight:900; color:${goldColor}; letter-spacing:1.5px; text-transform:uppercase;">VINHOMES SÀI GÒN PARK</div>
+            <div style="font-size:1.55rem; font-weight:900; color:${goldColor}; letter-spacing:1px; text-transform:uppercase;">VINHOMES SÀI GÒN PARK</div>
             <div style="font-size:0.88rem; font-weight:700; color:${textColor}; margin-top:4px;">BẢNG PHƯƠNG ÁN TÀI CHÍNH MUA BẤT ĐỘNG SẢN CHÍNH THỨC</div>
-            <div style="font-size:0.78rem; color:${mutedColor}; margin-top:2px;">Áp dụng CSBH V08 CĐT Vingroup · Ngày lập: ${todayStr}</div>
+            <div style="font-size:0.78rem; color:${mutedColor}; margin-top:2px;">Áp dụng CSBH V09/V08 CĐT Vingroup · Ngày lập: ${todayStr}</div>
         </div>
-        <div style="background:linear-gradient(135deg, #ffd166 0%, #f3a83b 100%); color:#0d2e26; font-size:1.35rem; font-weight:900; padding:10px 22px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); text-align:center;">
-            <div style="font-size:0.75rem; text-transform:uppercase; font-weight:700; opacity:0.85;">MÃ CĂN HỘ</div>
-            ${S.macan || 'AS72-24'}
+        <div style="background:linear-gradient(135deg, #ffd166 0%, #f3a83b 100%); color:#0d2e26; font-size:1.3rem; font-weight:900; padding:10px 22px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); text-align:center; white-space:nowrap; min-width:130px; flex-shrink:0;">
+            <div style="font-size:0.72rem; text-transform:uppercase; font-weight:800; opacity:0.85; letter-spacing:0.5px;">MÃ CĂN</div>
+            <div style="white-space:nowrap; font-weight:900;">${S.macan || 'AS72-24'}</div>
         </div>
     </div>
 
@@ -178,12 +176,12 @@ function updateQuotationPreview() {
     <!-- Thông Tin Sản Phẩm & Giá Niêm Yết -->
     <div style="background:${cardBg}; padding:18px; border-radius:12px; border:${cardBorder}; margin-bottom:20px;">
         <div style="font-size:0.95rem; font-weight:800; color:${goldColor}; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
-            📌 THÔNG TIN CHI TIẾT THỬA ĐẤT / CĂN HỘ
+            📌 THÔNG TIN CHI TIẾT THỬA ĐẤT / CĂN
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; font-size:0.88rem;">
-            <div>Mã Căn Hộ: <strong style="color:${goldColor}; font-size:0.95rem;">${S.macan}</strong></div>
+            <div>Mã Căn: <strong style="color:${goldColor}; font-size:0.95rem; white-space:nowrap;">${S.macan}</strong></div>
             <div>Loại Hình Sản Phẩm: <strong style="color:${textColor};">${S.typeLabel}</strong></div>
-            <div>Giá Niêm Yết Gốc (chưa VAT): <strong style="color:${textColor}; font-size:0.95rem;">${fmt(S.propValue)} VNĐ</strong></div>
+            <div>Giá Niêm Yết Gốc (chưa VAT): <strong style="color:${textColor}; font-size:0.95rem; white-space:nowrap;">${fmt(S.propValue)} VNĐ</strong></div>
             <div>Phương Thức Thanh Toán: <strong style="color:${goldColor};">${methodLabel}</strong></div>
         </div>
     </div>
@@ -198,17 +196,17 @@ function updateQuotationPreview() {
         ${ckRowsHTML}
         <div style="display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1.5px solid ${goldColor}; font-size:0.95rem; font-weight:900;">
             <span>TỔNG TIỀN CHIẾT KHẤU TIẾT KIỆM:</span>
-            <span style="color:${isWhite ? '#16a34a' : '#34d399'};">${fmt(S.totalCkAll)} VNĐ (${S.ckPct.toFixed(2)}%)</span>
+            <span style="color:${isWhite ? '#16a34a' : '#34d399'}; white-space:nowrap;">${fmt(S.totalCkAll)} VNĐ (${S.ckPct.toFixed(2)}%)</span>
         </div>
     </div>
 
     <!-- Tổng Báo Giá & Nộp Tiền -->
     <div style="background:linear-gradient(135deg, rgba(255,209,102,0.18) 0%, rgba(212,175,55,0.28) 100%); border:2px solid ${goldColor}; padding:20px; border-radius:14px; margin-bottom:24px; text-align:center;">
         <div style="font-size:0.88rem; font-weight:800; color:${mutedColor}; text-transform:uppercase; letter-spacing:0.5px;">TỔNG GIÁ TRỊ HỢP ĐỒNG CUỐI CÙNG (GỒM VAT + KPBT)</div>
-        <div style="font-size:2.2rem; font-weight:900; color:${goldColor}; margin:8px 0; letter-spacing:1px;">${fmt(S.grandTotal)} VNĐ</div>
+        <div style="font-size:2.2rem; font-weight:900; color:${goldColor}; margin:8px 0; letter-spacing:1px; white-space:nowrap;">${fmt(S.grandTotal)} VNĐ</div>
         <div style="display:flex; justify-content:center; gap:24px; font-size:0.88rem; color:${textColor}; font-weight:700; margin-top:8px;">
-            <div>• Vốn tự có trả CĐT: <span style="color:${goldColor};">${fmt(S.totalKHtoCDT)} VNĐ</span></div>
-            ${S.actualBankAmt > 0 ? `<div>• Ngân hàng giải ngân HTLS: <span style="color:#60a5fa;">${fmt(S.actualBankAmt)} VNĐ</span></div>` : ''}
+            <div>• Vốn tự có trả CĐT: <span style="color:${goldColor}; white-space:nowrap;">${fmt(S.totalKHtoCDT)} VNĐ</span></div>
+            ${S.actualBankAmt > 0 ? `<div>• Ngân hàng giải ngân HTLS: <span style="color:#60a5fa; white-space:nowrap;">${fmt(S.actualBankAmt)} VNĐ</span></div>` : ''}
         </div>
     </div>
 
@@ -218,12 +216,12 @@ function updateQuotationPreview() {
         <div style="font-size:0.95rem; font-weight:800; color:${goldColor}; margin-bottom:12px;">
             📅 BẢNG LỊCH THANH TOÁN TIẾN ĐỘ CHÍNH THỨC
         </div>
-        <table style="width:100%; border-collapse:collapse; text-align:left;">
+        <table style="width:100%; border-collapse:collapse; text-align:left; table-layout:fixed;">
             <thead>
                 <tr style="background:${tableHeaderBg}; color:${tableHeaderColor}; font-size:0.82rem; font-weight:800; text-transform:uppercase;">
-                    <th style="padding:9px 10px; border-radius:6px 0 0 6px;">Đợt Thanh Toán</th>
-                    <th style="padding:9px 10px;">Hạn Thanh Toán</th>
-                    <th style="padding:9px 10px; text-align:right; border-radius:0 6px 6px 0;">Số Tiền Nộp (VNĐ)</th>
+                    <th style="padding:10px 12px; width:45%; border-radius:6px 0 0 6px;">Đợt Thanh Toán</th>
+                    <th style="padding:10px 12px; width:22%; text-align:center;">Hạn Thanh Toán</th>
+                    <th style="padding:10px 12px; width:33%; text-align:right; border-radius:0 6px 6px 0;">Số Tiền Nộp (VNĐ)</th>
                 </tr>
             </thead>
             <tbody>
@@ -262,18 +260,29 @@ function downloadQuotationPNG() {
         return;
     }
 
-    const macan = (currentExportSData && currentExportSData.macan) ? currentExportSData.macan : 'CanHo';
+    const macan = (currentExportSData && currentExportSData.macan) ? currentExportSData.macan : 'Can';
+
+    const origWidth = el.style.width;
+    const origMaxWidth = el.style.maxWidth;
+    el.style.width = '720px';
+    el.style.maxWidth = '720px';
 
     html2canvas(el, {
         scale: 2, // HD Quality
         useCORS: true,
-        backgroundColor: null
+        backgroundColor: null,
+        width: 720,
+        windowWidth: 720
     }).then(canvas => {
+        el.style.width = origWidth;
+        el.style.maxWidth = origMaxWidth;
         const link = document.createElement('a');
         link.download = `BaoGia_VinhomesSaigonPark_${macan}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
     }).catch(err => {
+        el.style.width = origWidth;
+        el.style.maxWidth = origMaxWidth;
         console.error('Error generating PNG card:', err);
         alert('Có lỗi khi tạo ảnh báo giá: ' + err.message);
     });
@@ -311,7 +320,6 @@ function createExportModalHTML() {
                         <label class="form-label text-warning small font-weight-bold mb-1">Tone Màu Thẻ Báo Giá:</label>
                         <select id="exportTheme" class="form-select form-select-sm" onchange="updateQuotationPreview()">
                             <option value="gold">🏆 Hoàng Gia Emerald Gold (Đen Tuyền & Vàng Kim - Khuyên Dùng)</option>
-                            <option value="dark">🌿 Dark Emerald Classic (Xanh Lục Bảo)</option>
                             <option value="white">⚪ Clean White (Nền Trắng Nổi Bật)</option>
                         </select>
                     </div>
@@ -342,7 +350,7 @@ function closeExportModal() {
 }
 
 /* =============================================================
-   MODULE XUẤT ẢNH SO SÁNH 2 CĂN HỘ (2-APARTMENT COMPARISON EXPORT)
+   MODULE XUẤT ẢNH SO SÁNH 2 CĂN (2-UNIT COMPARISON EXPORT)
    ============================================================= */
 
 /**
@@ -351,7 +359,7 @@ function closeExportModal() {
 function exportCompare2Image() {
     const container = document.getElementById('compare2FullContent');
     if (!container || !container.children.length) {
-        alert('Vui lòng chọn mã 2 căn hộ và bấm So Sánh trước khi xuất ảnh!');
+        alert('Vui lòng chọn mã 2 căn và bấm So Sánh trước khi xuất ảnh!');
         return;
     }
 
@@ -396,8 +404,25 @@ function updateCompareQuotationPreview() {
     const previewBox = document.getElementById('compareQuotationCardPreview');
     if (!mainContent || !previewBox) return;
 
-    const val1 = document.getElementById('cmpApt1') ? document.getElementById('cmpApt1').value.trim().toUpperCase() : 'CĂN A';
-    const val2 = document.getElementById('cmpApt2') ? document.getElementById('cmpApt2').value.trim().toUpperCase() : 'CĂN B';
+    let val1 = document.getElementById('cmpApt1') ? document.getElementById('cmpApt1').value.trim().toUpperCase() : 'CĂN A';
+    let val2 = document.getElementById('cmpApt2') ? document.getElementById('cmpApt2').value.trim().toUpperCase() : 'CĂN B';
+    
+    const mKey1 = document.getElementById('cmpMethod1') ? document.getElementById('cmpMethod1').value : 'own-early';
+    const mKey2 = document.getElementById('cmpMethod2') ? document.getElementById('cmpMethod2').value : 'own-early';
+
+    const getPtttTag = (mKey) => {
+        if (mKey === 'own-early') return 'TTS';
+        if (mKey === 'own-normal') return 'TĐC';
+        if (mKey && mKey.startsWith('bank')) {
+            const bankMap = { 'bank_0': 'Vay HTLS 18T', 'bank_1': 'Vay HTLS 24T', 'bank_2': 'Vay HTLS 30T', 'bank_3': 'Vay HTLS 36T' };
+            if (bankMap[mKey]) return bankMap[mKey];
+            return 'Vay NH';
+        }
+        return 'TTS';
+    };
+
+    val1 = `${val1} (${getPtttTag(mKey1)})`;
+    val2 = `${val2} (${getPtttTag(mKey2)})`;
     const todayStr = new Date().toLocaleDateString('vi-VN');
 
     previewBox.innerHTML = `
@@ -408,7 +433,7 @@ function updateCompareQuotationPreview() {
         <div>
             <div style="font-size:1.6rem; font-weight:900; color:#ffd166; letter-spacing:1.5px; text-transform:uppercase;">VINHOMES SÀI GÒN PARK</div>
             <div style="font-size:0.95rem; font-weight:800; color:#ffffff; margin-top:3px;">BẢNG SO SÁNH PHƯƠNG ÁN TÀI CHÍNH BẤT ĐỘNG SẢN CHÍNH THỨC (${val1} vs ${val2})</div>
-            <div style="font-size:0.78rem; color:#cbd5e1; margin-top:2px;">Áp dụng CSBH CĐT Vingroup · Ngày lập: ${todayStr}</div>
+            <div style="font-size:0.78rem; color:#cbd5e1; margin-top:2px;">Áp dụng CSBH V09/V08 CĐT Vingroup · Ngày lập: ${todayStr}</div>
         </div>
         <div style="display:flex; gap:10px;">
             <div style="background:linear-gradient(135deg, #ffd166 0%, #f3a83b 100%); color:#0d2e26; font-size:1.1rem; font-weight:900; padding:8px 18px; border-radius:10px; text-align:center;">
@@ -495,16 +520,27 @@ function downloadCompareQuotationPNG() {
     const val1 = document.getElementById('cmpApt1') ? document.getElementById('cmpApt1').value.trim() : 'CanA';
     const val2 = document.getElementById('cmpApt2') ? document.getElementById('cmpApt2').value.trim() : 'CanB';
 
+    const origWidth = el.style.width;
+    const origMaxWidth = el.style.maxWidth;
+    el.style.width = '1150px';
+    el.style.maxWidth = '1150px';
+
     html2canvas(el, {
         scale: 2, // HD Quality
         useCORS: true,
-        backgroundColor: '#051410'
+        backgroundColor: '#051410',
+        width: 1150,
+        windowWidth: 1150
     }).then(canvas => {
+        el.style.width = origWidth;
+        el.style.maxWidth = origMaxWidth;
         const link = document.createElement('a');
         link.download = `SoSanh_VinhomesSaigonPark_${val1}_vs_${val2}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
     }).catch(err => {
+        el.style.width = origWidth;
+        el.style.maxWidth = origMaxWidth;
         console.error('Error generating comparison PNG card:', err);
         alert('Có lỗi khi tạo ảnh so sánh: ' + err.message);
     });
@@ -520,7 +556,7 @@ function createExportCompareModalHTML() {
         <div class="modal-content" style="background:#0d2e26; color:#ffffff; border:1px solid #ffd166; border-radius:14px;">
             <div class="modal-header" style="border-bottom:1px solid rgba(255,209,102,0.3);">
                 <h5 class="modal-title" style="color:#ffd166; font-weight:800;">
-                    <i class="bi bi-camera-fill me-2"></i>Tùy Chỉnh & Xuất Ảnh So Sánh 2 Căn Hộ PNG Cho Khách Hàng
+                    <i class="bi bi-camera-fill me-2"></i>Tùy Chỉnh & Xuất Ảnh So Sánh 2 Căn PNG Cho Khách Hàng
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="closeExportCompareModal()"></button>
             </div>

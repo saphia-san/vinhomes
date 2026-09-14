@@ -208,21 +208,16 @@
     }
 
     /* Sub-park Masterplan preview container */
-    #sec-mat-bang-phan-khu .col-12.col-lg-7 .position-relative {
-        min-height: 240px !important;
+    #sec-mat-bang-phan-khu .position-relative {
+        min-height: 220px !important;
         height: auto !important;
     }
 
     /* Sub-park right list thumbnails */
-    #sec-mat-bang-phan-khu .col-12.col-lg-5 {
-        max-height: none !important;
-        overflow-y: visible !important;
-    }
-
-    #sec-mat-bang-phan-khu .col-12.col-lg-5 img {
-        width: 80px !important;
-        height: 56px !important;
-        min-width: 80px !important;
+    #sec-mat-bang-phan-khu .park-thumb-card img {
+        width: 76px !important;
+        height: 52px !important;
+        min-width: 76px !important;
         object-fit: cover !important;
     }
 
@@ -304,6 +299,13 @@
         background: #ffffff !important;
         color: #0f172a !important;
         border: 1px solid #cbd5e1 !important;
+    }
+
+    body.light-theme .sec-card-theme h3 i,
+    body.light-theme .sec-card-theme h4 i,
+    body.light-theme .card-custom h3 i,
+    body.light-theme .card-custom h4 i {
+        color: #0d2e26 !important;
     }
 
     body.light-theme div[style*="background:#fef9c3"],

@@ -45,7 +45,7 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
     if (!calcRes || !calcRes.S) return null;
 
     const S = calcRes.S;
-    const net_price = S.contractPrice || S.grandTotal || (S.PA ? S.PA.allin : property.allin);
+    const net_price = (S && S.totalKHtoCDT > 0) ? S.totalKHtoCDT : (S.contractPrice || S.grandTotal || (S.PA ? S.PA.allin : property.allin));
     if (net_price <= 0) return null;
 
     let net_land_price = net_price;
@@ -64,7 +64,7 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
             initial_capital = net_land_price; // TTS Giãn xây đóng 100% Tiền đất trong 15 ngày
             total_required_capital = net_land_price;
         } else {
-            initial_capital = net_price; // Thô / Hoàn thiện đóng 100% BĐS
+            initial_capital = net_price; // Thô / Hoàn thiện đóng 100% BĐS (Đã trừ Voucher & CSBH)
             total_required_capital = net_price;
         }
     } else if (overrideMethod === 'own-normal') {
@@ -74,7 +74,7 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
     } else if (overrideMethod === 'bank') {
         // Vay bank 70%: Khách chỉ cần bỏ ra 30% vốn tự có (70% còn lại Ngân hàng cho vay HTLS 0%)
         const earlyStages = (calcRes.stages || []).filter(s => !s.label.includes('Ngân hàng') && !s.label.includes('bàn giao') && !s.label.includes('Sổ hồng') && !s.label.includes('Xây T') && !s.label.includes('T+5') && !s.label.includes('T+6') && !s.label.includes('T+7'));
-        initial_capital = earlyStages.slice(0, 3).reduce((acc, s) => acc + (s.gross || 0), 0) || Math.round(net_price * 0.30);
+        initial_capital = earlyStages.slice(0, 3).reduce((acc, s) => acc + (s.netCash !== undefined ? s.netCash : (s.gross || 0)), 0) || Math.round(net_price * 0.30);
         total_required_capital = initial_capital;
     }
 
@@ -93,16 +93,19 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
             const grace_period = gracePeriodMonths;
             const months_to_pay_principal = total_loan_months - grace_period;
             const principal_per_month = loan_amount / months_to_pay_principal;
-            const interest_rate_per_month = 0.105 / 12;
+            const currentRate = (typeof document !== 'undefined' && document.getElementById('interestRate'))
+                ? (parseFloat(document.getElementById('interestRate').value) || 13.0)
+                : 13.0;
+            const interest_rate_per_month = (currentRate / 100) / 12;
             const interest_per_month = loan_amount * interest_rate_per_month;
             max_monthly_payment = Math.round(principal_per_month + interest_per_month);
         }
     }
 
     // LỌC CỨNG HẠN MỨC NGÂN SÁCH (Hard Budget Filtering - Chuẩn Nghiệp Vụ BĐS)
-    // Nếu tổng số tiền túi khách phải trả bằng vốn tự có > Vốn tự có sẵn có -> LOẠI BỎ NGAY
-    if (customer_capital > 0 && total_required_capital > customer_capital) {
-        return null; // Vốn tự có không đủ chi trả -> Loại bỏ khỏi kết quả
+    // Nếu số vốn ban đầu cần chuẩn bị đợt 1 > Vốn tự có sẵn có -> LOẠI BỎ NGAY
+    if (customer_capital > 0 && initial_capital > customer_capital) {
+        return null; // Vốn ban đầu không đủ chi trả -> Loại bỏ khỏi kết quả
     }
 
     // Nếu khách chọn hạn mức dòng tiền/tháng (vd: 50 Tr/tháng), chỉ giữ lại các căn có max_monthly_payment <= 50 Tr
@@ -125,8 +128,8 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
     const final_score = Math.round(base_score);
 
     const methodLabels = {
-        'own-early': '💰 TTS 100% (Sớm)',
-        'own-normal': '📋 Tiến Độ Thường',
+        'own-early': '💰 Thanh toán sớm',
+        'own-normal': '📋 Tiến Độ Chuẩn',
         'bank': `🏦 Vay Bank 70% (HTLS ${gracePeriodMonths}T)`
     };
 
@@ -180,9 +183,9 @@ function updateFinSliderDisplays() {
     const elB = document.getElementById('finBudget');
     const elDispB = document.getElementById('finBudgetValDisplay');
     if (elB && elDispB) {
-        const v = parseInt(elB.value, 10);
-        if (v === 0) {
-            elDispB.textContent = "Tất cả";
+        const v = parseInt(elB.value, 10) || 1300;
+        if (v >= 20000) {
+            elDispB.textContent = "20 Tỷ+ VNĐ";
         } else if (v >= 1000) {
             const ty = (v / 1000).toFixed(v % 1000 === 0 ? 0 : 1);
             elDispB.textContent = `${ty} Tỷ VNĐ`;
@@ -194,14 +197,15 @@ function updateFinSliderDisplays() {
     const elCF = document.getElementById('finMonthlyCashflow');
     const elDispCF = document.getElementById('finCashflowValDisplay');
     if (elCF && elDispCF) {
-        const v = parseInt(elCF.value, 10);
-        if (v === 0) {
-            elDispCF.textContent = "Tất cả";
+        const v = parseInt(elCF.value, 10) || 35;
+        if (v >= 200) {
+            elDispCF.textContent = "200 Triệu+/tháng";
         } else {
             elDispCF.textContent = `${v} Triệu/tháng`;
         }
     }
 }
+window.updateFinSliderDisplays = updateFinSliderDisplays;
 
 /**
  * Hàm điều khiển chính chạy Bộ Lọc Gợi Ý Căn Phù Hợp
@@ -211,6 +215,7 @@ function runFinancialMatcher() {
     const elCF = document.getElementById('finMonthlyCashflow');
     const elM = document.getElementById('finMethod');
     const elT = document.getElementById('finType');
+    const elBank = document.getElementById('finBank');
 
     updateFinSliderDisplays();
 
@@ -218,6 +223,7 @@ function runFinancialMatcher() {
     const cfVal = elCF ? elCF.value : '0';
     const mVal = elM ? elM.value : 'all';
     const tVal = elT ? elT.value : 'all';
+    const bankVal = elBank ? elBank.value : 'all';
 
     const wrap = document.getElementById('finMatcherResultsWrap');
     const container = document.getElementById('finMatcherResultsContainer');
@@ -227,12 +233,14 @@ function runFinancialMatcher() {
     // Chuyển đổi bVal (Triệu VNĐ), cfVal (Triệu VNĐ) sang con số VNĐ chuẩn
     let customer_capital = 0;
     if (bVal && bVal !== 'all' && bVal !== '0') {
-        customer_capital = parseInt(bVal, 10) * 1_000_000;
+        const bNum = parseInt(bVal, 10);
+        customer_capital = (bNum >= 20000) ? Infinity : bNum * 1_000_000;
     }
 
     let customer_monthly_cashflow = 0;
     if (cfVal && cfVal !== 'all' && cfVal !== '0') {
-        customer_monthly_cashflow = parseInt(cfVal, 10) * 1_000_000;
+        const cfNum = parseInt(cfVal, 10);
+        customer_monthly_cashflow = (cfNum >= 200) ? Infinity : cfNum * 1_000_000;
     }
 
     const userInputs = {
@@ -242,66 +250,81 @@ function runFinancialMatcher() {
         property_type: tVal
     };
 
-    // Đồng bộ tạm thời Promo Checkboxes (Quà tặng Vàng LUÔN BẰNG TRUE tự động)
+    // Đồng bộ tạm thời Promo Checkboxes
     const getCheck = (id) => { const el = document.getElementById(id); return el ? el.checked : false; };
-    const finPromos = {
-        goldGift:    true, // TỰ ĐỘNG CHIẾT KHẤU QUÀ VÀNG CHO TẤT CẢ CĂN
+    const getVal = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
+
+    const activePromos = {
+        goldGift: getCheck('fin_promo_goldGift') || getCheck('promo_goldGift'),
         earlyMoveIn: getCheck('fin_promo_earlyMoveIn'),
-        noBlnh:      getCheck('fin_promo_noBlnh'),
-        aquafield:   getCheck('fin_promo_aquafield'),
-        voucher:     getCheck('fin_promo_voucher'),
-        goldGiftCount: 'auto',
-        oldHousePrice: (() => { const el = document.getElementById('fin_oldHousePrice'); return el ? el.value : ''; })(),
-        voucherPercent: (() => { const el = document.getElementById('fin_voucherPercent'); return el ? el.value : '8'; })(),
+        noBlnh: getCheck('fin_promo_noBlnh') || getCheck('promo_noBlnh'),
+        aquafield: getCheck('fin_promo_aquafield') || getCheck('promo_aquafield'),
+        voucher: getCheck('fin_promo_voucher') || getCheck('promo_voucher'),
+        voucherAmount: getVal('fin_voucherAmount') || getVal('voucherAmount'),
     };
 
     const savedMain = {
-        goldGift:    getCheck('promo_goldGift'),
-        earlyMoveIn: getCheck('promo_earlyMoveIn'),
-        noBlnh:      getCheck('promo_noBlnh'),
-        aquafield:   getCheck('promo_aquafield'),
-        voucher:     getCheck('promo_voucher'),
-        goldGiftCount: (() => { const el = document.getElementById('goldGiftCount'); return el ? el.value : 'auto'; })(),
-        oldHousePrice: (() => { const el = document.getElementById('oldHousePrice'); return el ? el.value : ''; })(),
-        voucherPercent: (() => { const el = document.getElementById('voucherPercent'); return el ? el.value : '8'; })(),
+        goldGift: getCheck('promo_goldGift'),
+        noBlnh: getCheck('promo_noBlnh'),
+        aquafield: getCheck('promo_aquafield'),
+        voucher: getCheck('promo_voucher'),
+        goldGiftCount: getVal('goldGiftCount') || 'auto',
+        voucherAmount: getVal('voucherAmount'),
     };
 
-    const syncPromoToMain = () => {
+    const applyPromosToMain = () => {
         const setC = (id, val) => { const el = document.getElementById(id); if (el) el.checked = val; };
         const setV = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
-        setC('promo_goldGift', true); // Luôn bật Quà Vàng
-        setC('promo_earlyMoveIn', finPromos.earlyMoveIn);
-        setC('promo_noBlnh', finPromos.noBlnh);
-        setC('promo_aquafield', finPromos.aquafield);
-        setC('promo_voucher', finPromos.voucher);
-        setV('goldGiftCount', 'auto');
-        setV('oldHousePrice', finPromos.oldHousePrice);
-        setV('voucherPercent', finPromos.voucherPercent);
+        setC('promo_goldGift', activePromos.goldGift);
+        setC('promo_noBlnh', activePromos.noBlnh);
+        setC('promo_aquafield', activePromos.aquafield);
+        setC('promo_voucher', activePromos.voucher);
+        if (activePromos.voucherAmount) setV('voucherAmount', activePromos.voucherAmount);
     };
 
     const restoreMain = (saved) => {
         const setC = (id, val) => { const el = document.getElementById(id); if (el) el.checked = val; };
         const setV = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
         setC('promo_goldGift', saved.goldGift);
-        setC('promo_earlyMoveIn', saved.earlyMoveIn);
         setC('promo_noBlnh', saved.noBlnh);
         setC('promo_aquafield', saved.aquafield);
         setC('promo_voucher', saved.voucher);
         setV('goldGiftCount', saved.goldGiftCount);
-        setV('oldHousePrice', saved.oldHousePrice);
-        setV('voucherPercent', saved.voucherPercent);
+        setV('voucherAmount', saved.voucherAmount);
     };
 
-    syncPromoToMain();
+    applyPromosToMain();
 
     const data = (typeof APARTMENT_DATA !== 'undefined' ? APARTMENT_DATA : []);
     const results = [];
 
     for (const u of data) {
+        // Bỏ qua các căn đã bán, chỉ gợi ý các căn Đang mở bán
+        if (u.daBan === true || u.status === 'daBan') continue;
+
+        // Lọc chương trình Về ở sớm (chỉ 2 căn TL10-22 và TL10-53 hỗ trợ VOS)
+        const isVos = !!(u && (u.macan === 'TL10-22' || u.macan === 'TL10-53' || u.vos === true));
+        if (activePromos.earlyMoveIn && !isVos) continue;
+
         // Lọc loại hình bàn giao
         if (tVal !== 'all') {
             const typeMap = { 'gianXay': 'gianXay', 'rough': 'rough', 'finished': 'finished', 'GIAN_XAY': 'gianXay', 'THO': 'rough', 'HOAN_THIEN': 'finished' };
             if (u.type !== typeMap[tVal] && u.type !== tVal) continue;
+        }
+
+        // Lọc ngân hàng hỗ trợ cho vay
+        if (bankVal !== 'all') {
+            const bInfo = u.bankInfo;
+            if (!bInfo || !bInfo.allBanks) continue;
+            const bList = bInfo.allBanks.map(b => b.toUpperCase());
+            const targetB = bankVal.toUpperCase();
+            let matchBank = false;
+            if (targetB === 'MBB' || targetB === 'MB') {
+                matchBank = bList.includes('MBB') || bList.includes('MB');
+            } else {
+                matchBank = bList.includes(targetB);
+            }
+            if (!matchBank) continue;
         }
 
         const scoreObj = calculateMatchScore(u, userInputs);
@@ -321,10 +344,10 @@ function runFinancialMatcher() {
 
     if (results.length === 0) {
         container.innerHTML = `
-            <div class="col-12 text-center py-4 border border-secondary rounded-3 bg-dark">
-                <i class="bi bi-search text-warning" style="font-size: 2.5rem;"></i>
-                <h5 class="fw-bold text-light mt-2 mb-1">Không tìm thấy căn phù hợp với điều kiện tài chính đã chọn!</h5>
-                <p class="text-muted small mb-0">Vui lòng nới rộng hạn mức vốn tự có hoặc dòng tiền hàng tháng để xem thêm sản phẩm phù hợp.</p>
+            <div class="col-12 text-center py-4 px-3 card-custom sec-card-theme rounded-3 shadow-sm">
+                <i class="bi bi-search mb-2" style="font-size: 2.8rem; color: #d97706; display: inline-block;"></i>
+                <h4 class="fw-bold mt-2 mb-2" style="font-size: 1.15rem;">KHÔNG TÌM THẤY CĂN PHÙ HỢP VỚI ĐIỀU KIỆN TÀI CHÍNH ĐÃ CHỌN!</h4>
+                <div class="sub-text small mb-0" style="font-size: 0.92rem;">Vui lòng nới rộng hạn mức vốn tự có hoặc dòng tiền hàng tháng để xem thêm sản phẩm phù hợp.</div>
             </div>
         `;
         return;
@@ -340,11 +363,11 @@ function renderAllMatchedCards() {
     const container = document.getElementById('finMatcherResultsContainer');
     if (!container || !allMatchingResults) return;
 
-    const typeLabels = { rough: 'Bàn Giao Thô', finished: 'Hoàn Thiện', gianXay: 'Giãn Xây Q4/2028' };
+    const typeLabels = { rough: 'Bàn giao thô', finished: 'Hoàn thiện', gianXay: 'Giãn xây' };
     const elM = document.getElementById('finMethod');
     const mVal = elM ? elM.value : 'all';
 
-    container.innerHTML = allMatchingResults.map(item => {
+    const cardsHtml = allMatchingResults.map(item => {
         const { property: u, net_price, initial_capital, max_monthly_payment, final_score, methodLabel, overrideMethod, calcRes } = item;
 
         const targetMethod = overrideMethod || 'own-early';
@@ -353,25 +376,28 @@ function renderAllMatchedCards() {
         // Màu & Badge Match score
         const msBgColor = final_score >= 90 ? 'bg-success text-white' : final_score >= 70 ? 'bg-warning text-dark' : 'bg-danger text-white';
 
-        // XÁC ĐỊNH SỐ CHỈ VÀNG THEO CSBH V07 & V08 (Tổng giá gốc gồm VAT và KPBT)
+        // XÁC ĐỊNH SỐ CHỈ VÀNG THEO CSBH (Tổng giá gốc gồm VAT và KPBT)
         const origAllin = (calcRes && calcRes.S && calcRes.S.PA && calcRes.S.PA.allin) ? calcRes.S.PA.allin : (u.priceBeforeVat || 0);
-        let goldText = 'Quà 1 Chỉ Vàng';
+        // Quà tặng Vàng: chỉ hiển thị nếu chương trình còn hiệu lực (SP.promotions.goldGift != null)
+        const goldGiftActive = (typeof SALES_POLICY !== 'undefined' && SALES_POLICY.promotions && SALES_POLICY.promotions.goldGift !== null);
+        let goldText = 'Quà 1 chỉ vàng';
         if (origAllin >= 20e9) {
-            goldText = 'Quà 5 Chỉ Vàng';
+            goldText = 'Quà 5 chỉ vàng';
         } else if (origAllin >= 10e9) {
-            goldText = 'Quà 3 Chỉ Vàng';
+            goldText = 'Quà 3 chỉ vàng';
         }
 
         // Badges đặc quyền gọn gàng với padding thoải mái
-        const isVOS = (u.macan === 'TL10-53' || u.macan === 'TL10-22');
+        const isVOS = (u.macan === 'TL10-53' || u.macan === 'TL10-22' || u.macan === 'TL10-51' || u.vos === true);
         const vosBadge = isVOS ? `<span class="badge bg-warning text-dark fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;">VOS: -5% HĐMB + 5% tiền mặt</span>` : '';
-        const goldBadge = `<span class="badge gold-gift-badge fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px; background: linear-gradient(135deg, #ffd166 0%, #f59e0b 100%); color: #04120e !important; font-weight: 800;">${goldText}</span>`;
-        const gianXayBadge = u.type === 'gianXay' ? `<span class="badge bg-info text-dark fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;">Giãn Xây Q4/2028</span>` : '';
+        const goldBadge = goldGiftActive ? `<span class="badge gold-gift-badge fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px; background: linear-gradient(135deg, #ffd166 0%, #f59e0b 100%); color: #04120e !important; font-weight: 800;">${goldText}</span>` : '';
+        const gianXayBadge = u.type === 'gianXay' ? `<span class="badge bg-info text-dark fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;">Giãn xây</span>` : '';
 
+        const ROW = 'display:flex; justify-content:space-between; align-items:center; padding:5px 0; font-size:0.82rem;';
         const monthlyRow = (max_monthly_payment > 0)
-            ? `<div class="d-flex justify-content-between align-items-center py-1">
-                <span class="text-light opacity-90 fw-medium">Trả góp/tháng:</span>
-                <strong class="text-info font-monospace fw-bold" style="font-size: 0.88rem;">${fmt(max_monthly_payment)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">/tháng</span></strong>
+            ? `<div class="rec-row-border" style="${ROW}">
+                <span class="rec-label">Trả góp/tháng:</span>
+                <strong class="font-monospace rec-val-highlight" style="font-size:0.86rem; font-weight:700;">${fmt(max_monthly_payment)}&nbsp;<span class="rec-unit" style="font-weight:400; font-size:0.73rem;">/tháng</span></strong>
                </div>`
             : '';
 
@@ -383,58 +409,68 @@ function renderAllMatchedCards() {
                      style="background: linear-gradient(160deg, #092e26 0%, #041a14 100%); border: 1.5px solid rgba(255, 209, 102, 0.35); border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.4); padding: 16px 18px;">
                     <div>
                         <!-- Header: Mã Căn & Match Score -->
-                        <div class="d-flex justify-content-between align-items-center mb-2.5 pb-2 border-bottom border-secondary border-opacity-30">
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2.5 border-bottom border-secondary border-opacity-30">
                             <div class="d-flex align-items-center gap-2">
                                 <h5 class="fw-extrabold mb-0 text-warning" style="font-size: 1.25rem; letter-spacing: 0.3px; text-shadow: 0 0 8px rgba(255,209,102,0.3);">${u.macan}</h5>
-                                <span class="badge type-badge ${u.type === 'gianXay' ? 'type-badge-gianxay' : (u.type === 'rough' ? 'type-badge-rough' : 'type-badge-finished')} px-2.5 py-1 fw-bold" style="font-size: 0.72rem; border-radius: 10px;">${typeLabels[u.type] || 'Bàn Giao Hoàn Thiện'}</span>
+                                <span class="badge type-badge ${u.type === 'gianXay' ? 'type-badge-gianxay' : (u.type === 'rough' ? 'type-badge-rough' : 'type-badge-finished')} px-2.5 py-1 fw-bold" style="font-size: 0.72rem; border-radius: 10px;">${typeLabels[u.type] || 'Bàn giao hoàn thiện'}</span>
                             </div>
                             <span class="badge ${msBgColor} px-2.5 py-1 fw-bold shadow-sm" style="font-size: 0.8rem; border-radius: 10px;">
                                 ${final_score}% Khớp
                             </span>
                         </div>
 
-                        <!-- Badges & Ô Tick So Sánh (Thêm mt-2.5 pt-0.5 để không đụng đường viền trên) -->
-                        <div class="d-flex justify-content-between align-items-center mb-2.5 mt-2.5 pt-0.5 flex-wrap gap-1.5">
+                        <!-- Badges & Ô Tick So Sánh (Khoảng cách thoáng 100%, không bị chèn hay đè đường viền) -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 mt-2 flex-wrap gap-2">
                             <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                                <span class="badge bg-success bg-gradient text-white px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;">Đang mở bán</span>
+                                ${(u.daBan === true || u.status === 'daBan') ? '<span class="badge bg-secondary text-white px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;"><i class="bi bi-lock-fill me-1"></i>Đã bán</span>' : '<span class="badge bg-success bg-gradient text-white px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;">Đang mở bán</span>'}
                                 ${goldBadge}
                                 ${vosBadge}
                             </div>
-                            <div class="form-check m-0 d-flex align-items-center gap-1 cursor-pointer">
+                            <div class="form-check m-0 d-flex align-items-center gap-1.5 cursor-pointer py-1 px-2.5 rounded-3" style="background: rgba(255, 209, 102, 0.1); border: 1px solid rgba(255, 209, 102, 0.3); white-space: nowrap;">
                                 <input class="form-check-input cursor-pointer m-0" type="checkbox" id="chk_cmp_${u.macan}" 
-                                       style="width: 1rem; height: 1rem;" 
+                                       style="width: 1.05rem; height: 1.05rem; accent-color: #f59e0b;" 
                                        onchange="toggleCompareUnit('${u.macan}')" ${isChecked ? 'checked' : ''}>
-                                <label class="form-check-label text-warning extra-small fw-bold mb-0 cursor-pointer" for="chk_cmp_${u.macan}" style="font-size: 0.78rem;">
-                                    Tick So Sánh
+                                <label class="form-check-label text-warning extra-small fw-bold mb-0 cursor-pointer" for="chk_cmp_${u.macan}" style="font-size: 0.8rem;">
+                                    Tick so sánh
                                 </label>
                             </div>
                         </div>
 
-                        <!-- Spec Grid (Glassmorphism rộng rãi, không bị chạm viền) -->
-                        <div class="rounded-3 mb-2.5" style="background: rgba(3, 20, 16, 0.85); border: 1px solid rgba(255, 209, 102, 0.25); padding: 12px 14px; font-size: 0.82rem; line-height: 1.65;">
-                            <div class="d-flex justify-content-between align-items-center py-1">
-                                <span class="text-light opacity-75">Diện tích Đất / Xây:</span>
-                                <strong class="text-white fw-bold">${u.dtDat} m² &nbsp;•&nbsp; ${u.dtXay} m²</strong>
+                        <!-- Info Box: gộp Spec + Financial -->
+                        <div class="rounded-3 mb-2 rec-inner-box" style="padding:8px 14px;">
+                            <div style="${ROW}">
+                                <span class="rec-label">Diện tích đất / xây:</span>
+                                <strong class="rec-val">${u.dtDat} m² • ${u.dtXay} m²</strong>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center py-1">
-                                <span class="text-light opacity-75">Giá Gốc CĐT:</span>
-                                <strong class="text-info font-monospace fw-bold">${fmt(u.priceBeforeVat)}&nbsp;<span class="fw-normal opacity-85" style="font-size: 0.75rem;">VNĐ</span></strong>
+                            <div class="rec-row-border" style="${ROW}">
+                                <span class="rec-label">Giá gốc CĐT:</span>
+                                <strong class="font-monospace rec-val" style="font-weight:600;">${fmt(u.priceBeforeVat)}&nbsp;<span class="rec-unit" style="font-weight:400; font-size:0.73rem;">VNĐ</span></strong>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center py-1 border-top border-secondary border-opacity-25 mt-1 pt-1.5">
-                                <span class="text-warning fw-bold">Thực Trả CĐT (Net):</span>
-                                <strong class="text-warning font-monospace fw-bold" style="font-size: 0.92rem; text-shadow: 0 0 8px rgba(255,209,102,0.3);">${fmt(net_price)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">VNĐ</span></strong>
+                            ${u.bankInfo ? (() => {
+                                const sc = (u.bankInfo.soCap && u.bankInfo.soCap.length) ? u.bankInfo.soCap.join(', ') : '';
+                                const tc = (u.bankInfo.thuCap && u.bankInfo.thuCap.length) ? u.bankInfo.thuCap.join(', ') : '';
+                                const isSame = sc === tc && sc !== '';
+                                const showTC = tc && !isSame;
+                                return `<div class="rec-row-border" style="${ROW} font-size:0.78rem; align-items:flex-start;">
+                                    <span class="rec-label"><i class="bi bi-bank2 me-1"></i>Bank cho vay:</span>
+                                    <span class="rec-bank-val" style="text-align:right;">
+                                        ${sc || 'N/A'}${showTC ? `<div class="rec-bank-sub" style="font-weight:500; font-size:0.75rem; margin-top:2px;">Thứ cấp: ${tc}</div>` : ''}
+                                    </span>
+                                </div>`;
+                            })() : ''}
+                            <div class="rec-row-border" style="${ROW}">
+                                <span class="rec-label-net" style="font-weight:600;">Thực trả CĐT (Net):</span>
+                                <strong class="font-monospace rec-val-net" style="font-size:0.9rem; font-weight:700;">${fmt(net_price)}&nbsp;<span class="rec-unit" style="font-weight:400; font-size:0.73rem;">VNĐ</span></strong>
                             </div>
-                        </div>
-
-                        <!-- Financial Box (Khung Vốn & Dòng Tiền) -->
-                        <div class="rounded-3 mb-2" style="background: rgba(255, 209, 102, 0.07); border: 1px dashed rgba(255, 209, 102, 0.45); padding: 12px 14px; font-size: 0.82rem; line-height: 1.65;">
-                            <div class="d-flex justify-content-between align-items-center py-1 border-bottom border-warning border-opacity-25 mb-1.5 pb-1.5">
-                                <span class="text-light opacity-90 fw-bold">Phương thức tính:</span>
-                                <span class="badge bg-warning text-dark fw-bold shadow-sm px-2.5 py-1" style="font-size: 0.74rem; border-radius: 10px;">${methodLabel}</span>
+                            <!-- Divider mục tài chính -->
+                            <div class="rec-divider" style="margin:4px 0;"></div>
+                            <div style="${ROW}">
+                                <span class="rec-label">Phương thức:</span>
+                                <span class="rec-method-val" style="font-weight:600; font-size:0.8rem;">${methodLabel}</span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center py-1">
-                                <span class="text-white fw-bold">Vốn ban đầu cần có:</span>
-                                <strong class="text-warning font-monospace fw-bold" style="font-size: 0.9rem;">${fmt(initial_capital)}&nbsp;<span class="fw-normal opacity-90" style="font-size: 0.75rem;">VNĐ</span></strong>
+                            <div class="rec-row-border" style="${ROW}">
+                                <span class="rec-label-capital" style="font-weight:600;">Vốn ban đầu cần có:</span>
+                                <strong class="font-monospace rec-val-capital" style="font-size:0.9rem; font-weight:700;">${fmt(initial_capital)}&nbsp;<span class="rec-unit" style="font-weight:400; font-size:0.73rem;">VNĐ</span></strong>
                             </div>
                             ${monthlyRow}
                         </div>
@@ -451,6 +487,10 @@ function renderAllMatchedCards() {
             </div>
         `;
     }).join('');
+
+    requestAnimationFrame(() => {
+        container.innerHTML = cardsHtml;
+    });
 }
 
 /* =============================================================
@@ -463,7 +503,7 @@ function toggleCompareUnit(macan) {
         selectedCompareUnits.splice(idx, 1);
     } else {
         if (selectedCompareUnits.length >= 2) {
-            alert('Giao diện so sánh chuẩn của hệ thống cho phép chọn 2 căn hộ (Căn A & Căn B)! Vui lòng bỏ chọn 1 căn trước nếu muốn thay đổi.');
+            alert('Giao diện so sánh chuẩn của hệ thống cho phép chọn 2 căn (Căn A & Căn B)! Vui lòng bỏ chọn 1 căn trước nếu muốn thay đổi.');
             const chk = document.getElementById(`chk_cmp_${macan}`);
             if (chk) chk.checked = false;
             return;
@@ -490,7 +530,7 @@ function updateCompareStickyBar() {
 
     bar.style.removeProperty('display');
 
-    const unitPills = selectedCompareUnits.map(code => 
+    const unitPills = selectedCompareUnits.map(code =>
         `<span class="cmp-code-pill">${code}</span>`
     ).join('<span class="cmp-code-sep">•</span>');
 
@@ -524,7 +564,7 @@ function clearSelectedCompareUnits() {
  */
 function goToSystemCompareTab() {
     if (selectedCompareUnits.length < 2) {
-        alert('Vui lòng tick chọn đủ 2 căn hộ để thực hiện so sánh song song!');
+        alert('Vui lòng tick chọn đủ 2 căn để thực hiện so sánh song song!');
         return;
     }
 
@@ -564,8 +604,10 @@ function goToSystemCompareTab() {
     setC('cmpEarly1', pEarly);
     setC('cmpNoBlnh1', pNoBlnh);
     setC('cmpAqua1', pAqua);
-    if (pVoucher && document.getElementById('fin_oldHousePrice')) {
-        setV('cmpVoucher1', document.getElementById('fin_oldHousePrice').value || '');
+    setC('cmpVoucher1', pVoucher);
+    if (pVoucher && document.getElementById('fin_voucherAmount')) {
+        setV('cmpVoucherAmt1', document.getElementById('fin_voucherAmount').value || '');
+        if (typeof toggleCmpVoucherInput === 'function') toggleCmpVoucherInput(1);
     }
 
     // Đồng bộ ưu đãi sang Căn 2 trong Tab So Sánh
@@ -573,8 +615,10 @@ function goToSystemCompareTab() {
     setC('cmpEarly2', pEarly);
     setC('cmpNoBlnh2', pNoBlnh);
     setC('cmpAqua2', pAqua);
-    if (pVoucher && document.getElementById('fin_oldHousePrice')) {
-        setV('cmpVoucher2', document.getElementById('fin_oldHousePrice').value || '');
+    setC('cmpVoucher2', pVoucher);
+    if (pVoucher && document.getElementById('fin_voucherAmount')) {
+        setV('cmpVoucherAmt2', document.getElementById('fin_voucherAmount').value || '');
+        if (typeof toggleCmpVoucherInput === 'function') toggleCmpVoucherInput(2);
     }
 
     // Chuyển sang Tab So Sánh 2 Căn hiện tại của hệ thống
@@ -593,31 +637,49 @@ function goToSystemCompareTab() {
 
 // Global binding
 window.runFinancialMatcher = runFinancialMatcher;
+window.debouncedRunFinancialMatcher = debouncedRunFinancialMatcher;
 window.calculateMatchScore = calculateMatchScore;
 window.toggleCompareUnit = toggleCompareUnit;
 window.goToSystemCompareTab = goToSystemCompareTab;
 window.clearSelectedCompareUnits = clearSelectedCompareUnits;
 window.updateFinSliderDisplays = updateFinSliderDisplays;
 
-document.addEventListener('DOMContentLoaded', () => {
+let finDebounceTimer = null;
+function debouncedRunFinancialMatcher() {
+    clearTimeout(finDebounceTimer);
+    finDebounceTimer = setTimeout(() => {
+        requestAnimationFrame(() => {
+            runFinancialMatcher();
+        });
+    }, 220);
+}
+
+function initFinMatcherEvents() {
     updateFinSliderDisplays();
 
-    // Tự động lắng nghe sự kiện trượt slider trên Mobile / Touch / Mouse khi người dùng bắt đầu kéo
     const finB = document.getElementById('finBudget');
     const finCF = document.getElementById('finMonthlyCashflow');
-    if (finB) {
-        finB.addEventListener('input', () => { updateFinSliderDisplays(); runFinancialMatcher(); });
-        finB.addEventListener('change', () => { updateFinSliderDisplays(); runFinancialMatcher(); });
-    }
-    if (finCF) {
-        finCF.addEventListener('input', () => { updateFinSliderDisplays(); runFinancialMatcher(); });
-        finCF.addEventListener('change', () => { updateFinSliderDisplays(); runFinancialMatcher(); });
-    }
+
+    const bindSliderEvents = (el) => {
+        if (!el) return;
+        ['input', 'change', 'pointermove', 'touchmove'].forEach(evt => {
+            el.addEventListener(evt, updateFinSliderDisplays, { passive: true });
+        });
+        el.addEventListener('input', debouncedRunFinancialMatcher);
+        el.addEventListener('change', runFinancialMatcher);
+    };
+
+    bindSliderEvents(finB);
+    bindSliderEvents(finCF);
 
     const finM = document.getElementById('finMethod');
     const finT = document.getElementById('finType');
     if (finM) finM.addEventListener('change', runFinancialMatcher);
     if (finT) finT.addEventListener('change', runFinancialMatcher);
+}
 
-    // Không tự động hiển thị 48 căn khi mới vào trang. Giữ danh sách ẩn cho đến khi khách kéo trượt hoặc bấm Tìm Căn.
-});
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFinMatcherEvents);
+} else {
+    initFinMatcherEvents();
+}

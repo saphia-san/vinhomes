@@ -1,70 +1,69 @@
 /* =============================================================
    CHÍNH SÁCH BÁN HÀNG & HẰNG SỐ CẤU HÌNH (CONFIG)
    Dự án: Vinhomes Sài Gòn Park
-   Áp dụng từ: 29/08/2026 (CSBH V08 Mới Nhất - 29/08/2026)
+   Áp dụng từ: 11/09/2026 (Ban hành ngày 11/09/2026)
+   Nguồn: CSBH V09 Giãn xây (11/09/2026) & V08 Thô/HT (11/09/2026)
+   *** CẬP NHẬT CHÍNH SÁCH BAN HÀNH 11/09/2026:
+       - Chiết khấu TTS: 7.5%
+       - Quà tặng Vàng: ĐÃ KẾT THÚC
+       - MỚI: Siêu Quà Tặng Đặc Quyền Sinh Nhật 33 năm VGR (11/09 - 31/10/2026):
+         Member: 0.3%, Gold: 0.9%, Platinum: 1.2%, Diamond: 1.5%
+       - MỚI: VinClub Thường: Gold 0.3% (0.15% trừ giá + 0.15% VPoint), Platinum 0.4%, Diamond 0.5%
+       - HTLS Tiêu Chuẩn: 18T = +3.5%, 24T = +8%, 30T = +13.5%, 36T = +19.5%
    *** KHI CẦN ĐỔI CHÍNH SÁCH / MỨC CK, CHỈ SỬA FILE NÀY ***
    =============================================================*/
 var SALES_POLICY = {
-    code: 'VSP_CSBH_CDT_Gian_xay_V08_290826',
-    title: 'CSBH V08 (29/08/2026)',
+    code: 'VSP_CSBH_V09_V08_11092026',
+    title: 'CSBH V09 (Giãn xây) & V08 (Thô/HT) - 11/09/2026',
+    defaultInterestRate: 13.0, // Lãi suất vay ngân hàng mặc định (%/năm tham khảo)
 
-    /* Chiết khấu vốn tự có – % tính trên giá trị BĐS
-     * Theo CSBH V08 áp dụng từ 29/08/2026:
-     * - Thanh toán sớm 100% (ký đến hết 10/09/2026): 9.0%
-     * - Thanh toán sớm 100% (ký sau 10/09/2026): 7.5%
-     * - Tiến độ thường: 0.0% (Thanh toán theo Giá Gốc)             */
+    /* Chiết khấu vốn tự có – % tính trên Giá trị QSD Đất & Thương Mại (trước VAT, KPBT) */
     ownCapital: {
         earlyPayment: {
-            earlyBird: 9.0,   // Từ 29/08/2026 đến hết 10/09/2026: 9.0%
-            standard: 7.5     // Sau 10/09/2026: 7.5%
+            earlyBird: 7.5,   // Mức chuẩn 7.5% áp dụng khi TTS
+            standard:  7.5
         },
-        normalProgress: 0.0   // Thanh toán tiến độ thường: 0% (Giá gốc)
+        normalProgress: 0.0   // Tiến độ thường: 0% (Giá gốc)
     },
 
-    /* Chiết khấu dòng tiền: 11%/năm × số tiền × số ngày / 365
-       Điều kiện: thanh toán trước hạn ≥ 7 ngày                    */
+    /* Chiết khấu dòng tiền: 11%/năm × số tiền × số ngày / 365 */
     cashFlowDiscountRate: 11.0,
 
-    /* Hỗ trợ lãi suất khi vay ngân hàng – CSBH V08 (29/08/2026) */
+    /* Hỗ trợ lãi suất khi vay ngân hàng */
     interestSupport: {
-        // Siêu Hỗ Trợ Lãi Suất (đến hết 10/09/2026)
-        early: [
-            { months: 18, priceIncrease: 0.0, label: 'HTLS 0% trong 18 tháng (+0%)' },
-            { months: 24, priceIncrease: 4.5, label: 'HTLS 0% trong 24 tháng (+4.5% giá đất)' },
-            { months: 30, priceIncrease: 9.0, label: 'HTLS 0% trong 30 tháng (+9.0% giá đất)' },
-            { months: 36, priceIncrease: 14.0, label: 'HTLS 0% trong 36 tháng (+14.0% giá đất)' }
-        ],
-        // HTLS Tiêu Chuẩn (sau 10/09/2026)
-        standard: [
-            { months: 18, priceIncrease: 3.5, label: 'HTLS 0% trong 18 tháng (+3.5% giá đất)' },
-            { months: 24, priceIncrease: 8.0, label: 'HTLS 0% trong 24 tháng (+8.0% giá đất)' },
-            { months: 30, priceIncrease: 13.5, label: 'HTLS 0% trong 30 tháng (+13.5% giá đất)' },
-            { months: 36, priceIncrease: 19.5, label: 'HTLS 0% trong 36 tháng (+19.5% giá đất)' }
-        ],
         roughAndGianXay: [
-            { months: 18, priceIncrease: 0.0, label: 'HTLS 0% trong 18 tháng (+0%)' },
-            { months: 24, priceIncrease: 4.5, label: 'HTLS 0% trong 24 tháng (+4.5% giá đất)' },
-            { months: 30, priceIncrease: 9.0, label: 'HTLS 0% trong 30 tháng (+9.0% giá đất)' },
-            { months: 36, priceIncrease: 14.0, label: 'HTLS 0% trong 36 tháng (+14.0% giá đất)' }
+            { months: 18, priceIncrease: 3.5,  extraDiscount: 0.0, label: 'HTLS 0% trong 18 tháng (+3.5%)' },
+            { months: 24, priceIncrease: 8.0,  extraDiscount: 0.0, label: 'HTLS 0% trong 24 tháng (+8.0%)' },
+            { months: 30, priceIncrease: 13.5, extraDiscount: 0.0, label: 'HTLS 0% trong 30 tháng (+13.5%)' },
+            { months: 36, priceIncrease: 19.5, extraDiscount: 0.0, label: 'HTLS 0% trong 36 tháng (+19.5%)' }
         ],
         finished: [
-            { months: 18, priceIncrease: 0.0, label: 'HTLS 0% trong 18 tháng (+0%)' },
-            { months: 24, priceIncrease: 4.5, label: 'HTLS 0% trong 24 tháng (+4.5% giá đất)' },
-            { months: 30, priceIncrease: 9.0, label: 'HTLS 0% trong 30 tháng (+9.0% giá đất)' },
-            { months: 36, priceIncrease: 14.0, label: 'HTLS 0% trong 36 tháng (+14.0% giá đất)' }
+            { months: 18, priceIncrease: 3.5,  extraDiscount: 0.0, label: 'HTLS 0% trong 18 tháng (+3.5%)' },
+            { months: 24, priceIncrease: 8.0,  extraDiscount: 0.0, label: 'HTLS 0% trong 24 tháng (+8.0%)' },
+            { months: 30, priceIncrease: 13.5, extraDiscount: 0.0, label: 'HTLS 0% trong 30 tháng (+13.5%)' },
+            { months: 36, priceIncrease: 19.5, extraDiscount: 0.0, label: 'HTLS 0% trong 36 tháng (+19.5%)' }
         ]
     },
 
-    /* Khuyến mãi & Quà tặng – CSBH V08 (29/08/2026) */
+    /* Khuyến mãi & Quà tặng */
     promotions: {
         earlyMoveIn: 5.0,            // 5% Trừ trực tiếp vào Giá BĐS (5% còn lại nhận hoàn tiền mặt khi về ở sớm)
         aquafield: 20_000_000,       // VNĐ – 500 căn đầu tiên
-        goldGift: {                  // Từ 29/08/2026 đến hết 10/09/2026
-            under10b:    15_000_000,  // Dưới 10 tỷ -> 1 chỉ (15tr)
-            from10to20b: 45_000_000,  // 10 - dưới 20 tỷ -> 3 chỉ (45tr)
-            over20b:     75_000_000   // Từ 20 tỷ -> 5 chỉ (75tr)
+        goldGift: null,              // ĐÃ KẾT THÚC
+        voucher: { maxPercent: 30.0 },
+        // Siêu Quà Tặng Đặc Quyền Sinh Nhật 33 năm VGR (11/09 - 31/10/2026)
+        vgr33Years: {
+            member: 0.3,
+            gold: 0.9,
+            platinum: 1.2,
+            diamond: 1.5
         },
-        voucher: { maxPercent: 30.0 }
+        // Chương trình VinClub thường
+        vinClub: {
+            gold: { direct: 0.15, vpoint: 0.15 },
+            platinum: { direct: 0.20, vpoint: 0.20 },
+            diamond: { direct: 0.25, vpoint: 0.25 }
+        }
     },
 
     paymentSchedule: {
@@ -78,3 +77,9 @@ var SALES_POLICY = {
         bankLoan: 70.0
     }
 };
+
+function getGoldCountForApt(apt) {
+    // Quà tặng Vàng đã KẾT THÚC sau ngày 10/09/2026
+    // Hàm giữ lại để tương thích ngược nhưng luôn trả về null/0
+    return null;
+}
