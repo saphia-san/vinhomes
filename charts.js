@@ -148,11 +148,10 @@ const customChartValuesPlugin = {
                 // Draw Bar Values (Dư Nợ Gốc) - ALWAYS INSIDE the green bar with white text
                 if (chart.isDatasetVisible(0) && (mode === 'all' || mode === 'principal')) {
                     const totalBars = metaBar.data.length;
-                    const barStep = (isMobileScreen && totalBars > 10) ? (totalBars > 18 ? 3 : 2) : 1;
+                    const barStep = 1;
 
                     metaBar.data.forEach((bar, i) => {
                         if (bar.hidden) return;
-                        if (barStep > 1 && i % barStep !== 0 && i !== totalBars - 1) return;
 
                         const valBar = chart.data.datasets[0].data[i];
                         if (valBar === undefined || valBar === null) return;
@@ -163,7 +162,7 @@ const customChartValuesPlugin = {
                         const barHeight = chart.chartArea ? (chart.chartArea.bottom - bar.y) : 50;
                         if (barHeight < 12) return;
 
-                        const fontSz = isMobileScreen ? 7.5 : 10;
+                        const fontSz = isMobileScreen ? 8 : 10;
                         ctx.font = `800 ${fontSz}px "Outfit", sans-serif`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
@@ -177,16 +176,14 @@ const customChartValuesPlugin = {
                 // Draw Line Values (Lãi Vay Trả Hàng Tháng) - ABOVE line points cleanly with Glass Pill Badge
                 if (chart.isDatasetVisible(1) && (mode === 'all' || mode === 'interest')) {
                     const totalLinePts = metaLine.data.length;
-                    const lineStep = (isMobileScreen && totalLinePts > 10) ? (totalLinePts > 18 ? 3 : 2) : 1;
+                    const lineStep = 1;
 
                     metaLine.data.forEach((pt, i) => {
-                        if (lineStep > 1 && i % lineStep !== 0 && i !== totalLinePts - 1) return;
-
                         const valLine = chart.data.datasets[1].data[i];
                         if (valLine === undefined || valLine === null) return;
                         const textLine = (valLine === 0 || valLine === '0') ? '0 Tr' : `${valLine} Tr`;
 
-                        const fontSz = isMobileScreen ? 7.5 : 10.5;
+                        const fontSz = isMobileScreen ? 8.5 : 10.5;
                         ctx.font = `800 ${fontSz}px "Outfit", sans-serif`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
@@ -194,14 +191,12 @@ const customChartValuesPlugin = {
                         const textWidth = ctx.measureText(textLine).width;
                         const px = pt.x;
 
-                        // Stagger Y offsets on mobile so adjacent glass pill badges don't collide
-                        const isStagger = isMobileScreen && totalLinePts > 10;
-                        const yDist = isStagger ? ((i / (lineStep > 1 ? lineStep : 1)) % 2 === 0 ? 8 : 17) : (isMobileScreen ? 8 : 12);
+                        const yDist = isMobileScreen ? 9 : 12;
                         const py = pt.y - yDist;
 
-                        const padX = isMobileScreen ? 2 : 6;
+                        const padX = isMobileScreen ? 3 : 6;
                         const rw = textWidth + padX * 2;
-                        const rh = isMobileScreen ? 11 : 16;
+                        const rh = isMobileScreen ? 13 : 16;
                         const rx = px - rw / 2;
                         const ry = py - rh / 2;
 
@@ -606,6 +601,15 @@ function renderLoanScheduleChart(canvasId, loanData) {
     });
 
     const isMobileScreen = (window.innerWidth < 768);
+    const containerEl = document.getElementById('chart-loan-container') || (canvas ? canvas.parentElement : null);
+    const totalYearsCount = Object.keys(yearly).length;
+
+    if (isMobileScreen && containerEl) {
+        const reqWidth = Math.max(window.innerWidth - 30, totalYearsCount * 32);
+        containerEl.style.minWidth = `${reqWidth}px`;
+    } else if (containerEl) {
+        containerEl.style.minWidth = '0px';
+    }
 
     const labels = Object.keys(yearly).map(y => `Năm ${y}`);
     const balanceData = Object.values(yearly).map(y => parseFloat((y.endBalance / 1e9).toFixed(2)));

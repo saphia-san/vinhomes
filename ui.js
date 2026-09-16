@@ -25,37 +25,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-window.ytPlayState = window.ytPlayState || {};
-
-function togglePlayPauseYT(iframeId) {
-    const iframe = document.getElementById(iframeId);
-    if (!iframe) return;
-    const overlay = document.getElementById(`custom-video-overlay-${iframeId}`);
-    const btn = overlay ? overlay.querySelector('.custom-yt-play-btn') : null;
-    const icon = btn ? btn.querySelector('i') : null;
-
-    if (window.ytPlayState[iframeId] === undefined) {
-        window.ytPlayState[iframeId] = 'playing';
-    }
-
-    if (window.ytPlayState[iframeId] === 'playing') {
-        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-        window.ytPlayState[iframeId] = 'paused';
-        if (icon) icon.className = 'bi bi-play-fill fs-2 ms-1';
-        if (btn) btn.style.opacity = '1';
-    } else {
-        iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        window.ytPlayState[iframeId] = 'playing';
-        if (icon) icon.className = 'bi bi-pause-fill fs-2';
-        if (btn) btn.style.opacity = '1';
-        setTimeout(() => {
-            if (btn && window.ytPlayState[iframeId] === 'playing') {
-                btn.style.opacity = '0';
-            }
-        }, 1200);
-    }
-}
-
 function playYoutubeEmbedded(containerEl, videoId) {
     if (!containerEl) return;
     
@@ -65,50 +34,23 @@ function playYoutubeEmbedded(containerEl, videoId) {
         return;
     }
 
-    const isMobile = (window.innerWidth < 768);
     const origin = (window.location.origin && window.location.origin !== 'null') 
         ? encodeURIComponent(window.location.origin) 
         : '';
     const originParam = origin ? `&origin=${origin}` : '';
 
-    const iframeId = `yt_embed_iframe_${Math.random().toString(36).substr(2, 9)}`;
-    window.ytPlayState[iframeId] = 'playing';
+    const ytParams = `autoplay=1&rel=0&modestbranding=1&playsinline=1${originParam}`;
 
-    if (isMobile) {
-        // Trên Điện thoại (Mobile): Ẩn 100% giao diện Youtube (bật controls=0, showinfo=0, modestbranding=1, playsinline=1)
-        // để video trông như Native Web Video HTML5
-        const ytParams = `autoplay=1&controls=0&modestbranding=1&showinfo=0&rel=0&iv_load_policy=3&playsinline=1&disablekb=1&fs=0&enablejsapi=1${originParam}`;
-        containerEl.innerHTML = `
-            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg" style="aspect-ratio: 16/9; min-height: 100%; background:#000;">
-                <iframe id="${iframeId}" src="https://www.youtube.com/embed/${videoId}?${ytParams}"
-                    title="Video Player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    allowfullscreen
-                    style="position: absolute; top: -12%; left: -6%; width: 112%; height: 124%; border:none; pointer-events:none;">
-                </iframe>
-                <div id="custom-video-overlay-${iframeId}" class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                    style="pointer-events: auto; cursor: pointer; background: transparent; z-index: 10;"
-                    onclick="togglePlayPauseYT('${iframeId}')">
-                    <div class="custom-yt-play-btn" style="width: 52px; height: 52px; border-radius: 50%; background: rgba(0,0,0,0.6); color: #ffffff; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px); opacity: 0; transition: opacity 0.35s ease; box-shadow: 0 4px 18px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.25);">
-                        <i class="bi bi-pause-fill fs-2"></i>
-                    </div>
-                </div>
-            </div>`;
-    } else {
-        // Trên Máy tính (Desktop): Giữ nguyên giao diện phát mặc định
-        const ytParams = `autoplay=1&rel=0&modestbranding=1&cc_load_policy=0&cc_lang_pref=off&enablejsapi=1${originParam}`;
-        containerEl.innerHTML = `
-            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg" style="aspect-ratio: 16/9; min-height: 100%; background:#000;">
-                <iframe id="${iframeId}" src="https://www.youtube.com/embed/${videoId}?${ytParams}"
-                    title="Video Player"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    allowfullscreen
-                    style="position: absolute; top: -12%; left: 0; width: 100%; height: 124%; border:none; pointer-events:auto;">
-                </iframe>
-            </div>`;
-    }
+    containerEl.innerHTML = `
+        <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg" style="aspect-ratio: 16/9; min-height: 100%; background:#000;">
+            <iframe src="https://www.youtube.com/embed/${videoId}?${ytParams}"
+                title="Video Player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:none; pointer-events:auto;">
+            </iframe>
+        </div>`;
 }
 
 function toggleTheme() {
@@ -984,9 +926,10 @@ ${d.supportMonths > 0 ? `
 <!-- Biểu đồ dư nợ & lãi vay -->
 <div class="widget-card mb-3">
     <div>
-        <div class="widget-header-line">
-            <div>
+        <div class="widget-header-line flex-wrap gap-2">
+            <div class="d-flex align-items-center">
                 <div class="widget-title"><i class="bi bi-graph-up-arrow me-2" style="color:inherit;"></i>Diễn biến dư nợ và trả góp hàng tháng</div>
+                <span class="mobile-chart-scroll-hint d-md-none ms-2"><i class="bi bi-arrows-expand me-1"></i>Vuốt ngang ➔</span>
             </div>
 
             <!-- INTERACTIVE VIEW MODE BUTTONS -->
@@ -997,8 +940,10 @@ ${d.supportMonths > 0 ? `
             </div>
         </div>
 
-        <div class="canvas-area-tall">
-            <canvas id="chart-loan-canvas"></canvas>
+        <div class="chart-scroll-wrapper-mobile">
+            <div class="canvas-area-tall" id="chart-loan-container">
+                <canvas id="chart-loan-canvas"></canvas>
+            </div>
         </div>
     </div>
 </div>

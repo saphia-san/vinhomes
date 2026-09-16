@@ -342,6 +342,34 @@
         color: #ffffff !important;
     }
 
+    /* Mobile Chart Horizontal Scroll Container */
+    .chart-scroll-wrapper-mobile {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 6px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .chart-scroll-wrapper-mobile .canvas-area-tall {
+        height: 290px !important;
+        contain: none !important;
+    }
+
+    .mobile-chart-scroll-hint {
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        color: #ffd166 !important;
+        background: rgba(255, 209, 102, 0.12) !important;
+        border: 1px solid rgba(255, 209, 102, 0.35) !important;
+        padding: 2px 8px !important;
+        border-radius: 12px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        white-space: nowrap !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+    }
+
     /* High-DPI Crisp Canvas Rendering & Layout on Mobile (Eliminates Blur on Mobile Retina Displays) */
     canvas,
     .techno-donut-canvas,
@@ -684,7 +712,11 @@ body.light-theme #finCompareStickyBar {
 }
 
 [id^="yt-player-box"] iframe {
-    object-fit: cover !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
     border: none !important;
 }
 
