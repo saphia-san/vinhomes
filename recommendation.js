@@ -57,7 +57,7 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
 
     // BƯỚC 2: Tính Vốn ban đầu cần chuẩn bị (initial_capital) và Tổng vốn tự có cần có (total_required_capital)
     let initial_capital = 0;
-    let total_required_capital = 0; // Tổng số tiền túi khách phải trả bằng vốn tự có
+    let total_required_capital = 0; // Tổng số tiền túi khách phải trả bằng vốn tự có (không tính nợ vay bank)
 
     if (overrideMethod === 'own-early') {
         if (mappedType === 'gianXay') {
@@ -68,13 +68,13 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
             total_required_capital = net_price;
         }
     } else if (overrideMethod === 'own-normal') {
-        initial_capital = Math.round(net_price * 0.20); // 20% đợt đầu
+        const full_price = S.contractPrice || S.origAllin || (S.PA ? S.PA.allin : net_price);
+        initial_capital = Math.round(full_price * 0.20); // 20% đợt 1 & 2 (Cọc + Ký HĐMB)
         // Tiến độ chuẩn CĐT đòi hỏi khách tự bỏ tiền túi 100% BĐS (không vay ngân hàng)
         total_required_capital = (mappedType === 'gianXay') ? net_land_price : net_price;
     } else if (overrideMethod === 'bank') {
-        // Vay bank 70%: Khách chỉ cần bỏ ra 30% vốn tự có (70% còn lại Ngân hàng cho vay HTLS 0%)
-        const earlyStages = (calcRes.stages || []).filter(s => !s.label.includes('Ngân hàng') && !s.label.includes('bàn giao') && !s.label.includes('Sổ hồng') && !s.label.includes('Xây T') && !s.label.includes('T+5') && !s.label.includes('T+6') && !s.label.includes('T+7'));
-        initial_capital = earlyStages.slice(0, 3).reduce((acc, s) => acc + (s.netCash !== undefined ? s.netCash : (s.gross || 0)), 0) || Math.round(net_price * 0.30);
+        // Vay bank 70%: Vốn tự có ban đầu 30% chính là toàn bộ số tiền mặt thực trả CĐT (S.totalKHtoCDT = net_price)
+        initial_capital = net_price;
         total_required_capital = initial_capital;
     }
 
@@ -103,14 +103,21 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
     }
 
     // LỌC CỨNG HẠN MỨC NGÂN SÁCH (Hard Budget Filtering - Chuẩn Nghiệp Vụ BĐS)
-    // Nếu số vốn ban đầu cần chuẩn bị đợt 1 > Vốn tự có sẵn có -> LOẠI BỎ NGAY
+    // 1. Nếu số vốn ban đầu cần chuẩn bị đợt 1 > Vốn tự có sẵn có -> LOẠI BỎ NGAY
     if (customer_capital > 0 && initial_capital > customer_capital) {
-        return null; // Vốn ban đầu không đủ chi trả -> Loại bỏ khỏi kết quả
+        return null; // Vốn ban đầu đợt 1 không đủ chi trả -> Loại bỏ
     }
 
-    // Nếu khách chọn hạn mức dòng tiền/tháng (vd: 50 Tr/tháng), chỉ giữ lại các căn có max_monthly_payment <= 50 Tr
+    // 2. Với PTTT Không Vay (Thanh toán sớm & Tiến độ chuẩn):
+    // Khách không vay bank nên Tổng vốn tự có cần có = 100% Giá căn (hoặc 100% Đất nếu Giãn xây).
+    // Nếu Vốn tự có của khách < Tổng giá căn -> Không đủ khả năng tự thanh toán theo tiến độ/TTS -> LOẠI BỎ
+    if (customer_capital > 0 && (overrideMethod === 'own-early' || overrideMethod === 'own-normal') && total_required_capital > customer_capital) {
+        return null;
+    }
+
+    // 3. Với PTTT Vay Bank: Nếu khách chọn hạn mức dòng tiền/tháng (vd: 50 Tr/tháng), chỉ giữ lại các căn có max_monthly_payment <= hạn mức
     if (customer_monthly_cashflow > 0 && overrideMethod === 'bank' && max_monthly_payment > customer_monthly_cashflow) {
-        return null; // Dòng tiền trả nợ vượt quá hạn mức dòng tiền khách chọn -> Không khớp
+        return null; // Dòng tiền trả nợ vượt quá hạn mức dòng tiền khách chọn -> Loại bỏ
     }
 
     // BƯỚC 4: Tính Match Score (%)
@@ -128,14 +135,17 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
     const final_score = Math.round(base_score);
 
     const methodLabels = {
-        'own-early': '💰 Thanh toán sớm',
-        'own-normal': '📋 Tiến Độ Chuẩn',
-        'bank': `🏦 Vay Bank 70% (HTLS ${gracePeriodMonths}T)`
+        'own-early': 'Thanh toán sớm',
+        'own-normal': 'Tiến độ chuẩn',
+        'bank': `Vay bank 70% (HTLS ${gracePeriodMonths}T)`
     };
+
+    const true_total_cost = (S && S.grandTotal > 0) ? S.grandTotal : (net_price + (S && S.totalKHtoBank ? S.totalKHtoBank : 0));
 
     return {
         property,
         net_price,
+        true_total_cost,
         net_land_price,
         net_build_price,
         initial_capital,
@@ -145,7 +155,7 @@ function calculateSingleMatchScore(property, userInputs, methodKey) {
         final_score,
         calcRes,
         overrideMethod,
-        methodLabel: methodLabels[overrideMethod] || '🏦 Vay HTLS (Bank)'
+        methodLabel: methodLabels[overrideMethod] || 'Vay HTLS (Bank)'
     };
 }
 
@@ -171,8 +181,8 @@ function calculateMatchScore(property, userInputs) {
 
     if (validScores.length === 0) return null;
 
-    // Ưu tiên xếp hạng PTTT có final_score cao nhất (hoặc Vốn ban đầu thấp nhất)
-    validScores.sort((a, b) => b.final_score - a.final_score || a.initial_capital - b.initial_capital);
+    // Ưu tiên PTTT có TỔNG CHI PHÍ TÀI CHÍNH THỰC TẾ (gồm cả gốc+lãi sau HTLS) thấp nhất cho khách (chiết khấu cao nhất)
+    validScores.sort((a, b) => a.true_total_cost - b.true_total_cost || a.initial_capital - b.initial_capital);
     return validScores[0];
 }
 
@@ -183,7 +193,7 @@ function updateFinSliderDisplays() {
     const elB = document.getElementById('finBudget');
     const elDispB = document.getElementById('finBudgetValDisplay');
     if (elB && elDispB) {
-        const v = parseInt(elB.value, 10) || 1300;
+        const v = parseInt(elB.value, 10) || 1900;
         if (v >= 20000) {
             elDispB.textContent = "20 Tỷ+ VNĐ";
         } else if (v >= 1000) {
@@ -197,7 +207,7 @@ function updateFinSliderDisplays() {
     const elCF = document.getElementById('finMonthlyCashflow');
     const elDispCF = document.getElementById('finCashflowValDisplay');
     if (elCF && elDispCF) {
-        const v = parseInt(elCF.value, 10) || 35;
+        const v = parseInt(elCF.value, 10) || 46;
         if (v >= 200) {
             elDispCF.textContent = "200 Triệu+/tháng";
         } else {
@@ -335,8 +345,8 @@ function runFinancialMatcher() {
 
     restoreMain(savedMain);
 
-    // Sắp xếp ưu tiên hiển thị theo số tiền Vốn ban đầu cần có từ THẤP ĐẾN CAO, sau đó tới Tổng Giá Thực Trả (Net) từ THẤP ĐẾN CAO
-    results.sort((a, b) => a.initial_capital - b.initial_capital || a.net_price - b.net_price);
+    // Sắp xếp ưu tiên hiển thị theo TỔNG CHI PHÍ TÀI CHÍNH THỰC TẾ (gồm cả gốc+lãi sau HTLS) từ THẤP ĐẾN CAO
+    results.sort((a, b) => a.true_total_cost - b.true_total_cost || a.initial_capital - b.initial_capital);
     allMatchingResults = results;
 
     if (countEl) countEl.textContent = results.length;
@@ -408,42 +418,38 @@ function renderAllMatchedCards() {
                 <div class="card-recommendation-item rounded-4 h-100 d-flex flex-column justify-content-between shadow position-relative"
                      style="background: linear-gradient(160deg, #092e26 0%, #041a14 100%); border: 1.5px solid rgba(255, 209, 102, 0.35); border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.4); padding: 14px 16px;">
                     <div>
-                        <!-- Header: Mã Căn & Match Score (Tối ưu giao diện Mobile) -->
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2 pb-2" style="border-bottom: 1px solid rgba(255, 209, 102, 0.25);">
+                        <!-- Header: Mã Căn, Loại Hình & Ô Tick So Sánh trên cùng 1 hàng -->
+                        <div class="d-flex align-items-center justify-content-between gap-2 mb-2 pb-2 rec-card-header-row" style="border-bottom: 1px solid rgba(255, 209, 102, 0.25);">
                             <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="fw-extrabold text-warning fs-5 mb-0" style="letter-spacing: 0.3px; text-shadow: 0 0 8px rgba(255,209,102,0.3); line-height: 1.1;">${u.macan}</span>
+                                <span class="fw-extrabold rec-unit-code mb-0">${u.macan}</span>
                                 <span class="badge type-badge ${u.type === 'gianXay' ? 'type-badge-gianxay' : (u.type === 'rough' ? 'type-badge-rough' : 'type-badge-finished')} px-2 py-1 fw-bold" style="font-size: 0.72rem; border-radius: 8px;">${typeLabels[u.type] || 'Hoàn thiện'}</span>
                             </div>
-                            <span class="badge ${msBgColor} px-2.5 py-1 fw-bold shadow-sm ms-auto" style="font-size: 0.78rem; border-radius: 8px; white-space: nowrap;">
-                                ${final_score}% Khớp
-                            </span>
-                        </div>
 
-                        <!-- Badges & Ô Tick So Sánh (Thoáng đẹp, không bị đè viền) -->
-                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2.5">
-                            <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                                ${(u.daBan === true || u.status === 'daBan') ? '<span class="badge bg-secondary text-white px-2 py-1" style="font-size: 0.7rem; border-radius: 8px;"><i class="bi bi-lock-fill me-1"></i>Đã bán</span>' : '<span class="badge bg-success bg-gradient text-white px-2 py-1" style="font-size: 0.7rem; border-radius: 8px;">Đang mở bán</span>'}
-                                ${goldBadge}
-                                ${vosBadge}
-                            </div>
-                            <label class="form-check m-0 d-flex align-items-center gap-1.5 cursor-pointer px-2 py-1 rounded-2 ms-auto" for="chk_cmp_${u.macan}" style="background: rgba(255, 209, 102, 0.08); border: 1px solid rgba(255, 209, 102, 0.28); white-space: nowrap; user-select: none;">
-                                <input class="form-check-input cursor-pointer m-0" type="checkbox" id="chk_cmp_${u.macan}" 
-                                       style="width: 1rem; height: 1rem; accent-color: #f59e0b;" 
+                            <label class="m-0 d-inline-flex align-items-center cursor-pointer ms-auto" for="chk_cmp_${u.macan}" style="background: transparent; border: none; padding: 0; white-space: nowrap; user-select: none; gap: 5px;">
+                                <input class="form-check-input cursor-pointer" type="checkbox" id="chk_cmp_${u.macan}" 
+                                       style="width: 1rem; height: 1rem; accent-color: #f59e0b; margin: 0 !important; flex-shrink: 0;" 
                                        onchange="toggleCompareUnit('${u.macan}')" ${isChecked ? 'checked' : ''}>
-                                <span class="text-warning fw-bold mb-0 cursor-pointer" style="font-size: 0.78rem;">
+                                <span class="fw-bold mb-0 cursor-pointer rec-cmp-label" style="font-size: 0.78rem;">
                                     Tick so sánh
                                 </span>
                             </label>
                         </div>
 
+                        <!-- Badges Ưu Đãi (Quà Vàng, VOS) -->
+                        ${(goldBadge || vosBadge) ? `
+                        <div class="d-flex align-items-center gap-1.5 flex-wrap mb-2 mt-1">
+                            ${goldBadge}
+                            ${vosBadge}
+                        </div>` : ''}
+
                         <!-- Info Box: gộp Spec + Financial -->
-                        <div class="rounded-3 mb-2 rec-inner-box" style="padding:8px 14px;">
+                        <div class="rounded-3 mb-2 mt-2.5 rec-inner-box" style="padding:8px 14px;">
                             <div style="${ROW}">
                                 <span class="rec-label">Diện tích đất / xây:</span>
                                 <strong class="rec-val">${u.dtDat} m² • ${u.dtXay} m²</strong>
                             </div>
                             <div class="rec-row-border" style="${ROW}">
-                                <span class="rec-label">Giá gốc CĐT:</span>
+                                <span class="rec-label">Giá bán chưa VAT, KPBT:</span>
                                 <strong class="font-monospace rec-val" style="font-weight:600;">${fmt(u.priceBeforeVat)}&nbsp;<span class="rec-unit" style="font-weight:400; font-size:0.73rem;">VNĐ</span></strong>
                             </div>
                             ${u.bankInfo ? (() => {
@@ -459,8 +465,8 @@ function renderAllMatchedCards() {
                                 </div>`;
                             })() : ''}
                             <div class="rec-row-border" style="${ROW}">
-                                <span class="rec-label-net" style="font-weight:600;">Thực trả CĐT (Net):</span>
-                                <strong class="font-monospace rec-val-net" style="font-size:0.9rem; font-weight:700;">${fmt(net_price)}&nbsp;<span class="rec-unit" style="font-weight:400; font-size:0.73rem;">VNĐ</span></strong>
+                                <span class="rec-label-net" style="font-weight:600;">Thực trả CĐT:</span>
+                                <strong class="font-monospace rec-val-net" style="font-size:0.9rem; font-weight:700;">${fmt(net_price)}&nbsp;<span class="rec-unit-gold" style="font-weight:400; font-size:0.73rem;">VNĐ</span></strong>
                             </div>
                             <!-- Divider mục tài chính -->
                             <div class="rec-divider" style="margin:4px 0;"></div>
@@ -470,7 +476,7 @@ function renderAllMatchedCards() {
                             </div>
                             <div class="rec-row-border" style="${ROW}">
                                 <span class="rec-label-capital" style="font-weight:600;">Vốn ban đầu cần có:</span>
-                                <strong class="font-monospace rec-val-capital" style="font-size:0.9rem; font-weight:700;">${fmt(initial_capital)}&nbsp;<span class="rec-unit" style="font-weight:400; font-size:0.73rem;">VNĐ</span></strong>
+                                <strong class="font-monospace rec-val-capital" style="font-size:0.9rem; font-weight:700;">${fmt(initial_capital)}&nbsp;<span class="rec-unit-gold" style="font-weight:400; font-size:0.73rem;">VNĐ</span></strong>
                             </div>
                             ${monthlyRow}
                         </div>
@@ -535,7 +541,7 @@ function updateCompareStickyBar() {
     ).join('<span class="cmp-code-sep">•</span>');
 
     const btnDisabled = selectedCompareUnits.length < 2 ? 'disabled style="opacity:0.6; cursor:not-allowed;"' : '';
-    const btnText = selectedCompareUnits.length < 2 ? 'Tick 1 căn nữa' : '🚀 So Sánh 2 Căn';
+    const btnText = selectedCompareUnits.length < 2 ? 'Tick 1 căn nữa' : 'So sánh';
 
     bar.innerHTML = `
         <div class="cmp-left-info">

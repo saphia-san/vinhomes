@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XEM TRƯỚC VÀ THIẾT KẾ MẪU ẢNH PNG HD - AS, TL & ĐLCV (3 PTTT)</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- html2canvas for PNG Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #010705;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-title-bar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header-title-bar h2 {
+            color: #f8d77f;
+            font-weight: 900;
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+        .header-title-bar p {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.9rem;
+        }
+
+        /* CONTROL PANEL BAR */
+        .control-panel {
+            background: rgba(6, 30, 24, 0.95);
+            border: 1px solid rgba(248, 215, 127, 0.4);
+            border-radius: 18px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            max-width: 820px;
+            width: 100%;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .control-label {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #f8d77f;
+            min-width: 140px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.85);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .tab-btn:hover {
+            background: rgba(248, 215, 127, 0.15);
+            color: #f8d77f;
+            border-color: rgba(248, 215, 127, 0.4);
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #fff7d6 0%, #f8d77f 35%, #d99b26 75%, #ffe699 100%);
+            color: #041c15;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(217,155,38,0.4);
+        }
+
+        .action-bar {
+            background: rgba(6, 30, 24, 0.95);
+            border: 1px solid rgba(248, 215, 127, 0.4);
+            border-radius: 14px;
+            padding: 14px 24px;
+            margin-bottom: 24px;
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        .btn-download-png {
+            background: linear-gradient(135deg, #fff7d6 0%, #f8d77f 35%, #d99b26 75%, #ffe699 100%);
+            color: #041c15;
+            border: none;
+            font-weight: 900;
+            padding: 10px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.92rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(217,155,38,0.4);
+            transition: transform 0.15s ease;
+        }
+        .btn-download-png:hover { transform: translateY(-2px); }
+
+        /* =============================================================
+           EXECUTIVE UNIFIED TABLE EXPORT CARD (800PX TARGET CAPTURE)
+           ============================================================= */
+        #posterRenderCapture {
+            width: 800px;
+            background: linear-gradient(150deg, #02120d 0%, #05221a 45%, #083327 80%, #031610 100%);
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            border-radius: 22px;
+            border: 1.5px solid rgba(248, 215, 127, 0.35);
+            padding: 28px 24px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.85);
+            box-sizing: border-box;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        /* 1. HEADER SECTION */
+        .poster-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .brand-logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand-crest-icon {
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, #fff7d6 0%, #f8d77f 35%, #d99b26 75%, #ffe699 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #041c15;
+            font-size: 1.55rem;
+            box-shadow: 0 0 18px rgba(248,215,127,0.35);
+        }
+        .brand-logo-img {
+            height: 48px;
+            width: auto;
+            max-width: 140px;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 0 18px rgba(248, 215, 127, 0.35);
+            background: rgba(4, 28, 21, 0.6);
+            display: block;
+        }
+        .brand-text-name {
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff7d6 0%, #f8d77f 50%, #e0a330 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.8px;
+            line-height: 1.1;
+        }
+
+        /* METALLIC GOLD PILL BADGE */
+        .metallic-gold-pill-badge {
+            background: linear-gradient(135deg, #fff7d6 0%, #f8d77f 30%, #d99b26 70%, #fff0b8 100%);
+            color: #041c15;
+            padding: 10px 28px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 0.6px;
+            line-height: 1;
+        }
+
+        /* 2. SPOTLIGHT VISUAL BLOCK */
+        .spotlight-visual-block {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .spotlight-left-crop {
+            border-radius: 16px;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            min-height: 310px;
+            padding: 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .spotlight-map-img {
+            width: 100%;
+            height: 100%;
+            min-height: 310px;
+            border-radius: 16px;
+            object-fit: cover;
+            display: block;
+            border: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .spotlight-right-info {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 16px 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .amenity-tiles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .amenity-tile-card {
+            position: relative;
+            height: 82px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #07201a;
+            border: none !important;
+            padding: 0 !important;
+        }
+        .amenity-tile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.14);
+            display: block;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .amenity-tile-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 4px 5px;
+            background: linear-gradient(0deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95);
+        }
+
+        /* UNIFIED TABLE SECTION STYLING */
+        .unified-block {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin-bottom: 22px;
+        }
+        .unified-block-title {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+            letter-spacing: 0.3px;
+        }
+
+        .data-table-simple {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+            color: #ffffff;
+        }
+        .data-table-simple td {
+            padding: 6.5px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
+        }
+        .data-table-simple tr:last-child td {
+            border-bottom: none;
+        }
+
+        .gold-total-val {
+            background: linear-gradient(135deg, #fff7d6 0%, #f8d77f 50%, #e0a330 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-size: 1.05rem;
+        }
+
+        .gold-sub-val {
+            background: linear-gradient(135deg, #fff7d6 0%, #f8d77f 50%, #e0a330 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-size: 0.88rem;
+        }
+
+        /* 5. FULL PAYMENT SCHEDULE TABLE */
+        .table-schedule-full {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.74rem;
+            color: #ffffff;
+            table-layout: fixed;
+        }
+        .table-schedule-full th {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            padding: 7px 8px;
+            text-transform: uppercase;
+            font-weight: 800;
+            font-size: 0.68rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            white-space: normal;
+            word-break: keep-all;
+        }
+        .table-schedule-full td {
+            padding: 6.5px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            vertical-align: middle;
+            color: #ffffff;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.35;
+        }
+        .table-schedule-full td.amt {
+            white-space: nowrap;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+        .table-schedule-full tr:nth-child(even) {
+            background: rgba(255,255,255,0.015);
+        }
+        .sched-section-label {
+            font-size: 0.78rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+        .sched-section-label.land {
+            color: #f8d77f;
+            background: rgba(248, 215, 127, 0.08);
+        }
+        .sched-section-label.con {
+            color: #f8d77f;
+            background: rgba(248, 215, 127, 0.08);
+        }
+        .sched-section-label .total-hint {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 0.73rem;
+            white-space: nowrap;
+        }
+
+        /* 6. FOOTER CONSULTANT BANNER */
+        .poster-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            padding-top: 14px;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .sale-contact-badge {
+            background: linear-gradient(135deg, #fff7d6 0%, #f8d77f 30%, #d99b26 70%, #fff0b8 100%);
+            color: #041c15;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-title-bar">
+        <h2><i class="bi bi-palette-fill me-2"></i>THIẾT KẾ ẢNH PNG BÁO GIÁ DÀNH CHO CÁC PHÂN KHU & PTTT</h2>
+        <p>Vinhomes Sài Gòn Park — Thứ tự cột [SỐ TIỀN (VNĐ)] trước cột [NH GIẢI NGÂN] &amp; Bỏ màu nền xanh dòng đợt vay</p>
+    </div>
+
+    <!-- BẢNG ĐIỀU KHIỂN CHỌN LOẠI CĂN & PTTT -->
+    <div class="control-panel">
+        <div class="control-group">
+            <span class="control-label"><i class="bi bi-house-door-fill"></i> 1. Loại căn / Phân khu:</span>
+            <button class="tab-btn btn-unit active" data-unit="AS72-24" onclick="selectUnit('AS72-24')">
+                AS72-24 (Phân Khu Ivy Park)
+            </button>
+            <button class="tab-btn btn-unit" data-unit="TL10-22" onclick="selectUnit('TL10-22')">
+                TL10-22 (Phân Khu Global Park)
+            </button>
+            <button class="tab-btn btn-unit" data-unit="DLCV1-39" onclick="selectUnit('DLCV1-39')">
+                ĐLCV1-39 (Phân Khu Global Park)
+            </button>
+        </div>
+
+        <div class="control-group">
+            <span class="control-label"><i class="bi bi-credit-card-2-front-fill"></i> 2. Phương Thức TT:</span>
+            <button class="tab-btn btn-pttt active" data-pttt="bank" onclick="selectPTTT('bank')">
+                <i class="bi bi-bank me-1"></i> Vay HTLS 0% (18 Tháng)
+            </button>
+            <button class="tab-btn btn-pttt" data-pttt="normal" onclick="selectPTTT('normal')">
+                <i class="bi bi-calendar2-check me-1"></i> Thanh Toán Tiến Độ Chuẩn (TĐC)
+            </button>
+            <button class="tab-btn btn-pttt" data-pttt="early" onclick="selectPTTT('early')">
+                <i class="bi bi-lightning-charge-fill me-1"></i> Thanh Toán Sớm 100% (TTS)
+            </button>
+        </div>
+    </div>
+
+    <!-- THANH NÚT THAO TÁC XUẤT ẢNH -->
+    <div class="action-bar">
+        <div>
+            <div id="actionBarTitle" style="font-weight: 900; color: #f8d77f; font-size: 1.05rem;">
+                <i class="bi bi-image me-1"></i> Xuất ảnh PNG cho Bảng thanh toán chi tiết của căn AS72-24
+            </div>
+            <div id="actionBarSub" style="font-size: 0.82rem; color: rgba(255,255,255,0.85); margin-top: 2px;">
+                Phương thức: VAY HTLS 0% (18 THÁNG) &bull; Kích thước chuẩn 800px HD
+            </div>
+        </div>
+        <button class="btn-download-png" onclick="downloadActivePoster()">
+            <i class="bi bi-download"></i> TẢI ẢNH PNG HD (800PX)
+        </button>
+    </div>
+
+    <!-- KHUNG RENDER CAPTURE CHÍNH (800PX) -->
+    <div id="posterRenderCapture">
+        <!-- NỘI DUNG SẼ ĐƯỢC CẬP NHẬT ĐỘNG THEO COMBO ĐÃ CHỌN -->
+    </div>
+
+    <script>
+        // DATA DICTIONARY CHO CÁC MẪU CĂN VÀ PTTT
+        const UNIT_DATA = {
+            'AS72-24': {
+                badge: 'AS72-24',
+                subdivision: 'Ivy Park (Khu 1) - Giãn Xây',
+                dtDat: '50 m²',
+                dtXd: '157.7 m²',
+                road: 'Ánh Sáng 72 (13m - 19m)',
+                spotlightImg: 'assets/spotlight/spotlight_as72_24.jpg',
+                isGianXay: true,
+                amenities: [
+                    { name: "CV Tri Thức Ivy Park", img: "assets/ivy-park-real.jpg" },
+                    { name: "Vincom Collection", img: "assets/fashion-town.jpg" },
+                    { name: "Phố Little HongKong", img: "assets/little-hongkong/66793e6ddd38e.jpg" },
+                    { name: "Bệnh Viện Vinmec 5★", img: "assets/benh-vien-vinmec/20181207_112946_724325_Vinmec_6.max-1800x1800.jpg" }
+                ],
+                discounts: [
+                    { label: 'Ưu đãi Từ chối Bảo lãnh ngân hàng (0.5%):', val: '19.457.312 VNĐ' },
+                    { label: 'Voucher Aquafield:', val: '20.000.000 VNĐ' }
+                ],
+                totalDiscount: '39.457.312 VNĐ',
+                p_land: '3.872.005.148 VNĐ',
+                vat_land: '338.498.885 VNĐ',
+                total_land: '4.210.504.033 VNĐ',
+                p_const: '1.340.450.000 VNĐ',
+                vat_const: '134.045.000 VNĐ',
+                kpbt: '27.500.633 VNĐ',
+                total_const: '1.501.995.633 VNĐ',
+                totalPrice: '5.712.499.666 VNĐ'
+            },
+            'TL10-22': {
+                badge: 'TL10-22',
+                subdivision: 'Global Park (Khu 2)',
+                dtDat: '50 m²',
+                dtXd: '157.7 m²',
+                road: 'Tương Lai 10 (Lộ giới 13m - 23m)',
+                spotlightImg: 'assets/spotlight/spotlight_tl10_22.jpg',
+                isGianXay: false,
+                amenities: [
+                    { name: "Global Village 24/7", img: "assets/global-village.png" },
+                    { name: "Vincom Mega Mall", img: "assets/vincom-mega-mall/a3.jpg" },
+                    { name: "Phố Little HongKong", img: "assets/little-hongkong/66793e6ddd38e.jpg" },
+                    { name: "CV Thiên Văn Galaxy", img: "assets/galaxy-park.png" }
+                ],
+                discounts: [
+                    { label: 'Ưu đãi Từ chối Bảo lãnh ngân hàng (0.5%):', val: '21.150.000 VNĐ' },
+                    { label: 'Voucher Aquafield:', val: '20.000.000 VNĐ' }
+                ],
+                totalDiscount: '41.150.000 VNĐ',
+                priceBeforeVat: '4.410.000.000 VNĐ',
+                vat: '441.000.000 VNĐ',
+                kpbt: '22.050.000 VNĐ',
+                totalPrice: '4.873.050.000 VNĐ'
+            },
+            'DLCV1-39': {
+                badge: 'ĐLCV1-39',
+                subdivision: 'Global Park (Khu 2)',
+                dtDat: '160 m²',
+                dtXd: '380.5 m²',
+                road: 'Đại Lộ Công Viên 1 (Lộ giới 32m - 40m)',
+                spotlightImg: 'assets/spotlight/spotlight_dlcv1_39.jpg',
+                isGianXay: false,
+                amenities: [
+                    { name: "Global Village 24/7", img: "assets/global-village.png" },
+                    { name: "Vincom Mega Mall", img: "assets/vincom-mega-mall/a3.jpg" },
+                    { name: "Phố Little HongKong", img: "assets/little-hongkong/66793e6ddd38e.jpg" },
+                    { name: "CV Thiên Văn Galaxy", img: "assets/galaxy-park.png" }
+                ],
+                discounts: [
+                    { label: 'Ưu đãi Từ chối Bảo lãnh ngân hàng (0.5%):', val: '68.500.000 VNĐ' },
+                    { label: 'Voucher Aquafield:', val: '20.000.000 VNĐ' }
+                ],
+                totalDiscount: '88.500.000 VNĐ',
+                priceBeforeVat: '13.700.000.000 VNĐ',
+                vat: '1.370.000.000 VNĐ',
+                kpbt: '68.500.000 VNĐ',
+                totalPrice: '15.138.500.000 VNĐ'
+            }
+        };
+
+        let currentUnitKey = 'AS72-24';
+        let currentPTTTKey = 'bank';
+
+        function selectUnit(unitKey) {
+            currentUnitKey = unitKey;
+            document.querySelectorAll('.btn-unit').forEach(b => {
+                b.classList.toggle('active', b.dataset.unit === unitKey);
+            });
+            renderPosterContent();
+        }
+
+        function selectPTTT(ptttKey) {
+            currentPTTTKey = ptttKey;
+            document.querySelectorAll('.btn-pttt').forEach(b => {
+                b.classList.toggle('active', b.dataset.pttt === ptttKey);
+            });
+            renderPosterContent();
+        }
+
+        function renderPosterContent() {
+            const unit = UNIT_DATA[currentUnitKey];
+            const captureEl = document.getElementById('posterRenderCapture');
+            const titleEl = document.getElementById('actionBarTitle');
+            const subEl = document.getElementById('actionBarSub');
+
+            let ptttName = '';
+            if (currentPTTTKey === 'bank') ptttName = 'VAY HTLS 0% (18 THÁNG)';
+            else if (currentPTTTKey === 'normal') ptttName = 'THANH TOÁN TIẾN ĐỘ CHUẨN';
+            else if (currentPTTTKey === 'early') ptttName = 'THANH TOÁN SỚM 100%';
+
+            titleEl.innerHTML = `<i class="bi bi-image me-1"></i> Xuất ảnh PNG cho Bảng thanh toán chi tiết của căn ${unit.badge}`;
+            subEl.innerHTML = `Phương thức: ${ptttName} &bull; Phân khu: ${unit.subdivision}`;
+
+            // 1. HEADER HTML
+            let ptttShort = 'TĐC';
+            if (currentPTTTKey === 'early') ptttShort = 'TTS';
+            else if (currentPTTTKey === 'bank') ptttShort = 'VAY HTLS 0% (18T)';
+
+            const headerHTML = `
+            <div class="poster-header">
+                <div class="brand-logo-wrap">
+                    <img src="logo-vinhomes-saigon-park-gold.jpg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" class="brand-logo-img" alt="Logo Vinhomes Sài Gòn Park">
+                    <div class="brand-crest-icon" style="display: none;"><i class="bi bi-building-fill"></i></div>
+                    <div><div class="brand-text-name">VINHOMES SÀI GÒN PARK</div></div>
+                </div>
+                <div class="metallic-gold-pill-badge">${unit.badge} • ${ptttShort}</div>
+            </div>`;
+
+            // 2. SPOTLIGHT & INFO HTML
+            const amenitiesHTML = unit.amenities.map(a => `
+                <div class="amenity-tile-card">
+                    <img src="${a.img}" onerror="this.onerror=null; this.src='assets/hero-overview.jpg';" class="amenity-tile-img" alt="${a.name}">
+                    <div class="amenity-tile-caption">${a.name}</div>
+                </div>
+            `).join('');
+
+            const spotlightHTML = `
+            <div class="spotlight-visual-block">
+                <div class="spotlight-left-crop">
+                    <img src="${unit.spotlightImg}" onerror="this.onerror=null; this.src='assets/hero-overview.jpg';" class="spotlight-map-img" alt="Vị trí căn ${unit.badge}">
+                </div>
+                <div class="spotlight-right-info">
+                    <div>
+                        <div style="font-size: 0.83rem; line-height: 1.85; color: #ffffff; margin-bottom: 12px; margin-top: 2px;">
+                            <div><span style="color: rgba(255,255,255,0.7);">Phân khu:</span> <strong style="color: #ffffff;">${unit.subdivision}</strong></div>
+                            <div>
+                                <span style="color: rgba(255,255,255,0.7);">DT Đất:</span> <strong style="color: #f8d77f;">${unit.dtDat}</strong>
+                                <span style="color: rgba(255,255,255,0.35); margin: 0 10px;">|</span>
+                                <span style="color: rgba(255,255,255,0.7);">DT Xây Dựng:</span> <strong style="color: #f8d77f;">${unit.dtXd}</strong>
+                            </div>
+                            <div><span style="color: rgba(255,255,255,0.7);">Mặt tiền đường:</span> <strong style="color: #ffffff;">${unit.road}</strong></div>
+                        </div>
+
+                        <div style="font-weight: 800; font-size: 0.8rem; color: #ffffff; margin-bottom: 6px;">Tiện Ích Nổi Bật Lân Cận:</div>
+                        <div class="amenity-tiles-grid">
+                            ${amenitiesHTML}
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+            // 3. CHƯƠNG TRÌNH ƯU ĐÃI
+            const discountsRows = unit.discounts.map(d => `
+                <tr><td style="width: 60%;">${d.label}</td><td style="width: 40%; text-align: right; font-weight: 700;">${d.val}</td></tr>
+            `).join('');
+
+            const discountsHTML = `
+            <div class="unified-block">
+                <div class="unified-block-title"><span><i class="bi bi-gift-fill me-1"></i> CHƯƠNG TRÌNH ƯU ĐÃI</span></div>
+                <table class="data-table-simple">
+                    <tbody>
+                        ${discountsRows}
+                        <tr style="background: rgba(255,255,255,0.06); font-weight: 900;">
+                            <td style="color: #ffffff; font-size: 0.85rem;">TỔNG TIỀN CHIẾT KHẤU TIẾT KIỆM ĐƯỢC:</td>
+                            <td style="text-align: right;" class="gold-sub-val">${unit.totalDiscount}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>`;
+
+            // 4. GIÁ TRỊ SAU ƯU ĐÃI
+            let breakdownRowsHTML = '';
+            if (unit.isGianXay) {
+                breakdownRowsHTML = `
+                <tr><td style="width: 55%; font-weight: 700; color: #f8d77f;">Giá đất (chưa VAT):</td><td style="width: 45%; text-align: right; font-weight: 700;">${unit.p_land}</td></tr>
+                <tr><td style="padding-left: 18px; color: rgba(255,255,255,0.85);">Thuế VAT Tiền Đất (10%):</td><td style="text-align: right; color: rgba(255,255,255,0.85);">${unit.vat_land}</td></tr>
+                <tr style="background: rgba(248, 215, 127, 0.08); font-weight: 800;"><td style="color: #ffffff;">Tổng Tiền Đất (gồm VAT):</td><td style="text-align: right; color: #f8d77f;">${unit.total_land}</td></tr>
+                <tr><td style="font-weight: 700; color: #f8d77f; padding-top: 8px;">Giá xây dựng (chưa VAT):</td><td style="text-align: right; font-weight: 700; padding-top: 8px;">${unit.p_const}</td></tr>
+                <tr><td style="padding-left: 18px; color: rgba(255,255,255,0.85);">Thuế VAT Xây Dựng (10%):</td><td style="text-align: right; color: rgba(255,255,255,0.85);">${unit.vat_const}</td></tr>
+                <tr><td style="padding-left: 18px; color: rgba(255,255,255,0.85);">Kinh phí bảo trì (KPBT 0.5%):</td><td style="text-align: right; color: rgba(255,255,255,0.85);">${unit.kpbt}</td></tr>
+                <tr style="background: rgba(248, 215, 127, 0.08); font-weight: 800;"><td style="color: #ffffff;">Tổng Tiền Xây Dựng &amp; KPBT:</td><td style="text-align: right; color: #f8d77f;">${unit.total_const}</td></tr>`;
+            } else {
+                breakdownRowsHTML = `
+                <tr><td style="width: 55%; font-weight: 700; color: #f8d77f;">Giá HĐMB (chưa VAT):</td><td style="width: 45%; text-align: right; font-weight: 700;">${unit.priceBeforeVat}</td></tr>
+                <tr><td style="padding-left: 18px; color: rgba(255,255,255,0.85);">Thuế VAT (10%):</td><td style="text-align: right; color: rgba(255,255,255,0.85);">${unit.vat}</td></tr>
+                <tr><td style="padding-left: 18px; color: rgba(255,255,255,0.85);">Kinh phí bảo trì (KPBT 0.5%):</td><td style="text-align: right; color: rgba(255,255,255,0.85);">${unit.kpbt}</td></tr>`;
+            }
+
+            const breakdownHTML = `
+            <div class="unified-block">
+                <div class="unified-block-title"><span><i class="bi bi-pie-chart-fill me-1"></i> GIÁ TRỊ SAU ƯU ĐÃI</span></div>
+                <table class="data-table-simple">
+                    <tbody>
+                        ${breakdownRowsHTML}
+                        <tr style="background: rgba(255,255,255,0.08); font-weight: 900; border-top: 1.5px solid rgba(248, 215, 127, 0.3);">
+                            <td style="color: #ffffff; font-size: 0.85rem; padding-top: 8px; padding-bottom: 8px;">TỔNG GIÁ GỒM VAT (Gồm VAT+KPBT):</td>
+                            <td style="text-align: right; padding-top: 8px; padding-bottom: 8px;" class="gold-total-val">${unit.totalPrice}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>`;
+
+            // 5. BẢNG THANH TOÁN CHI TIẾT DÀNH CHO PTTT ĐÃ CHỌN
+            let scheduleHTML = '';
+            if (currentPTTTKey === 'bank') {
+                if (unit.isGianXay) {
+                    scheduleHTML = renderBankGianXaySchedule(unit);
+                } else {
+                    scheduleHTML = renderBankThoSchedule(unit);
+                }
+            } else if (currentPTTTKey === 'normal') {
+                scheduleHTML = renderNormalSchedule(unit);
+            } else if (currentPTTTKey === 'early') {
+                scheduleHTML = renderEarlySchedule(unit);
+            }
+
+            // 6. FOOTER HTML
+            const footerHTML = `
+            <div class="poster-footer">
+                <div>
+                    <div style="font-weight: 800; color: #ffffff;">Vinhomes Sài Gòn Park – Đại đô thị tri thức bậc nhất TPHCM</div>
+                    <div style="font-size: 0.72rem; color: rgba(255, 255, 255, 0.75);">Bảng thanh toán được minh họa theo CSBH mới nhất của CĐT Vingroup.</div>
+                </div>
+                <div style="text-align: right; display: flex; align-items: center; gap: 12px;">
+                    <div>
+                        <div style="font-size: 0.7rem; color: rgba(255, 255, 255, 0.75); text-transform: uppercase;">Chuyên Viên Tư Vấn</div>
+                        <div style="font-weight: 800; color: #ffffff;">Nguyễn Văn A</div>
+                    </div>
+                    <div class="sale-contact-badge"><i class="bi bi-telephone-fill me-1"></i> 0901 234 567</div>
+                </div>
+            </div>`;
+
+            captureEl.innerHTML = headerHTML + spotlightHTML + discountsHTML + breakdownHTML + scheduleHTML + footerHTML;
+        }
+
+        // RENDER BẢNG THANH TOÁN: VAY HTLS 0% (GIÃN XÂY - AS72-24) - CỘT SỐ TIỀN VNĐ TRƯỚC CỘT NH GIẢI NGÂN (KHÔNG MÀU NỀN XANH DÒNG VAY)
+        function renderBankGianXaySchedule(unit) {
+            return `
+            <div class="unified-block">
+                <div class="unified-block-title"><span><i class="bi bi-calendar-check-fill me-1"></i> BẢNG THANH TOÁN CHI TIẾT - VAY HTLS 0% (18 THÁNG)</span></div>
+                
+                <div style="margin-bottom: 18px;">
+                    <div class="sched-section-label land">
+                        <span>THANH TOÁN TIỀN ĐẤT</span>
+                        <span class="total-hint">Tổng Tiền Đất (gồm VAT): ${unit.total_land}</span>
+                    </div>
+                    <table class="table-schedule-full">
+                        <thead>
+                            <tr>
+                                <th style="width: 18%;">Đợt Thanh Toán</th>
+                                <th style="width: 15%; text-align: center;">Hạn Nộp</th>
+                                <th style="width: 25%;">TỶ LỆ THANH TOÁN</th>
+                                <th style="width: 21%; text-align: right;" class="amt">Số Tiền (VNĐ)</th>
+                                <th style="width: 21%; text-align: right;" class="amt">NH Giải Ngân</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Đợt 1</strong> (Đặt cọc)</td><td style="text-align: center;">Ký TTĐC</td><td>Đặt cọc Đất Lần 1</td><td class="amt" style="font-weight: 800;">300.000.000</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td rowspan="2" style="vertical-align: middle;"><strong>Đợt 2</strong> (Ký HĐMB Đất)</td><td rowspan="2" style="text-align: center; vertical-align: middle;">15 ngày sau cọc</td><td>10% Tiền Đất (gồm VAT)<br><span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Đã trừ 300Tr cọc)</span></td><td class="amt" style="font-weight: 800;">121.050.403</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td>5% Tiền Đất (chưa VAT)<br><span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(TTĐC - CĐT trả lãi 9.5%/năm)</span></td><td class="amt" style="font-weight: 800;">193.600.257</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr>
+                                <td rowspan="2" style="vertical-align: middle;"><strong>Đợt 3</strong> (Thanh toán lần 2)</td><td rowspan="2" style="text-align: center; vertical-align: middle;">30 ngày sau cọc</td><td>15% Vốn tự có Tiền Đất (gồm VAT)</td><td class="amt" style="font-weight: 800;">631.575.605</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#f8d77f;">70% NH Giải Ngân Tiền Đất (gồm VAT)</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td><td class="amt" style="font-weight: 800;">2.947.352.823</td>
+                            </tr>
+                            <tr><td><strong>Đợt 4</strong> (Bàn giao Đất)</td><td style="text-align: center;">Dự kiến Q2/2027</td><td>VAT 5% Tiền Đất<br><span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Cấn trừ 5% TTĐC Đợt 2)</span></td><td class="amt" style="font-weight: 800;">16.924.944</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <div class="sched-section-label con">
+                        <span>THANH TOÁN TIỀN XÂY DỰNG (BẮT ĐẦU TỪ T+540 NGÀY)</span>
+                        <span class="total-hint">Tổng Tiền Xây + KPBT: ${unit.total_const}</span>
+                    </div>
+                    <table class="table-schedule-full">
+                        <thead>
+                            <tr>
+                                <th style="width: 18%;">Đợt Thanh Toán</th>
+                                <th style="width: 15%; text-align: center;">Hạn Nộp</th>
+                                <th style="width: 25%;">TỶ LỆ THANH TOÁN</th>
+                                <th style="width: 21%; text-align: right;" class="amt">Số Tiền (VNĐ)</th>
+                                <th style="width: 21%; text-align: right;" class="amt">NH Giải Ngân</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td rowspan="2" style="vertical-align: middle;"><strong>Đợt 5</strong> (Bắt đầu Xây)</td><td rowspan="2" style="text-align: center; vertical-align: middle;">T+540 ngày sau cọc</td><td>15% Tiền Xây Dựng (gồm VAT)</td><td class="amt" style="font-weight: 800;">221.174.250</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td>5% Tiền Xây Dựng (chưa VAT)<br><span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(TTĐC Xây - CĐT trả lãi 9.5%/năm)</span></td><td class="amt" style="font-weight: 800;">67.022.500</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td><strong>Đợt 6</strong> (T+555)</td><td style="text-align: center;">T+555 ngày</td><td>10% Tiền Xây Dựng (gồm VAT)</td><td class="amt" style="font-weight: 800;">147.449.500</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td><strong>Đợt 7</strong> (T+600)</td><td style="text-align: center;">T+600 ngày</td><td>15% Tiền Xây Dựng (gồm VAT)</td><td class="amt" style="font-weight: 800;">221.174.250</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td><strong>Đợt 8</strong> (T+660)</td><td style="text-align: center;">T+660 ngày</td><td>15% Tiền Xây Dựng (gồm VAT)</td><td class="amt" style="font-weight: 800;">221.174.250</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td><strong>Đợt 9</strong> (T+720)</td><td style="text-align: center;">T+720 ngày</td><td>15% Tiền Xây Dựng (gồm VAT)</td><td class="amt" style="font-weight: 800;">221.174.250</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td rowspan="3" style="vertical-align: middle;"><strong>Đợt 10</strong> (Nhận Nhà)</td><td rowspan="3" style="text-align: center; vertical-align: middle;">Bàn giao Q4/2028</td><td>25% Tiền Xây Dựng (gồm VAT)</td><td class="amt" style="font-weight: 800;">368.623.750</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td>VAT 5% Tiền Xây Dựng<br><span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Cấn trừ 5% TTĐC Xây)</span></td><td class="amt" style="font-weight: 800;">6.702.250</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td>100% KPBT (0.5%)</td><td class="amt" style="font-weight: 800;">27.500.633</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                            <tr><td><strong>Đợt 11</strong> (Cấp Sổ)</td><td style="text-align: center;">Nhận Sổ Hồng</td><td>Đã hoàn tất từ 5% TTĐC Xây</td><td class="amt" style="font-weight: 800;">0</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-weight: 900; color: #ffffff; font-size: 0.85rem;">TỔNG SỐ TIỀN KH THỰC TRẢ:</div>
+                    <div class="gold-total-val" style="font-size: 1.1rem;">2.765.146.842 VNĐ</div>
+                </div>
+            </div>`;
+        }
+
+        // RENDER BẢNG THANH TOÁN: VAY HTLS 0% (THÔ / HOÀN THIỆN - TL10-22 & ĐLCV1-39)
+        function renderBankThoSchedule(unit) {
+            let d2Tra = '275.722.725', d2Ttdc = '263.905.858';
+            let d3Vtc = '863.584.087', d3Bank = '4.030.059.073';
+            let d4Vat = '23.955.504', d4Kpbt = '29.528.011';
+            let totalKh = '1.756.696.185 VNĐ';
+
+            if (unit.badge === 'ĐLCV1-39') {
+                d2Tra = '1.570.146.974'; d2Ttdc = '855.025.518';
+                d3Vtc = '2.805.220.460'; d3Bank = '13.091.028.817';
+                d4Vat = '80.047.969'; d4Kpbt = '100.709.944';
+                totalKh = '5.711.150.862 VNĐ';
+            }
+
+            return `
+            <div class="unified-block">
+                <div class="unified-block-title"><span><i class="bi bi-calendar-check-fill me-1"></i> BẢNG THANH TOÁN CHI TIẾT - VAY HTLS 0% (18 THÁNG)</span></div>
+                <table class="table-schedule-full">
+                    <thead>
+                        <tr>
+                            <th style="width: 18%;">Đợt Thanh Toán</th>
+                            <th style="width: 15%; text-align: center;">Hạn Nộp</th>
+                            <th style="width: 25%;">TỶ LỆ THANH TOÁN</th>
+                            <th style="width: 21%; text-align: right;" class="amt">Số Tiền (VNĐ)</th>
+                            <th style="width: 21%; text-align: right;" class="amt">NH Giải Ngân</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Đợt 1</strong> (Đặt cọc)</td><td style="text-align: center;">Ký TTĐC</td><td>Đặt cọc Lần 1</td><td class="amt" style="font-weight: 800;">300.000.000</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                        <tr><td rowspan="2" style="vertical-align: middle;"><strong>Đợt 2</strong> (Ký HĐMB)</td><td rowspan="2" style="text-align: center; vertical-align: middle;">15 ngày sau cọc</td><td>10% Giá HĐMB (gồm VAT)<br><span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Đã trừ 300Tr cọc)</span></td><td class="amt" style="font-weight: 800;">${d2Tra}</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                        <tr><td>5% Giá HĐMB (chưa VAT)<br><span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(TTĐC - Hưởng lãi 9.5%/năm)</span></td><td class="amt" style="font-weight: 800;">${d2Ttdc}</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                        <tr>
+                            <td rowspan="2" style="vertical-align: middle;"><strong>Đợt 3</strong> (NH Giải ngân)</td><td rowspan="2" style="text-align: center; vertical-align: middle;">30 ngày sau cọc</td><td>15% Vốn tự có Giá HĐMB (gồm VAT)</td><td class="amt" style="font-weight: 800;">${d3Vtc}</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#f8d77f;">70% NH Giải Ngân HTLS 0% (gồm VAT)</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td><td class="amt" style="font-weight: 800;">${d3Bank}</td>
+                        </tr>
+                        <tr><td rowspan="2" style="vertical-align: middle;"><strong>Đợt 4</strong> (Bàn giao nhà)</td><td rowspan="2" style="text-align: center; vertical-align: middle;">Dự kiến Q4/2026</td><td>VAT 5% Giá HĐMB<br><span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Cấn trừ 5% TTĐC Đợt 2)</span></td><td class="amt" style="font-weight: 800;">${d4Vat}</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                        <tr><td>100% KPBT (0.5%)</td><td class="amt" style="font-weight: 800;">${d4Kpbt}</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                        <tr><td><strong>Đợt 5</strong> (Cấp Sổ)</td><td style="text-align: center;">Nhận Sổ Hồng</td><td>Đã hoàn tất từ 5% TTĐC</td><td class="amt" style="font-weight: 800;">0</td><td class="amt" style="color: rgba(255,255,255,0.4);">—</td></tr>
+                    </tbody>
+                </table>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-weight: 900; color: #ffffff; font-size: 0.85rem;">TỔNG SỐ TIỀN KH THỰC TRẢ:</div>
+                    <div class="gold-total-val" style="font-size: 1.1rem;">${totalKh}</div>
+                </div>
+            </div>`;
+        }
+
+        // RENDER BẢNG THANH TOÁN: TIẾN ĐỘ CHUẨN (TĐC) - THÔ / HOÀN THIỆN CHUẨN CĐT
+        function renderNormalSchedule(unit) {
+            let d2Goc = '275.722.725', d2Ttdc = '263.905.858';
+            let d3 = '863.584.087', d4 = '863.584.087', d5 = '863.584.087', d6 = '863.584.087';
+            let d7Goc = '1.439.306.812', d7Vat = '23.955.504', d7Kpbt = '29.528.011';
+            let totalKh = '5.786.755.258 VNĐ';
+
+            if (unit.badge === 'ĐLCV1-39') {
+                d2Goc = '1.570.146.974'; d2Ttdc = '855.025.518';
+                d3 = '2.805.220.460'; d4 = '2.805.220.460'; d5 = '2.805.220.460'; d6 = '2.805.220.460';
+                d7Goc = '4.675.367.434'; d7Vat = '80.047.969'; d7Kpbt = '100.709.944';
+                totalKh = '18.802.179.679 VNĐ';
+            }
+
+            return `
+            <div class="unified-block">
+                <div class="unified-block-title"><span><i class="bi bi-calendar-check-fill me-1"></i> BẢNG THANH TOÁN CHI TIẾT - THANH TOÁN TIẾN ĐỘ CHUẨN</span></div>
+                <table class="table-schedule-full">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Đợt Thanh Toán</th>
+                            <th style="width: 18%; text-align: center;">Hạn Nộp</th>
+                            <th style="width: 37%;">TỶ LỆ THANH TOÁN</th>
+                            <th style="width: 25%; text-align: right;" class="amt">Số Tiền (VNĐ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Đợt 1</strong> (Đặt cọc)</td><td style="text-align: center;">Ký TTĐC</td><td>Đặt cọc Lần 1</td><td class="amt" style="font-weight: 800;">300.000.000</td></tr>
+                        <tr><td rowspan="2" style="vertical-align: middle;"><strong>Đợt 2</strong> (Ký HĐMB)</td><td rowspan="2" style="text-align: center; vertical-align: middle;">15 ngày sau cọc</td><td>10% Giá HĐMB (gồm VAT) <span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Đã trừ 300Tr cọc)</span></td><td class="amt" style="font-weight: 800;">${d2Goc}</td></tr>
+                        <tr><td>5% Giá HĐMB (chưa VAT) <span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(TTĐC - Hưởng lãi 9.5%/năm)</span></td><td class="amt" style="font-weight: 800;">${d2Ttdc}</td></tr>
+                        <tr><td><strong>Đợt 3</strong> (Thanh toán lần 2)</td><td style="text-align: center;">Đợt 2 + 15 ngày</td><td>15% Giá HĐMB (gồm VAT)</td><td class="amt" style="font-weight: 800;">${d3}</td></tr>
+                        <tr><td><strong>Đợt 4</strong> (Thanh toán lần 3)</td><td style="text-align: center;">Đợt 2 + 60 ngày</td><td>15% Giá HĐMB (gồm VAT)</td><td class="amt" style="font-weight: 800;">${d4}</td></tr>
+                        <tr><td><strong>Đợt 5</strong> (Thanh toán lần 4)</td><td style="text-align: center;">Đợt 2 + 120 ngày</td><td>15% Giá HĐMB (gồm VAT)</td><td class="amt" style="font-weight: 800;">${d5}</td></tr>
+                        <tr><td><strong>Đợt 6</strong> (Thanh toán lần 5)</td><td style="text-align: center;">Đợt 2 + 180 ngày</td><td>15% Giá HĐMB (gồm VAT)</td><td class="amt" style="font-weight: 800;">${d6}</td></tr>
+                        <tr><td rowspan="3" style="vertical-align: middle;"><strong>Đợt 7</strong> (Bàn giao nhà)</td><td rowspan="3" style="text-align: center; vertical-align: middle;">Dự kiến Q4/2026</td><td>25% Giá HĐMB (gồm VAT)</td><td class="amt" style="font-weight: 800;">${d7Goc}</td></tr>
+                        <tr><td>VAT 5% Giá HĐMB <span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Cấn trừ 5% TTĐC Đợt 2)</span></td><td class="amt" style="font-weight: 800;">${d7Vat}</td></tr>
+                        <tr><td>100% KPBT (0.5%)</td><td class="amt" style="font-weight: 800;">${d7Kpbt}</td></tr>
+                        <tr><td><strong>Đợt 8</strong> (Cấp Sổ)</td><td style="text-align: center;">Nhận Sổ Hồng</td><td>Đã hoàn tất từ 5% TTĐC</td><td class="amt" style="font-weight: 800;">0</td></tr>
+                    </tbody>
+                </table>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-weight: 900; color: #ffffff; font-size: 0.85rem;">TỔNG SỐ TIỀN KH THỰC TRẢ:</div>
+                    <div class="gold-total-val" style="font-size: 1.1rem;">${totalKh}</div>
+                </div>
+            </div>`;
+        }
+
+        // RENDER BẢNG THANH TOÁN: THANH TOÁN SỚM 100% (TTS) - THÔ / HOÀN THIỆN CHUẨN CĐT
+        function renderEarlySchedule(unit) {
+            let d2Goc = '223.469.365', d2Ttdc = '240.154.331';
+            let d3Tts = '4.449.489.601';
+            let d4Vat = '21.580.352', d4Kpbt = '29.528.011';
+            let totalKh = '5.264.221.659 VNĐ';
+
+            if (unit.badge === 'ĐLCV1-39') {
+                d2Goc = '1.400.851.921'; d2Ttdc = '778.073.221';
+                d3Tts = '14.457.241.329';
+                d4Vat = '72.352.740'; d4Kpbt = '100.709.944';
+                totalKh = '17.109.229.154 VNĐ';
+            }
+
+            return `
+            <div class="unified-block">
+                <div class="unified-block-title"><span><i class="bi bi-calendar-check-fill me-1"></i> BẢNG THANH TOÁN CHI TIẾT - THANH TOÁN SỚM 100%</span></div>
+                <table class="table-schedule-full">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Đợt Thanh Toán</th>
+                            <th style="width: 18%; text-align: center;">Hạn Nộp</th>
+                            <th style="width: 37%;">TỶ LỆ THANH TOÁN</th>
+                            <th style="width: 25%; text-align: right;" class="amt">Số Tiền (VNĐ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Đợt 1</strong> (Đặt cọc)</td><td style="text-align: center;">Ký TTĐC</td><td>Đặt cọc Lần 1</td><td class="amt" style="font-weight: 800;">300.000.000</td></tr>
+                        <tr><td rowspan="2" style="vertical-align: middle;"><strong>Đợt 2</strong> (Ký HĐMB)</td><td rowspan="2" style="text-align: center; vertical-align: middle;">15 ngày sau cọc</td><td>10% Giá HĐMB (gồm VAT) <span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Đã trừ 300Tr cọc)</span></td><td class="amt" style="font-weight: 800;">${d2Goc}</td></tr>
+                        <tr><td>5% Giá HĐMB (chưa VAT) <span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(TTĐC - Hưởng lãi 9.5%/năm)</span></td><td class="amt" style="font-weight: 800;">${d2Ttdc}</td></tr>
+                        <tr><td><strong>Đợt 3</strong> (Thanh toán sớm)</td><td style="text-align: center;">Đợt 2 + 15 ngày</td><td>85% Giá HĐMB (gồm VAT) <span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Đã trừ CK TTS 9% &amp; Chiết khấu)</span></td><td class="amt" style="font-weight: 800; color:#ffd166;">${d3Tts}</td></tr>
+                        <tr><td rowspan="2" style="vertical-align: middle;"><strong>Đợt 4</strong> (Bàn giao nhà)</td><td rowspan="2" style="text-align: center; vertical-align: middle;">Dự kiến Q4/2026</td><td>VAT 5% Giá HĐMB <span style="font-size:0.68rem; color:rgba(255,255,255,0.65);">(Cấn trừ 5% TTĐC Đợt 2)</span></td><td class="amt" style="font-weight: 800;">${d4Vat}</td></tr>
+                        <tr><td>100% KPBT (0.5%)</td><td class="amt" style="font-weight: 800;">${d4Kpbt}</td></tr>
+                        <tr><td><strong>Đợt 5</strong> (Cấp Sổ)</td><td style="text-align: center;">Nhận Sổ Hồng</td><td>Đã hoàn tất từ 5% TTĐC</td><td class="amt" style="font-weight: 800;">0</td></tr>
+                    </tbody>
+                </table>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 8px; margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-weight: 900; color: #ffffff; font-size: 0.85rem;">TỔNG SỐ TIỀN KH THỰC TRẢ:</div>
+                    <div class="gold-total-val" style="font-size: 1.1rem;">${totalKh}</div>
+                </div>
+            </div>`;
+        }
+
+        function downloadActivePoster() {
+            const el = document.getElementById('posterRenderCapture');
+            if (!el) return;
+
+            if (typeof html2canvas === 'undefined') {
+                alert('Thư viện html2canvas chưa được tải xong, vui lòng chờ 2 giây!');
+                return;
+            }
+
+            const fileName = `BaoGia_Executive_VinhomesSaigonPark_${currentUnitKey}_${currentPTTTKey.toUpperCase()}.png`;
+
+            html2canvas(el, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#010705',
+                width: 800,
+                windowWidth: 800,
+                imageTimeout: 15000,
+                logging: false
+            }).then(canvas => {
+                if (canvas.toBlob) {
+                    canvas.toBlob(blob => {
+                        if (!blob) return;
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.download = fileName;
+                        link.href = url;
+                        link.click();
+                        setTimeout(() => URL.revokeObjectURL(url), 5000);
+                    }, 'image/png');
+                } else {
+                    const link = document.createElement('a');
+                    link.download = fileName;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }
+            }).catch(err => {
+                alert('Có lỗi khi xuất ảnh PNG: ' + err.message);
+            });
+        }
+
+        // KHỞI TẠO RENDER LẦN ĐẦU
+        renderPosterContent();
+    </script>
+</body>
+</html>

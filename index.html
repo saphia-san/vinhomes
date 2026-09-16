@@ -117,23 +117,28 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .spotlight-toolbar-btns {
             display: inline-flex;
             border-radius: 0.375rem;
         }
+
         .spotlight-toolbar-btns .spotlight-btn {
             border-radius: 0;
             font-size: 0.875rem;
             padding: 0.25rem 0.5rem;
         }
+
         .spotlight-toolbar-btns .spotlight-btn:first-child {
             border-top-left-radius: 0.375rem;
             border-bottom-left-radius: 0.375rem;
         }
+
         .spotlight-toolbar-btns .spotlight-btn:last-child {
             border-top-right-radius: 0.375rem;
             border-bottom-right-radius: 0.375rem;
         }
+
         .spotlight-toolbar-btns .spotlight-btn:not(:first-child) {
             margin-left: -1px;
         }
@@ -320,112 +325,145 @@
             color: #0f172a !important;
         }
 
-        /* Titles & Headings in Light Mode */
-        body.light-theme #finMatcherResultsWrap h5.text-warning {
-            color: #0d2e26 !important;
-            text-shadow: none !important;
+        /* Recommendation Card Header & Borders */
+        .card-recommendation-item .rec-card-header-row {
+            border-bottom: 1px solid rgba(255, 209, 102, 0.25) !important;
         }
 
-        body.light-theme .card-recommendation-item h5.text-warning {
-            color: #0284c7 !important;
-            text-shadow: none !important;
+        /* -------------------------------------------------------------
+           BỘ QUY TẮC 3 MÀU CHUẨN XÁC CHO THẺ GỢI Ý CĂN (REC CARD 3-COLOR SYSTEM)
+           - Màu 1 (Accent Gold): Mã Căn [AS72-24]
+           - Màu 2 (Primary Value): Tất cả số tiền, giá trị, phương thức, tick so sánh
+           - Màu 3 (Muted Label): Tất cả nhãn mô tả bên trái & đơn vị (VNĐ, m², /tháng)
+           ------------------------------------------------------------- */
+
+        /* 1. DARK THEME DEFAULT (Nền Tối) */
+        .card-recommendation-item .rec-unit-code {
+            font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', 'Inter', system-ui, -apple-system, sans-serif !important;
+            font-size: 1.25rem !important;
+            font-weight: 800 !important;
+            color: #ffd166 !important;
+            /* MÀU 1: VÀNG KIM NỔI BẬT */
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(255, 209, 102, 0.4);
+            line-height: 1.1;
         }
 
-        body.light-theme .card-recommendation-item .text-warning {
-            color: #0d9488 !important;
-            text-shadow: none !important;
-        }
-
-        /* Recommendation Card Inner Box Styling (Dark Theme default, Light Theme overrides) */
         .rec-inner-box {
             background: rgba(3, 20, 16, 0.75) !important;
             border: 1px solid rgba(255, 209, 102, 0.28) !important;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
         }
+
         .rec-row-border {
             border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
         }
+
         .rec-divider {
             border-top: 1.5px dashed rgba(255, 209, 102, 0.3) !important;
         }
+
+        /* MÀU 3: NHÃN MÔ TẢ & ĐƠN VỊ (GIAO DIỆN TỐI - XÁM NHẠT) */
         .rec-inner-box .rec-label {
             color: #94a3b8 !important;
         }
+
         .rec-inner-box .rec-unit {
-            color: #64748b !important;
+            color: #94a3b8 !important;
         }
-        .rec-inner-box .rec-val {
+
+        .rec-inner-box .rec-bank-sub {
+            color: #94a3b8 !important;
+        }
+
+        /* MÀU 2: GIÁ TRỊ VĂN BẢN CHÍNH (GIAO DIỆN TỐI - TRẮNG TINH) */
+        .rec-inner-box .rec-val,
+        .rec-inner-box .rec-bank-val,
+        .rec-inner-box .rec-method-val,
+        .rec-inner-box .rec-val-highlight {
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+
+        .card-recommendation-item .rec-cmp-label {
             color: #ffffff !important;
         }
-        .rec-inner-box .rec-bank-val {
-            color: #fde047 !important;
-            font-weight: 600;
-        }
-        .rec-inner-box .rec-bank-sub {
-            color: #cbd5e1 !important;
-        }
-        .rec-inner-box .rec-label-net {
-            color: #e2e8f0 !important;
-        }
-        .rec-inner-box .rec-val-net {
-            color: #4ade80 !important;
-        }
-        .rec-inner-box .rec-method-val {
-            color: #4ade80 !important;
-        }
-        .rec-inner-box .rec-label-capital {
-            color: #e2e8f0 !important;
-        }
-        .rec-inner-box .rec-val-capital {
+
+        /* MÀU 1 (VÀNG NỔI BẬT): DÒNG THỰC TRẢ CĐT VÀ DÒNG VỐN BAN ĐẦU CẦN CÓ (GIAO DIỆN TỐI) */
+        .rec-inner-box .rec-label-net,
+        .rec-inner-box .rec-val-net,
+        .rec-inner-box .rec-label-capital,
+        .rec-inner-box .rec-val-capital,
+        .rec-inner-box .rec-unit-gold {
             color: #ffd166 !important;
+            font-weight: 700;
         }
-        .rec-inner-box .rec-val-highlight {
-            color: #38bdf8 !important;
+
+        /* 2. LIGHT THEME OVERRIDES (GIAO DIỆN SÁNG) */
+        body.light-theme .card-recommendation-item {
+            background: #ffffff !important;
+            border: 1.5px solid #e2e8f0 !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important;
+        }
+
+        body.light-theme .card-recommendation-item .rec-card-header-row {
+            border-bottom: 1px solid #e2e8f0 !important;
+        }
+
+        /* MÀU XANH LÁ TƯƠI SÁNG: MÃ CĂN (GIAO DIỆN SÁNG) */
+        body.light-theme .card-recommendation-item .rec-unit-code {
+            color: #15803d !important;
+            text-shadow: none !important;
         }
 
         body.light-theme .rec-inner-box {
-            background: #ffffff !important;
+            background: #f8fafc !important;
             border: 1px solid #e2e8f0 !important;
             box-shadow: none !important;
         }
+
         body.light-theme .rec-row-border {
             border-top: 1px solid #f1f5f9 !important;
         }
+
         body.light-theme .rec-divider {
-            border-top: 2px solid #f1f5f9 !important;
+            border-top: 1.5px dashed #cbd5e1 !important;
         }
+
+        /* MÀU 3: NHÃN MÔ TẢ & ĐƠN VỊ (GIAO DIỆN SÁNG - XÁM TRUNG TÍNH) */
         body.light-theme .rec-inner-box .rec-label {
             color: #64748b !important;
         }
+
         body.light-theme .rec-inner-box .rec-unit {
-            color: #94a3b8 !important;
+            color: #64748b !important;
         }
-        body.light-theme .rec-inner-box .rec-val {
-            color: #1e293b !important;
-        }
-        body.light-theme .rec-inner-box .rec-bank-val {
-            color: #1e293b !important;
-        }
+
         body.light-theme .rec-inner-box .rec-bank-sub {
             color: #64748b !important;
         }
-        body.light-theme .rec-inner-box .rec-label-net {
-            color: #374151 !important;
-        }
-        body.light-theme .rec-inner-box .rec-val-net {
-            color: #0f766e !important;
-        }
-        body.light-theme .rec-inner-box .rec-method-val {
-            color: #15803d !important;
-        }
-        body.light-theme .rec-inner-box .rec-label-capital {
-            color: #374151 !important;
-        }
-        body.light-theme .rec-inner-box .rec-val-capital {
-            color: #0f766e !important;
-        }
+
+        /* MÀU 2: GIÁ TRỊ VĂN BẢN CHÍNH (GIAO DIỆN SÁNG - ĐEN ĐÁ MẮT ĐỌC RÕ RÀNG) */
+        body.light-theme .rec-inner-box .rec-val,
+        body.light-theme .rec-inner-box .rec-bank-val,
+        body.light-theme .rec-inner-box .rec-method-val,
         body.light-theme .rec-inner-box .rec-val-highlight {
-            color: #0f766e !important;
+            color: #0f172a !important;
+            font-weight: 700;
+        }
+
+        body.light-theme .card-recommendation-item .rec-cmp-label {
+            color: #0f172a !important;
+        }
+
+        /* MÀU XANH LÁ TƯƠI SÁNG: DÒNG THỰC TRẢ CĐT VÀ DÒNG VỐN BAN ĐẦU CẦN CÓ (GIAO DIỆN SÁNG) */
+        body.light-theme .rec-inner-box .rec-label-net,
+        body.light-theme .rec-inner-box .rec-val-net,
+        body.light-theme .rec-inner-box .rec-label-capital,
+        body.light-theme .rec-inner-box .rec-val-capital,
+        body.light-theme .rec-inner-box .rec-unit-gold {
+            color: #15803d !important;
+            font-weight: 800;
         }
 
         /* Type Badge Styling (Dark Theme & Light Theme) */
@@ -609,11 +647,13 @@
             background: #07201a !important;
             transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
+
         .amenity-tile-card:hover {
             transform: translateY(-2px) scale(1.02);
             border-color: #ffd166 !important;
             box-shadow: 0 4px 14px rgba(255, 209, 102, 0.35) !important;
         }
+
         .amenity-tile-img {
             object-fit: cover !important;
             width: 100% !important;
@@ -621,6 +661,7 @@
             border: none !important;
             transition: transform 0.35s ease;
         }
+
         .amenity-tile-card:hover .amenity-tile-img {
             transform: scale(1.08);
         }
@@ -630,6 +671,7 @@
         .swal2-container {
             z-index: 999999 !important;
         }
+
         .swal2-container.swal-amenity-lightbox-container .swal2-title,
         .swal2-container .swal2-title {
             color: #ffd166 !important;
@@ -644,7 +686,7 @@
         body.light-theme .unit-spotlight-preview-box {
             background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
             border: 1.5px solid #cbd5e1 !important;
-            box-shadow: 0 8px 24px rgba(13, 92, 70, 0.06), 0 2px 6px rgba(0,0,0,0.03) !important;
+            box-shadow: 0 8px 24px rgba(13, 92, 70, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03) !important;
             border-radius: 16px !important;
             padding: 20px 22px !important;
         }
@@ -1135,6 +1177,7 @@
             color: #0f172a !important;
             font-weight: 700;
         }
+
         body.dark-theme .matrix-val-default {
             color: #f8fafc !important;
             font-weight: 700;
@@ -1144,6 +1187,7 @@
             color: #059669 !important;
             font-weight: 800;
         }
+
         body.dark-theme .matrix-val-better {
             color: #34d399 !important;
             font-weight: 800;
@@ -1153,6 +1197,7 @@
         .matrix-summary-row {
             background: #f0fdf4 !important;
         }
+
         body.dark-theme .matrix-summary-row {
             background: #072b1e !important;
         }
@@ -1161,6 +1206,7 @@
             color: #0f172a !important;
             font-weight: 800;
         }
+
         body.dark-theme .matrix-summary-title {
             color: #ffffff !important;
             font-weight: 800;
@@ -1169,6 +1215,7 @@
         .matrix-sub-text {
             color: #475569 !important;
         }
+
         body.dark-theme .matrix-sub-text {
             color: #cbd5e1 !important;
         }
@@ -1177,13 +1224,15 @@
             color: #059669 !important;
             font-weight: 600;
         }
+
         body.dark-theme .matrix-bank-note {
             color: #34d399 !important;
             font-weight: 600;
         }
 
         /* Empty state icon & highlight text theme adaptive styling (Green in Light theme, Gold in Dark theme) */
-        .empty-state-icon, .section-title-icon {
+        .empty-state-icon,
+        .section-title-icon {
             color: #047857 !important;
         }
 
@@ -1484,12 +1533,13 @@
             color: #ffd166 !important;
             font-size: 1.15rem !important;
             font-weight: 900 !important;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
         }
 
         body.light-theme .result-table tr.row-sec-header-1 {
             background: #fffbeb !important;
         }
+
         body.light-theme .result-table tr.row-sec-header-1 td {
             color: #b45309 !important;
         }
@@ -1497,6 +1547,7 @@
         body.light-theme .result-table tr.row-sec-header-2 {
             background: #ecfdf5 !important;
         }
+
         body.light-theme .result-table tr.row-sec-header-2 td {
             color: #047857 !important;
         }
@@ -1504,6 +1555,7 @@
         body.light-theme .result-table tr.row-sub-highlight-land {
             background: #fef3c7 !important;
         }
+
         body.light-theme .result-table tr.row-sub-highlight-land td {
             color: #92400e !important;
         }
@@ -1511,6 +1563,7 @@
         body.light-theme .result-table tr.row-sub-highlight-const {
             background: #d1fae5 !important;
         }
+
         body.light-theme .result-table tr.row-sub-highlight-const td {
             color: #065f46 !important;
         }
@@ -2632,51 +2685,31 @@
 
         /* Highlighted Row for Đợt 1 (Đặt cọc) */
         .row-stage-deposit {
-            background: linear-gradient(90deg, rgba(245, 158, 11, 0.38) 0%, rgba(255, 209, 102, 0.22) 100%) !important;
+            background: rgba(245, 158, 11, 0.1) !important;
             border: none !important;
             box-shadow: none !important;
         }
 
         .row-stage-deposit td {
             color: #fef08a !important;
-            font-weight: 800 !important;
-            border: none !important;
-            border-top: none !important;
-            border-bottom: none !important;
-            border-left: none !important;
-            border-right: none !important;
-        }
-
-        .row-stage-deposit td:first-child {
-            border-left: none !important;
-            padding-left: 16px !important;
+            font-weight: 700 !important;
         }
 
         body.light-theme .row-stage-deposit {
-            background: #fefce8 !important;
+            background: rgba(245, 158, 11, 0.08) !important;
             border: none !important;
             box-shadow: none !important;
         }
 
         body.light-theme .row-stage-deposit td {
-            color: #92400e !important;
-            font-weight: 800 !important;
-            border: none !important;
-            border-top: none !important;
-            border-bottom: none !important;
-            border-left: none !important;
-            border-right: none !important;
-        }
-
-        body.light-theme .row-stage-deposit td:first-child {
-            border-left: none !important;
-            padding-left: 16px !important;
+            color: #0f172a !important;
+            font-weight: 700 !important;
         }
 
         body.light-theme .row-stage-deposit td.stage-col,
         body.light-theme .row-stage-deposit td.stage-col .badge-stage {
-            color: #78350f !important;
-            font-weight: 900 !important;
+            color: #b45309 !important;
+            font-weight: 800 !important;
         }
 
         body.light-theme .split-stage-header {
@@ -3170,14 +3203,14 @@
                 body.classList.remove('light-theme', 'theme-bloomberg-light', 'light-mode', 'theme-light');
                 body.classList.add('dark-theme');
                 if (btn) {
-                    btn.innerHTML = '<i class="bi bi-sun-fill me-1" style="color:#ffd166;"></i><span class="d-none d-sm-inline ms-1"> Giao Diện Sáng</span>';
+                    btn.innerHTML = '<i class="bi bi-sun-fill me-1" style="color:#ffd166;"></i><span class="d-none d-sm-inline ms-1"> Giao diện sáng</span>';
                     btn.className = 'btn btn-outline-warning rounded-3 px-3 py-2 fw-semibold';
                 }
             } else {
                 body.classList.remove('dark-theme', 'theme-emerald-dark', 'dark-mode', 'theme-dark');
                 body.classList.add('light-theme');
                 if (btn) {
-                    btn.innerHTML = '<i class="bi bi-moon-stars-fill me-1" style="color:#2563eb;"></i><span class="d-none d-sm-inline ms-1"> Giao Diện Tối</span>';
+                    btn.innerHTML = '<i class="bi bi-moon-stars-fill me-1" style="color:#2563eb;"></i><span class="d-none d-sm-inline ms-1"> Giao diện tối</span>';
                     btn.className = 'btn btn-outline-secondary rounded-3 px-3 py-2 fw-semibold';
                 }
             }
@@ -3231,13 +3264,13 @@
                     style="border-color: #cbd5e1; color: #0f172a; background: #ffffff; font-size: 0.88rem; padding:8px 12px;"
                     onclick="toggleTheme()">
                     <i class="bi bi-moon-stars-fill" style="color:#2563eb;"></i>
-                    <span class="d-none d-sm-inline ms-1"> Giao Diện Tối</span>
+                    <span class="d-none d-sm-inline ms-1"> Giao diện tối</span>
                 </button>
                 <button class="btn btn-outline-warning rounded-3 fw-semibold"
                     style="border-color: rgba(212, 175, 55, 0.5); color: #b8860b; padding:8px 12px;"
                     onclick="showHistoryModal()">
                     <i class="bi bi-clock-history"></i>
-                    <span class="d-none d-sm-inline ms-1"> Lịch Sử Báo Giá</span>
+                    <span class="d-none d-sm-inline ms-1"> Lịch sử báo giá</span>
                 </button>
             </div>
         </div>
@@ -3247,27 +3280,27 @@
             <ul class="nav nav-tabs nav-tabs-custom border-0 m-0 justify-content-center flex-wrap gap-1" id="mainTab">
                 <li class="nav-item">
                     <button class="nav-link active fw-bold" id="tab-overview-btn" onclick="showTab('overview')">
-                        <i class="bi bi-globe-americas me-1"></i> Tổng Quan Dự Án
+                        <i class="bi bi-globe-americas me-1"></i> Tổng quan dự án
                     </button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link fw-bold" id="tab-input-btn" onclick="showTab('input')">
-                        <i class="bi bi-sliders me-1"></i> Nhập Thông Tin Tính Giá
+                        <i class="bi bi-sliders me-1"></i> Tra cứu &amp; báo giá
                     </button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link fw-bold" id="tab-result-btn" onclick="showTab('result')">
-                        <i class="bi bi-table me-1"></i> Kết Quả &amp; So Sánh
+                        <i class="bi bi-table me-1"></i> Kết quả &amp; so sánh
                     </button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link fw-bold" id="tab-loan-btn" onclick="showTab('loan')">
-                        <i class="bi bi-bank me-1"></i> Lịch Vay Ngân Hàng
+                        <i class="bi bi-bank me-1"></i> Lịch vay ngân hàng
                     </button>
                 </li>
                 <li class="nav-item">
                     <button class="nav-link fw-bold" id="tab-compare2-btn" onclick="showTab('compare2')">
-                        <i class="bi bi-layout-split me-1"></i> So Sánh Căn
+                        <i class="bi bi-layout-split me-1"></i> So sánh căn
                     </button>
                 </li>
             </ul>
@@ -3329,19 +3362,19 @@
             <div class="d-flex align-items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-thin"
                 style="white-space: nowrap;">
                 <a href="#sec-tong-quan" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
-                        class="bi bi-buildings-fill me-1"></i>Giới Thiệu Dự Án</a>
+                        class="bi bi-buildings-fill me-1"></i>Giới thiệu dự án</a>
                 <a href="#sec-vi-tri" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
-                        class="bi bi-geo-alt me-1"></i>Vị Trí &amp; CĐT Vingroup</a>
+                        class="bi bi-geo-alt me-1"></i>Vị trí &amp; CĐT Vingroup</a>
                 <a href="#sec-tien-do" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
-                        class="bi bi-hammer me-1"></i>Tiến Độ Thực Tế</a>
+                        class="bi bi-hammer me-1"></i>Tiến độ thực tế</a>
                 <a href="#sec-tien-ich" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
-                        class="bi bi-stars me-1"></i>Tiện Ích Nổi Bật</a>
+                        class="bi bi-stars me-1"></i>Tiện ích nổi bật</a>
                 <a href="#sec-tien-ich-thuc-te" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
-                        class="bi bi-patch-check-fill me-1"></i>Tiện Ích Thực Tế</a>
+                        class="bi bi-patch-check-fill me-1"></i>Tiện ích thực tế</a>
                 <a href="#sec-hero" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
-                        class="bi bi-diagram-3-fill me-1"></i>Layout &amp; Mặt Bằng</a>
+                        class="bi bi-diagram-3-fill me-1"></i>Mặt bằng &amp; Layout</a>
                 <a href="#sec-tieu-chuan" class="btn btn-sm fw-bold rounded-pill quick-nav-btn"><i
-                        class="bi bi-clipboard-check me-1"></i>Tiêu Chuẩn Bàn Giao</a>
+                        class="bi bi-clipboard-check me-1"></i>Tiêu chuẩn bàn giao</a>
             </div>
 
             <!-- KHỐI 1: GIỚI THIỆU DỰ ÁN (HERO TOP 50/50) -->
@@ -3352,7 +3385,8 @@
                             <i class="bi bi-buildings-fill me-2" style="color:#10b981;"></i>GIỚI THIỆU DỰ ÁN
                         </h3>
                         <div class="sub-text" style="font-size:0.95rem;">
-                            Khám phá toàn cảnh Vinhomes Sài Gòn Park – đại đô thị đáng sống bậc nhất vừa chính thức lộ diện, mang đến không gian sống xanh chuẩn quốc tế và cơ hội đầu tư sinh lời đầy triển vọng.
+                            Khám phá toàn cảnh Vinhomes Sài Gòn Park – đại đô thị đáng sống bậc nhất vừa chính thức lộ
+                            diện, mang đến không gian sống xanh chuẩn quốc tế và cơ hội đầu tư sinh lời đầy triển vọng.
                         </div>
                     </div>
                 </div>
@@ -3361,19 +3395,26 @@
                 <div class="row g-4 mb-4 align-items-stretch">
                     <!-- Bên Trái: Video 1 Flycam toàn cảnh -->
                     <div class="col-lg-6">
-                        <div class="card border-0 shadow-lg rounded-4 overflow-hidden h-100" style="background:transparent; border: none !important;">
-                            <div id="yt-player-box-1" class="position-relative overflow-hidden cursor-pointer h-100" onclick="playYoutubeEmbedded(this, 'jdP5wAHQEDU')">
+                        <div class="card border-0 shadow-lg rounded-4 overflow-hidden h-100"
+                            style="background:transparent; border: none !important;">
+                            <div id="yt-player-box-1" class="position-relative overflow-hidden cursor-pointer h-100"
+                                onclick="playYoutubeEmbedded(this, 'jdP5wAHQEDU')">
                                 <div class="ratio ratio-16x9 h-100">
-                                    <img src="https://i.ytimg.com/vi/jdP5wAHQEDU/maxresdefault.jpg" decoding="async" alt="Video Dự Án" style="object-fit:cover; width:100%; height:100%;" loading="lazy" decoding="async">
+                                    <img src="https://i.ytimg.com/vi/jdP5wAHQEDU/maxresdefault.jpg" decoding="async"
+                                        alt="Video Dự Án" style="object-fit:cover; width:100%; height:100%;"
+                                        loading="lazy" decoding="async">
                                 </div>
-                                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-3 p-md-4" style="background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);">
+                                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-3 p-md-4"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);">
                                     <div class="text-center my-auto">
-                                        <div class="video-play-btn d-inline-flex align-items-center justify-content-center rounded-circle shadow-lg hover-scale" style="width: 66px; height: 66px; background: rgba(255, 255, 255, 0.92); border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.45); backdrop-filter: blur(10px);">
+                                        <div class="video-play-btn d-inline-flex align-items-center justify-content-center rounded-circle shadow-lg hover-scale"
+                                            style="width: 66px; height: 66px; background: rgba(255, 255, 255, 0.92); border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.45); backdrop-filter: blur(10px);">
                                             <i class="bi bi-play-fill fs-1 ms-1" style="color: #0f172a !important;"></i>
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="fw-bold text-white mb-0" style="font-size:1.15rem; text-shadow:0 2px 8px rgba(0,0,0,0.9);">
+                                        <h4 class="fw-bold text-white mb-0"
+                                            style="font-size:1.15rem; text-shadow:0 2px 8px rgba(0,0,0,0.9);">
                                             Trải Nghiệm Vinhomes Sài Gòn Park
                                         </h4>
                                     </div>
@@ -3384,7 +3425,8 @@
 
                     <!-- Bên Phải: Ảnh phối cảnh nổi bật chính -->
                     <div class="col-lg-6">
-                        <div class="position-relative overflow-hidden rounded-4 shadow-sm border h-100 cursor-pointer hover-lift" style="border-color: rgba(255,209,102,0.35) !important;">
+                        <div class="position-relative overflow-hidden rounded-4 shadow-sm border h-100 cursor-pointer hover-lift"
+                            style="border-color: rgba(255,209,102,0.35) !important;">
                             <img src="assets/tong-quan-du-an/1787973009633_59065042594565031_4258139849654498913_2c1a6e420b0aaec1778530a081a48081.jpg"
                                 loading="eager" fetchpriority="high" decoding="async"
                                 class="img-fluid w-100 h-100 rounded-4"
@@ -3550,13 +3592,14 @@
                         <div>
                             <h3 class="fw-bold mb-1"
                                 style="font-size:1.6rem; font-family:'Be Vietnam Pro', sans-serif; text-transform: uppercase;">
-                                <i class="bi bi-geo-alt-fill me-2" style="color:#ffd166;"></i>Vị Trí Đắc Địa &amp; Liên Kết Giao Thông Chiến Lược
+                                <i class="bi bi-geo-alt-fill me-2" style="color:#ffd166;"></i>Vị Trí Đắc Địa &amp; Liên
+                                Kết Giao Thông Chiến Lược
                             </h3>
                             <div class="sub-text" style="font-size:0.95rem;">
                                 Tâm điểm kết nối Tây Bắc TP.HCM &amp; các tuyến đường huyết mạch liên vùng
                             </div>
                         </div>
-                        
+
                     </div>
 
                     <!-- Khung chứa 2 ảnh nối liền nhau -->
@@ -3592,7 +3635,8 @@
                     <div>
                         <h3 class="fw-bold mb-1"
                             style="font-size:1.6rem; font-family:'Be Vietnam Pro', sans-serif; text-transform: uppercase;">
-                            <i class="bi bi-hammer me-2" style="color:#10b981;"></i>TIẾN ĐỘ THỰC TẾ DỰ ÁN VINHOMES SÀI GÒN PARK
+                            <i class="bi bi-hammer me-2" style="color:#10b981;"></i>TIẾN ĐỘ THỰC TẾ DỰ ÁN VINHOMES SÀI
+                            GÒN PARK
                         </h3>
                         <div class="sub-text" style="font-size:0.95rem;">
                             Hình ảnh thi công thực tế tại công trường được cập nhật trực tiếp mới nhất
@@ -3611,12 +3655,13 @@
                     style="border-color: rgba(16,185,129,0.35) !important; background:#000;">
                     <img class="img-fluid w-100 rounded-4"
                         src="assets/tien-do-du-an/1788416157232_9061281768864376758_g5094736717488924866_75e1253ed30563f9c56655605682655f.jpg"
-                        loading="lazy" decoding="async" alt="Tiến độ thực tế toàn cảnh công trường Vinhomes Sài Gòn Park"
+                        loading="lazy" decoding="async"
+                        alt="Tiến độ thực tế toàn cảnh công trường Vinhomes Sài Gòn Park"
                         style="width:100%; max-height:560px; object-fit:cover; display:block; transition: all 0.4s ease;"
                         onclick="openGallery(this, 'Tiến Độ Thực Tế Toàn Cảnh Công Trường (Tháng 09/2026)')">
                     <div class="position-absolute bottom-0 start-0 w-100 p-4 text-start"
                         style="background: linear-gradient(to top, rgba(5,20,16,0.92), transparent); pointer-events:none;">
-                        
+
                         <div class="fw-bold text-white keep-text-white fs-5"
                             style="color:#ffffff !important; text-shadow: 0 2px 8px rgba(0,0,0,0.95);">
                             Toàn Cảnh Công Trường Thi Công Thực Tế Vinhomes Sài Gòn Park - Tháng 09/2026
@@ -3692,24 +3737,33 @@
 
                     <!-- Video 2: Trải nghiệm Công viên Botanica Park 27ha -->
                     <div class="mb-4">
-                        <div class="card border-0 shadow-lg rounded-4 overflow-hidden" style="background:transparent; border: none !important;">
-                            <div id="yt-player-box-2" class="position-relative overflow-hidden cursor-pointer" onclick="playYoutubeEmbedded(this, 'sEj6EvJCvNg')">
+                        <div class="card border-0 shadow-lg rounded-4 overflow-hidden"
+                            style="background:transparent; border: none !important;">
+                            <div id="yt-player-box-2" class="position-relative overflow-hidden cursor-pointer"
+                                onclick="playYoutubeEmbedded(this, 'sEj6EvJCvNg')">
                                 <div class="ratio ratio-16x9">
-                                    <img src="assets/botanical-park/1784779400973_1471936595886940955_g4376460951761607370_5393f73c9d7caaf1891140fe77fad982.jpg" decoding="async" alt="Botanica Park Video" style="object-fit:cover; width:100%; height:100%;" loading="lazy" decoding="async">
+                                    <img src="assets/botanical-park/1784779400973_1471936595886940955_g4376460951761607370_5393f73c9d7caaf1891140fe77fad982.jpg"
+                                        decoding="async" alt="Botanica Park Video"
+                                        style="object-fit:cover; width:100%; height:100%;" loading="lazy"
+                                        decoding="async">
                                 </div>
-                                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-3 p-md-4" style="background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);">
+                                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-3 p-md-4"
+                                    style="background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);">
                                     <div class="d-flex align-items-center justify-content-end">
-                                        <span class="badge bg-dark bg-opacity-75 text-white px-2.5 py-1 rounded-pill" style="font-size:0.75rem; border:1px solid rgba(255,255,255,0.25);">
+                                        <span class="badge bg-dark bg-opacity-75 text-white px-2.5 py-1 rounded-pill"
+                                            style="font-size:0.75rem; border:1px solid rgba(255,255,255,0.25);">
                                             <i class="bi bi-tree-fill me-1 text-success"></i> BOTANICA PARK 27HA
                                         </span>
                                     </div>
                                     <div class="text-center my-auto">
-                                        <div class="video-play-btn d-inline-flex align-items-center justify-content-center rounded-circle shadow-lg hover-scale" style="width: 64px; height: 64px; background: rgba(255, 255, 255, 0.92); border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.45); backdrop-filter: blur(10px);">
+                                        <div class="video-play-btn d-inline-flex align-items-center justify-content-center rounded-circle shadow-lg hover-scale"
+                                            style="width: 64px; height: 64px; background: rgba(255, 255, 255, 0.92); border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.45); backdrop-filter: blur(10px);">
                                             <i class="bi bi-play-fill fs-1 ms-1" style="color: #0f172a !important;"></i>
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 class="fw-bold text-white mb-0" style="font-size:1.1rem; text-shadow:0 2px 6px rgba(0,0,0,0.9);">
+                                        <h4 class="fw-bold text-white mb-0"
+                                            style="font-size:1.1rem; text-shadow:0 2px 6px rgba(0,0,0,0.9);">
                                             Botanica Park 27ha - Mỗi Cuối Tuần Của Con Là Một Hành Trình Khám Phá
                                         </h4>
                                     </div>
@@ -3721,7 +3775,8 @@
                     <div class="row g-3 align-items-stretch">
                         <!-- Featured Main Image -->
                         <div class="col-12 col-lg-8 col-xl-8">
-                            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
+                            <div
+                                class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
                                 <img id="sec-tien-ich-botanical-main-img"
                                     src="assets/botanical-park/1784779400953_1471936595886940955_g4376460951761607370_c6c1b76562cb22b646c07fd901b1a613.jpg"
                                     loading="lazy" decoding="async"
@@ -3868,7 +3923,8 @@
                     <div class="row g-3 align-items-stretch">
                         <!-- Featured Main Image -->
                         <div class="col-12 col-lg-8 col-xl-8">
-                            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
+                            <div
+                                class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
                                 <img id="sec-tien-ich-zenpark-main-img"
                                     src="assets/zenpark/1784778947070_1471936595886940955_g4376460951761607370_1f863cc874134bad6a6c21e6fe11f8f9.jpg"
                                     loading="lazy" decoding="async"
@@ -3945,7 +4001,8 @@
                     <div class="row g-3 align-items-stretch">
                         <!-- Featured Main Image -->
                         <div class="col-12 col-lg-8 col-xl-8">
-                            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
+                            <div
+                                class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
                                 <img id="sec-tien-ich-vinwonders-main-img"
                                     src="assets/vinwonders/1784779388727_1471936595886940955_g4376460951761607370_6979f81df46924b70d310c9b46efad66.jpg"
                                     loading="lazy" decoding="async"
@@ -4015,7 +4072,8 @@
                     <div class="row g-3 align-items-stretch">
                         <!-- Featured Main Image -->
                         <div class="col-12 col-lg-8 col-xl-8">
-                            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
+                            <div
+                                class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
                                 <img id="sec-tien-ich-startup-main-img"
                                     src="assets/saigon-startup-village/1784778936025_1471936595886940955_g4376460951761607370_d178e5eca69c5dbd127a0638d61bd7b6.jpg"
                                     loading="lazy" decoding="async"
@@ -4069,10 +4127,12 @@
                         <div>
                             <h3 class="fw-bold mb-1"
                                 style="font-size:1.6rem; font-family:'Be Vietnam Pro', sans-serif; text-transform: uppercase;">
-                                <i class="bi bi-building me-2" style="color:#ffd166;"></i>Tháp Biểu Tượng Vinhomes Sài Gòn Park
+                                <i class="bi bi-building me-2" style="color:#ffd166;"></i>Tháp Biểu Tượng Vinhomes Sài
+                                Gòn Park
                             </h3>
                             <div class="sub-text" style="font-size:0.95rem;">
-                                Ngọn tháp biểu tượng kiêu hãnh - Điểm nhấn kiến trúc cho toàn cảnh quan độc bản của đại đô thị
+                                Ngọn tháp biểu tượng kiêu hãnh - Điểm nhấn kiến trúc cho toàn cảnh quan độc bản của đại
+                                đô thị
                             </div>
                         </div>
 
@@ -4110,7 +4170,8 @@
                         <div class="position-absolute bottom-0 start-0 w-100 p-4 text-start"
                             style="background: linear-gradient(to top, rgba(5,20,16,0.95), transparent); pointer-events:none;">
                             <div class="fw-bold text-white keep-text-white fs-5"
-                                style="color:#ffffff !important; text-shadow: 0 2px 8px rgba(0,0,0,0.95);">Tháp Biểu Tượng
+                                style="color:#ffffff !important; text-shadow: 0 2px 8px rgba(0,0,0,0.95);">Tháp Biểu
+                                Tượng
                                 Đô Thị Tri Thức Vinhomes Sài Gòn Park</div>
                         </div>
                     </div>
@@ -4132,7 +4193,8 @@
                     <div class="row g-3 align-items-stretch">
                         <!-- Featured Main Image -->
                         <div class="col-12 col-lg-8 col-xl-8">
-                            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
+                            <div
+                                class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
                                 <img id="sec-tien-ich-fashion-main-img"
                                     src="assets/trendy-fashion-town/1784778908570_1471936595886940955_g4376460951761607370_c613c81ea174833f279a145506150ae2.jpg"
                                     loading="lazy" decoding="async"
@@ -4202,7 +4264,8 @@
                     <div class="row g-3 align-items-stretch">
                         <!-- Featured Main Image -->
                         <div class="col-12 col-lg-8 col-xl-8">
-                            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
+                            <div
+                                class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
                                 <img id="sec-tien-ich-global-village-main-img"
                                     src="assets/global-village/1779366058506_289378263983988423_g1000134458429698594_c1d438cdf6c1905e9c09775315fc6ff7_1.jpg"
                                     loading="lazy" decoding="async"
@@ -4299,7 +4362,8 @@
                     <div class="row g-3 align-items-stretch">
                         <!-- Featured Main Image -->
                         <div class="col-12 col-lg-8 col-xl-8">
-                            <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
+                            <div
+                                class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg border text-center d-flex align-items-center justify-content-center sec-preview-bg">
                                 <img id="sec-tien-ich-san-golf-main-img"
                                     src="assets/san-golf/TGC_VinPearl Golf CuChi_LIFESTYLE-9026_1758272340.jpg"
                                     loading="lazy" decoding="async"
@@ -4594,7 +4658,8 @@
                     <div>
                         <h3 class="fw-bold mb-1"
                             style="font-size:1.6rem; font-family:'Be Vietnam Pro', sans-serif; text-transform: uppercase;">
-                            <i class="bi bi-patch-check-fill me-2" style="color:#3b82f6;"></i>HỆ SINH THÁI TIỆN ÍCH THỰC TẾ ĐÃ VẬN HÀNH (VINGROUP)
+                            <i class="bi bi-patch-check-fill me-2" style="color:#3b82f6;"></i>HỆ SINH THÁI TIỆN ÍCH THỰC
+                            TẾ ĐÃ VẬN HÀNH (VINGROUP)
                         </h3>
                         <div class="sub-text" style="font-size:0.95rem;">
                             Minh chứng chất lượng dịch vụ đẳng cấp từ các đại đô thị Vinhomes đã bàn giao
@@ -4609,9 +4674,11 @@
                 </div>
 
                 <!-- SUB-SECTION 1: BỆNH VIỆN ĐA KHOA QUỐC TẾ VINMEC & CÂU CHUYỆN KHÁCH HÀNG THỰC TẾ -->
-                <div class="mb-5 p-4 rounded-4" style="background: rgba(59,130,246,0.06); border: 1.5px solid rgba(59,130,246,0.25);">
+                <div class="mb-5 p-4 rounded-4"
+                    style="background: rgba(59,130,246,0.06); border: 1.5px solid rgba(59,130,246,0.25);">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <span class="badge" style="background:#3b82f6; color:#ffffff; font-size:0.92rem; font-weight:800; padding:6px 12px; border-radius:8px;">
+                        <span class="badge"
+                            style="background:#3b82f6; color:#ffffff; font-size:0.92rem; font-weight:800; padding:6px 12px; border-radius:8px;">
                             <i class="bi bi-hospital me-1"></i> Y TẾ QUỐC TẾ VINMEC
                         </span>
                         <h5 class="fw-bold mb-0" style="font-size:1.1rem; color:var(--text-primary);">
@@ -4619,7 +4686,8 @@
                         </h5>
                     </div>
                     <div class="sub-text mb-4" style="font-size:0.88rem;">
-                        Trích từ các bài viết &amp; câu chuyện thực tế được đăng tải trực tiếp trên trang chính chủ Bệnh viện Quốc tế Vinmec, đem lại niềm tin tuyệt đối cho cư dân.
+                        Trích từ các bài viết &amp; câu chuyện thực tế được đăng tải trực tiếp trên trang chính chủ Bệnh
+                        viện Quốc tế Vinmec, đem lại niềm tin tuyệt đối cho cư dân.
                     </div>
 
                     <!-- Grid 4 Bài Báo / Câu Chuyện Thực Tế Nổi Bật -->
@@ -4629,11 +4697,13 @@
                             <div class="card h-100 border-0 shadow-sm rounded-3 hover-lift cursor-pointer overflow-hidden story-card-item"
                                 onclick="openGallery(this.querySelector('img'), 'Vinmec - Vượt Qua Cửa Tử Sau Hành Trình Điều Trị Tại Vinmec Central Park')">
                                 <img src="assets/benh-vien-vinmec/Từng được tiên lượng chỉ còn 2 tháng để sống, nữ Việt kiều Mỹ vượt cửa tử sau hành trình điều trị tại Vinmec Central Park.jpg"
-                                    class="card-img-top" style="aspect-ratio:16/10; object-fit:cover;" loading="lazy" decoding="async">
+                                    class="card-img-top" style="aspect-ratio:16/10; object-fit:cover;" loading="lazy"
+                                    decoding="async">
                                 <div class="card-body p-3">
                                     <div class="badge badge-vinmec-pill mb-2">Câu chuyện kì diệu</div>
                                     <h6 class="fw-bold mb-0" style="font-size:0.84rem; line-height:1.4;">
-                                        Từng tiên lượng 2 tháng để sống, nữ Việt kiều Mỹ vượt cửa tử tại Vinmec Central Park
+                                        Từng tiên lượng 2 tháng để sống, nữ Việt kiều Mỹ vượt cửa tử tại Vinmec Central
+                                        Park
                                     </h6>
                                 </div>
                             </div>
@@ -4644,7 +4714,8 @@
                             <div class="card h-100 border-0 shadow-sm rounded-3 hover-lift cursor-pointer overflow-hidden story-card-item"
                                 onclick="openGallery(this.querySelector('img'), 'Vinmec Times City - Điều Trị Triệt Căn Ung Thư Kép Sau 15 Năm')">
                                 <img src="assets/benh-vien-vinmec/Vinmec Times City điều trị triệt căn ung thư kép sau 15 năm.jpg"
-                                    class="card-img-top" style="aspect-ratio:16/10; object-fit:cover;" loading="lazy" decoding="async">
+                                    class="card-img-top" style="aspect-ratio:16/10; object-fit:cover;" loading="lazy"
+                                    decoding="async">
                                 <div class="card-body p-3">
                                     <div class="badge badge-vinmec-pill mb-2">Thành tựu y học</div>
                                     <h6 class="fw-bold mb-0" style="font-size:0.84rem; line-height:1.4;">
@@ -4659,7 +4730,8 @@
                             <div class="card h-100 border-0 shadow-sm rounded-3 hover-lift cursor-pointer overflow-hidden story-card-item"
                                 onclick="openGallery(this.querySelector('img'), 'Vinmec Hạ Long - Phẫu Thuật Loại Bỏ U Nang Nhầy Tụy 8cm')">
                                 <img src="assets/benh-vien-vinmec/Phẫu thuật nội soi loại bỏ u nang nhầy tụy 8 cm tại Vinmec Hạ Long.jpg"
-                                    class="card-img-top" style="aspect-ratio:16/10; object-fit:cover;" loading="lazy" decoding="async">
+                                    class="card-img-top" style="aspect-ratio:16/10; object-fit:cover;" loading="lazy"
+                                    decoding="async">
                                 <div class="card-body p-3">
                                     <div class="badge badge-vinmec-pill mb-2">Phẫu thuật kĩ thuật cao</div>
                                     <h6 class="fw-bold mb-0" style="font-size:0.84rem; line-height:1.4;">
@@ -4674,7 +4746,8 @@
                             <div class="card h-100 border-0 shadow-sm rounded-3 hover-lift cursor-pointer overflow-hidden story-card-item"
                                 onclick="openGallery(this.querySelector('img'), 'Vinmec - Bảo Tồn Thận Ghép Nhờ Kỹ Thuật Chụp Mạch Khí CO2')">
                                 <img src="assets/benh-vien-vinmec/BẢO TỒN THẬN GHÉP CHO BỆNH NHÂN U70 NHỜ KỸ THUẬT CHỤP MẠCH BẰNG KHÍ CO₂.jfif"
-                                    class="card-img-top" style="aspect-ratio:16/10; object-fit:cover;" loading="lazy" decoding="async">
+                                    class="card-img-top" style="aspect-ratio:16/10; object-fit:cover;" loading="lazy"
+                                    decoding="async">
                                 <div class="card-body p-3">
                                     <div class="badge badge-vinmec-pill mb-2">Công nghệ tiên tiến</div>
                                     <h6 class="fw-bold mb-0" style="font-size:0.84rem; line-height:1.4;">
@@ -4689,26 +4762,34 @@
                     <div class="row row-cols-2 row-cols-md-3 g-3">
                         <div class="col">
                             <img src="assets/benh-vien-vinmec/Phong-kham-dat-chuan-tai-benh-vien-Vinmec-hinh-anh-minh-hoa.jpg"
-                                class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(59,130,246,0.25);"
-                                onclick="openGallery(this, 'Hệ Thống Phòng Khám Đạt Chuẩn JCI Quốc Tế Tại Vinmec')" loading="lazy" decoding="async">
+                                class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(59,130,246,0.25);"
+                                onclick="openGallery(this, 'Hệ Thống Phòng Khám Đạt Chuẩn JCI Quốc Tế Tại Vinmec')"
+                                loading="lazy" decoding="async">
                         </div>
                         <div class="col">
                             <img src="assets/benh-vien-vinmec/20181207_112946_724325_Vinmec_6.max-1800x1800.jpg"
-                                class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(59,130,246,0.25);"
-                                onclick="openGallery(this, 'Cơ Sở Hạ Tầng Bệnh Viện Quốc Tế Vinmec')" loading="lazy" decoding="async">
+                                class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(59,130,246,0.25);"
+                                onclick="openGallery(this, 'Cơ Sở Hạ Tầng Bệnh Viện Quốc Tế Vinmec')" loading="lazy"
+                                decoding="async">
                         </div>
                         <div class="col">
                             <img src="assets/benh-vien-vinmec/avatar1746629741959-1746629743062946522364.webp"
-                                class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(59,130,246,0.25);"
-                                onclick="openGallery(this, 'Đội Ngũ Bác Sĩ Chuyên Khoa Đẳng Cấp Quốc Tế Tại Vinmec')" loading="lazy" decoding="async">
+                                class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(59,130,246,0.25);"
+                                onclick="openGallery(this, 'Đội Ngũ Bác Sĩ Chuyên Khoa Đẳng Cấp Quốc Tế Tại Vinmec')"
+                                loading="lazy" decoding="async">
                         </div>
                     </div>
                 </div>
 
                 <!-- SUB-SECTION 2: HỆ THỐNG GIÁO DỤC CHUẨN QUỐC TẾ VINSCHOOL (TẠI VINHOMES OCEAN PARK 2) -->
-                <div class="mb-5 p-4 rounded-4" style="background: rgba(245,158,11,0.06); border: 1.5px solid rgba(245,158,11,0.25);">
+                <div class="mb-5 p-4 rounded-4"
+                    style="background: rgba(245,158,11,0.06); border: 1.5px solid rgba(245,158,11,0.25);">
                     <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
-                        <span class="badge" style="background:#f59e0b; color:#ffffff; font-size:0.92rem; font-weight:800; padding:6px 12px; border-radius:8px;">
+                        <span class="badge"
+                            style="background:#f59e0b; color:#ffffff; font-size:0.92rem; font-weight:800; padding:6px 12px; border-radius:8px;">
                             <i class="bi bi-mortarboard-fill me-1"></i> GIÁO DỤC VINSCHOOL
                         </span>
                         <h5 class="fw-bold mb-0" style="font-size:1.1rem; color:var(--text-primary);">
@@ -4722,20 +4803,28 @@
                     <div class="row g-4 align-items-stretch">
                         <!-- Bên Trái: Video 3 Vinschool Ocean Park 2 -->
                         <div class="col-lg-6">
-                            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100" style="background:transparent; border: none !important;">
-                                <div id="yt-player-box-3" class="position-relative overflow-hidden cursor-pointer h-100" onclick="playYoutubeEmbedded(this, 'JQLNAINIU1A')">
+                            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100"
+                                style="background:transparent; border: none !important;">
+                                <div id="yt-player-box-3" class="position-relative overflow-hidden cursor-pointer h-100"
+                                    onclick="playYoutubeEmbedded(this, 'JQLNAINIU1A')">
                                     <div class="ratio ratio-16x9 h-100">
-                                        <img src="https://i.ytimg.com/vi/JQLNAINIU1A/maxresdefault.jpg" decoding="async" alt="Vinschool Video" style="object-fit:cover; width:100%; height:100%;" loading="lazy" decoding="async">
+                                        <img src="https://i.ytimg.com/vi/JQLNAINIU1A/maxresdefault.jpg" decoding="async"
+                                            alt="Vinschool Video" style="object-fit:cover; width:100%; height:100%;"
+                                            loading="lazy" decoding="async">
                                     </div>
-                                    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);">
+                                    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-3"
+                                        style="background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);">
                                         <div class="d-flex align-items-center justify-content-end">
-                                            <span class="badge bg-warning text-dark px-2 py-1 rounded-pill" style="font-size:0.75rem; font-weight:700;">
+                                            <span class="badge bg-warning text-dark px-2 py-1 rounded-pill"
+                                                style="font-size:0.75rem; font-weight:700;">
                                                 <i class="bi bi-mortarboard-fill me-1"></i> VINSCHOOL OCEAN PARK 2
                                             </span>
                                         </div>
                                         <div class="text-center my-auto">
-                                            <div class="video-play-btn d-inline-flex align-items-center justify-content-center rounded-circle shadow-lg hover-scale" style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.92); border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.45); backdrop-filter: blur(10px);">
-                                                <i class="bi bi-play-fill fs-1 ms-1" style="color: #0f172a !important;"></i>
+                                            <div class="video-play-btn d-inline-flex align-items-center justify-content-center rounded-circle shadow-lg hover-scale"
+                                                style="width: 60px; height: 60px; background: rgba(255, 255, 255, 0.92); border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.45); backdrop-filter: blur(10px);">
+                                                <i class="bi bi-play-fill fs-1 ms-1"
+                                                    style="color: #0f172a !important;"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -4747,16 +4836,32 @@
                         <div class="col-lg-6">
                             <div class="row row-cols-2 g-2 h-100">
                                 <div class="col">
-                                    <img src="assets/vinschool/vinschool-ocean-park-6.jpg" class="img-fluid w-100 h-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(245,158,11,0.25);" onclick="openGallery(this, 'Trường Liên Cấp Vinschool Ocean Park')" loading="lazy" decoding="async">
+                                    <img src="assets/vinschool/vinschool-ocean-park-6.jpg"
+                                        class="img-fluid w-100 h-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(245,158,11,0.25);"
+                                        onclick="openGallery(this, 'Trường Liên Cấp Vinschool Ocean Park')"
+                                        loading="lazy" decoding="async">
                                 </div>
                                 <div class="col">
-                                    <img src="assets/vinschool/ptlc_t2_2048x1367.jpg" class="img-fluid w-100 h-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(245,158,11,0.25);" onclick="openGallery(this, 'Khuôn Viên Trường Vinschool Hiện Đại')" loading="lazy" decoding="async">
+                                    <img src="assets/vinschool/ptlc_t2_2048x1367.jpg"
+                                        class="img-fluid w-100 h-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(245,158,11,0.25);"
+                                        onclick="openGallery(this, 'Khuôn Viên Trường Vinschool Hiện Đại')"
+                                        loading="lazy" decoding="async">
                                 </div>
                                 <div class="col">
-                                    <img src="assets/vinschool/vhB-ZR0ZpAr4VWO1Qr9ZZbBWrMxIowR5o2HSuwxI2eLn-pzH8eX5pznc1AxFdqwreozU9VpLo3KmaxBubz_D5aug==.jpg" class="img-fluid w-100 h-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(245,158,11,0.25);" onclick="openGallery(this, 'Phòng Học &amp; Cơ Sở Vật Chất Vinschool')" loading="lazy" decoding="async">
+                                    <img src="assets/vinschool/vhB-ZR0ZpAr4VWO1Qr9ZZbBWrMxIowR5o2HSuwxI2eLn-pzH8eX5pznc1AxFdqwreozU9VpLo3KmaxBubz_D5aug==.jpg"
+                                        class="img-fluid w-100 h-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(245,158,11,0.25);"
+                                        onclick="openGallery(this, 'Phòng Học &amp; Cơ Sở Vật Chất Vinschool')"
+                                        loading="lazy" decoding="async">
                                 </div>
                                 <div class="col">
-                                    <img src="assets/vinschool/vhECLEmSEw43z6CW9EAycD_sJDSs-vB6fsBpM0JKVudob8qHDN4d-SNUSp5d7i8nkdZbH8BRtR9vBFTpib0l8kHw==.jpg" class="img-fluid w-100 h-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(245,158,11,0.25);" onclick="openGallery(this, 'Hoạt Động Thể Thao &amp; Ngoại Khóa Vinschool')" loading="lazy" decoding="async">
+                                    <img src="assets/vinschool/vhECLEmSEw43z6CW9EAycD_sJDSs-vB6fsBpM0JKVudob8qHDN4d-SNUSp5d7i8nkdZbH8BRtR9vBFTpib0l8kHw==.jpg"
+                                        class="img-fluid w-100 h-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover; border:1.5px solid rgba(245,158,11,0.25);"
+                                        onclick="openGallery(this, 'Hoạt Động Thể Thao &amp; Ngoại Khóa Vinschool')"
+                                        loading="lazy" decoding="async">
                                 </div>
                             </div>
                         </div>
@@ -4767,36 +4872,74 @@
                 <div class="row g-4">
                     <!-- Vincom Mega Mall -->
                     <div class="col-md-6">
-                        <div class="p-4 rounded-4 h-100" style="background: rgba(16,185,129,0.06); border: 1.5px solid rgba(16,185,129,0.25);">
+                        <div class="p-4 rounded-4 h-100"
+                            style="background: rgba(16,185,129,0.06); border: 1.5px solid rgba(16,185,129,0.25);">
                             <div class="d-flex align-items-center gap-2 mb-3">
-                                <span class="badge" style="background:#10b981; color:#ffffff; font-size:0.92rem; font-weight:800; padding:6px 12px; border-radius:8px;">
+                                <span class="badge"
+                                    style="background:#10b981; color:#ffffff; font-size:0.92rem; font-weight:800; padding:6px 12px; border-radius:8px;">
                                     <i class="bi bi-bag-check-fill me-1"></i> TTTM VINCOM MEGA MALL
                                 </span>
                                 <h5 class="fw-bold mb-0" style="font-size:1rem;">THƯƠNG MẠI &amp; MUA SẮM SẦM UẤT</h5>
                             </div>
                             <div class="row row-cols-2 g-2">
-                                <div class="col"><img src="assets/vincom-mega-mall/Vincom-Mega-Mall-Grand-Park.png" class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover;" onclick="openGallery(this, 'Vincom Mega Mall Grand Park')" loading="lazy" decoding="async"></div>
-                                <div class="col"><img src="assets/vincom-mega-mall/VMM-Thao-Dien.jpg" class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover;" onclick="openGallery(this, 'Vincom Mega Mall Thảo Điền')" loading="lazy" decoding="async"></div>
-                                <div class="col"><img src="assets/vincom-mega-mall/vincom-mega-mall-17.jpg" class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover;" onclick="openGallery(this, 'Không Gian Mua Sắm Nhộn Nhịp Vincom Mega Mall')" loading="lazy" decoding="async"></div>
-                                <div class="col"><img src="assets/vincom-mega-mall/Anh6.jpg" class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover;" onclick="openGallery(this, 'Không Gian Ẩm Thực &amp; Giải Trí Vincom Mega Mall')" loading="lazy" decoding="async"></div>
+                                <div class="col"><img src="assets/vincom-mega-mall/Vincom-Mega-Mall-Grand-Park.png"
+                                        class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover;"
+                                        onclick="openGallery(this, 'Vincom Mega Mall Grand Park')" loading="lazy"
+                                        decoding="async"></div>
+                                <div class="col"><img src="assets/vincom-mega-mall/VMM-Thao-Dien.jpg"
+                                        class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover;"
+                                        onclick="openGallery(this, 'Vincom Mega Mall Thảo Điền')" loading="lazy"
+                                        decoding="async"></div>
+                                <div class="col"><img src="assets/vincom-mega-mall/vincom-mega-mall-17.jpg"
+                                        class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover;"
+                                        onclick="openGallery(this, 'Không Gian Mua Sắm Nhộn Nhịp Vincom Mega Mall')"
+                                        loading="lazy" decoding="async"></div>
+                                <div class="col"><img src="assets/vincom-mega-mall/Anh6.jpg"
+                                        class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover;"
+                                        onclick="openGallery(this, 'Không Gian Ẩm Thực &amp; Giải Trí Vincom Mega Mall')"
+                                        loading="lazy" decoding="async"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Little HongKong -->
                     <div class="col-md-6">
-                        <div class="p-4 rounded-4 h-100" style="background: rgba(236,72,153,0.06); border: 1.5px solid rgba(236,72,153,0.25);">
+                        <div class="p-4 rounded-4 h-100"
+                            style="background: rgba(236,72,153,0.06); border: 1.5px solid rgba(236,72,153,0.25);">
                             <div class="d-flex align-items-center gap-2 mb-3">
-                                <span class="badge" style="background:#ec4899; color:#ffffff; font-size:0.92rem; font-weight:800; padding:6px 12px; border-radius:8px;">
+                                <span class="badge"
+                                    style="background:#ec4899; color:#ffffff; font-size:0.92rem; font-weight:800; padding:6px 12px; border-radius:8px;">
                                     <i class="bi bi-shop me-1"></i> LITTLE HONGKONG
                                 </span>
                                 <h5 class="fw-bold mb-0" style="font-size:1rem;">PHỐ PHỒN HOA KHÔNG NGỦ</h5>
                             </div>
                             <div class="row row-cols-2 g-2">
-                                <div class="col"><img src="assets/little-hongkong/240616-vhm-pr21-ocp2-recap-khai-truong-little-hongkong-a5-1718512772.jpg" class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover;" onclick="openGallery(this, 'Lễ Khai Trương Little HongKong Rực Rỡ')" loading="lazy" decoding="async"></div>
-                                <div class="col"><img src="assets/little-hongkong/240708vhmprvhop2423little-hong-kong-o-phia-dong-ha-noi-co-gi-ma-khien-du-khach-xon-xanga3-17204357046171039471859.webp" class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover;" onclick="openGallery(this, 'Phố Đèn Lồng Phồn Hoa Little HongKong')" loading="lazy" decoding="async"></div>
-                                <div class="col"><img src="assets/little-hongkong/66793e6ddd38e.jpg" class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover;" onclick="openGallery(this, 'Không Gian Vui Chơi Đêm Little HongKong')" loading="lazy" decoding="async"></div>
-                                <div class="col"><img src="assets/little-hongkong/a66666-1081.jpg" class="img-fluid w-100 rounded-3 hover-lift cursor-pointer" style="aspect-ratio:16/10; object-fit:cover;" onclick="openGallery(this, 'Kinh Doanh Sầm Uất Tại Little HongKong')" loading="lazy" decoding="async"></div>
+                                <div class="col"><img
+                                        src="assets/little-hongkong/240616-vhm-pr21-ocp2-recap-khai-truong-little-hongkong-a5-1718512772.jpg"
+                                        class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover;"
+                                        onclick="openGallery(this, 'Lễ Khai Trương Little HongKong Rực Rỡ')"
+                                        loading="lazy" decoding="async"></div>
+                                <div class="col"><img
+                                        src="assets/little-hongkong/240708vhmprvhop2423little-hong-kong-o-phia-dong-ha-noi-co-gi-ma-khien-du-khach-xon-xanga3-17204357046171039471859.webp"
+                                        class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover;"
+                                        onclick="openGallery(this, 'Phố Đèn Lồng Phồn Hoa Little HongKong')"
+                                        loading="lazy" decoding="async"></div>
+                                <div class="col"><img src="assets/little-hongkong/66793e6ddd38e.jpg"
+                                        class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover;"
+                                        onclick="openGallery(this, 'Không Gian Vui Chơi Đêm Little HongKong')"
+                                        loading="lazy" decoding="async"></div>
+                                <div class="col"><img src="assets/little-hongkong/a66666-1081.jpg"
+                                        class="img-fluid w-100 rounded-3 hover-lift cursor-pointer"
+                                        style="aspect-ratio:16/10; object-fit:cover;"
+                                        onclick="openGallery(this, 'Kinh Doanh Sầm Uất Tại Little HongKong')"
+                                        loading="lazy" decoding="async"></div>
                             </div>
                         </div>
                     </div>
@@ -4853,8 +4996,7 @@
                                 loading="lazy" decoding="async"
                                 class="img-fluid w-100 h-100 hover-lift cursor-pointer rounded-4"
                                 style="width: 100%; height: 100%; object-fit: contain; display: block; transition: opacity 0.2s ease, transform 0.3s ease;"
-                                onclick="openGallery(this, 'Ivy Park')"
-                                alt="Ivy Park">
+                                onclick="openGallery(this, 'Ivy Park')" alt="Ivy Park">
                             <div class="position-absolute bottom-0 start-0 w-100 p-3 text-start"
                                 style="background: linear-gradient(to top, rgba(5,20,16,0.95), transparent); pointer-events:none;">
                                 <div id="sec-mat-bang-phan-khu-caption"
@@ -5863,11 +6005,11 @@
                     <button type="button" class="btn btn-sub-tab active px-4 py-2 rounded-pill fw-bold"
                         id="subTabMatcherBtn" onclick="switchSubInputTab('matcher')"
                         style="font-size: 0.92rem; transition: all 0.25s ease;">
-                        Gợi Ý Căn Phù Hợp theo Tài Chính
+                        Gợi ý căn phù hợp theo tài chính
                     </button>
                     <button type="button" class="btn btn-sub-tab px-4 py-2 rounded-pill fw-bold" id="subTabCalcBtn"
                         onclick="switchSubInputTab('calc')" style="font-size: 0.92rem; transition: all 0.25s ease;">
-                        Tính Toán Căn Cụ Thể
+                        Tính toán căn cụ thể
                     </button>
                 </div>
             </div>
@@ -5880,32 +6022,29 @@
                     <div
                         class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2 pb-2 border-bottom border-secondary border-opacity-20">
                         <h4 class="fw-bold mb-0" style="color: #ffd166; font-size: 1.2rem;">
-                            <i class="bi bi-sliders me-2"></i>Gợi Ý Căn Phù Hợp Theo Tài Chính Khách Hàng
+                            <i class="bi bi-sliders me-2"></i>Gợi ý căn phù hợp theo tài chính khách hàng
                         </h4>
-                        <span class="badge bg-warning text-dark fw-bold px-3 py-1.5"
-                            style="border-radius: 20px; font-size: 0.78rem;">
-                            <i class="bi bi-magic me-1"></i> Tự Động Lọc Giỏ Hàng
-                        </span>
                     </div>
-                    <p class="text-muted small mb-2.5 mt-1">Nhập số tiền vốn tự có sẵn có hoặc nhu cầu bàn giao để hệ
-                        thống tự động đề xuất những căn khớp tốt nhất trong giỏ hàng:</p>
+                    <p class="text-muted small mb-2.5 mt-1">Nhập số tiền vốn tự có, dòng tiền hàng tháng hoặc nhu cầu
+                        bàn giao để hệ
+                        thống tự động đề xuất những căn phù hợp nhất trong giỏ hàng:</p>
 
                     <div class="row g-3 mb-3 align-items-start">
-                        <!-- 1. Vốn tự có sẵn có (Thanh trượt Kéo Nút Tròn) -->
+                        <!-- 1. Vốn tự có (Thanh trượt Kéo Nút Tròn) -->
                         <div class="col-12 col-sm-6 col-fin-slider">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label fw-bold fin-form-label small mb-0">Vốn Tự Có Sẵn Có:</label>
+                                <label class="form-label fw-bold fin-form-label small mb-0">Vốn tự có:</label>
                                 <span class="badge fw-bold shadow-sm" id="finBudgetValDisplay"
                                     style="background: linear-gradient(135deg, #ffd166 0%, #f59e0b 100%); color: #04120e !important; font-size: 0.82rem; font-weight: 800; padding: 4px 10px; border-radius: 8px;">3.5
                                     Tỷ VNĐ</span>
                             </div>
-                            <input type="range" class="form-range custom-gold-slider my-1" id="finBudget" min="1300"
+                            <input type="range" class="form-range custom-gold-slider my-1" id="finBudget" min="1900"
                                 max="20000" step="100" value="3500"
                                 oninput="updateFinSliderDisplays(); if(typeof debouncedRunFinancialMatcher==='function') debouncedRunFinancialMatcher(); else runFinancialMatcher();">
                             <div
                                 style="position: relative; width: 100%; font-size: 0.72rem; color: #94a3b8; height: 18px; margin-top: 2px;">
-                                <span style="position: absolute; left: 0%;">1.3 Tỷ</span>
-                                <span style="position: absolute; left: 46.5%; transform: translateX(-50%);">10 Tỷ</span>
+                                <span style="position: absolute; left: 0%;">1.9 Tỷ</span>
+                                <span style="position: absolute; left: 44.8%; transform: translateX(-50%);">10 Tỷ</span>
                                 <span style="position: absolute; right: 0%;">20 Tỷ+</span>
                             </div>
                         </div>
@@ -5913,19 +6052,19 @@
                         <!-- 2. Dòng tiền trả hàng tháng (Thanh trượt Kéo Nút Tròn) -->
                         <div class="col-12 col-sm-6 col-fin-slider">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label fw-bold fin-form-label small mb-0">Dòng Tiền Hàng
-                                    Tháng:</label>
+                                <label class="form-label fw-bold fin-form-label small mb-0">Dòng tiền hàng
+                                    tháng:</label>
                                 <span class="badge fw-bold shadow-sm" id="finCashflowValDisplay"
                                     style="background: linear-gradient(135deg, #ffd166 0%, #f59e0b 100%); color: #04120e !important; font-size: 0.82rem; font-weight: 800; padding: 4px 10px; border-radius: 8px;">50
                                     Triệu/tháng</span>
                             </div>
                             <input type="range" class="form-range custom-gold-slider my-1" id="finMonthlyCashflow"
-                                min="35" max="200" step="5" value="50"
+                                min="46" max="200" step="1" value="50"
                                 oninput="updateFinSliderDisplays(); if(typeof debouncedRunFinancialMatcher==='function') debouncedRunFinancialMatcher(); else runFinancialMatcher();">
                             <div
                                 style="position: relative; width: 100%; font-size: 0.72rem; color: #94a3b8; height: 18px; margin-top: 2px;">
-                                <span style="position: absolute; left: 0%;">35 Tr/tháng</span>
-                                <span style="position: absolute; left: 39.4%; transform: translateX(-50%);">100
+                                <span style="position: absolute; left: 0%;">46 Tr/tháng</span>
+                                <span style="position: absolute; left: 35.1%; transform: translateX(-50%);">100
                                     Tr/tháng</span>
                                 <span style="position: absolute; right: 0%;">200 Tr+</span>
                             </div>
@@ -5934,7 +6073,7 @@
                         <!-- 3. Phương thức thanh toán ưu tiên -->
                         <div class="col-12 col-sm-6 col-fin-select">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label fw-bold fin-form-label small mb-0">Phương Thức Ưu Tiên:</label>
+                                <label class="form-label fw-bold fin-form-label small mb-0">Phương thức ưu tiên:</label>
                             </div>
                             <select class="form-select bg-dark text-white border-warning my-1" id="finMethod"
                                 style="height: 38px;">
@@ -5948,8 +6087,8 @@
                         <!-- 4. Tính chất bàn giao & loại hình -->
                         <div class="col-12 col-sm-6 col-fin-select">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label class="form-label fw-bold fin-form-label small mb-0">Bàn Giao &amp; Loại
-                                    Hình:</label>
+                                <label class="form-label fw-bold fin-form-label small mb-0">Bàn giao &amp; loại
+                                    hình:</label>
                             </div>
                             <select class="form-select bg-dark text-white border-warning my-1" id="finType"
                                 style="height: 38px;">
@@ -5965,7 +6104,7 @@
                     <div class="p-3 mb-3 rounded-3 promo-filter-box"
                         style="background: rgba(255,209,102,0.06); border: 1px dashed rgba(255,209,102,0.35);">
                         <div class="fw-bold mb-3 promo-filter-title" style="font-size: 0.95rem;">
-                            Chương Trình Ưu Đãi &amp; Khuyến Mãi
+                            Chương trình ưu đãi &amp; khuyến mãi
                         </div>
                         <div class="d-flex flex-wrap align-items-center" style="row-gap: 12px; column-gap: 24px;">
                             <div class="form-check m-0">
@@ -5978,8 +6117,8 @@
                             <div class="form-check m-0">
                                 <input class="form-check-input" type="checkbox" id="fin_promo_voucher"
                                     onchange="toggleFinVoucherInput(); runFinancialMatcher();">
-                                <label class="form-check-label fin-check-label small" for="fin_promo_voucher">Voucher Sở
-                                    Hữu Nhà Vinhomes</label>
+                                <label class="form-check-label fin-check-label small" for="fin_promo_voucher">Voucher sở
+                                    hữu nhà Vinhomes</label>
                             </div>
                         </div>
                         <div id="finVoucherInputWrap" class="mt-2 ms-4" style="display:none;">
@@ -6002,9 +6141,10 @@
                     <div id="finMatcherResultsWrap" style="display: none;">
                         <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
                             <h5 class="fw-bold mb-0 text-warning" style="font-size: 1.1rem;">
-                                <i class="bi bi-stars me-1"></i>Căn Đề Xuất Phù Hợp Nhu Cầu
+                                <i class="bi bi-stars me-1"></i>Căn đề xuất phù hợp nhu cầu
                             </h5>
-                            <span class="badge bg-warning text-dark fw-bold px-2.5 py-1 shadow-sm" style="font-size: 0.8rem; border-radius: 8px;">
+                            <span class="badge bg-warning text-dark fw-bold px-2.5 py-1 shadow-sm"
+                                style="font-size: 0.8rem; border-radius: 8px;">
                                 <span id="finMatchCount">0</span> căn
                             </span>
                         </div>
@@ -6022,7 +6162,8 @@
                     <div class="col-12 col-lg-6">
                         <div class="card-custom h-100 mb-0 d-flex flex-column justify-content-between">
                             <div>
-                                <div class="card-title"><i class="bi bi-search me-2"></i>Nhập mã căn hoặc nhập giá thủ công</div>
+                                <div class="card-title"><i class="bi bi-search me-2"></i>Nhập mã căn hoặc nhập giá thủ
+                                    công</div>
 
                                 <!-- Autocomplete search -->
                                 <div class="mb-3 search-wrap">
@@ -6068,7 +6209,7 @@
                                     <label class="form-label">Phương thức thanh toán</label>
                                     <select id="paymentMethod" class="form-select" onchange="toggleBankFields()">
                                         <option value="own-early">Thanh toán sớm (CK 7.5%)</option>
-                                        <option value="own-normal">Vốn tự có – Tiến độ chuẩn</option>
+                                        <option value="own-normal">Tiến độ chuẩn</option>
                                         <option value="bank">Vay ngân hàng (HTLS 0%)</option>
                                     </select>
                                 </div>
@@ -6081,8 +6222,9 @@
                                     <input type="hidden" id="interestRate" value="13">
 
                                     <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
-                                        <div class="fw-bold text-info" id="bankSectionTitle"><i class="bi bi-bank me-1"></i>
-                                            Cấu Hình Gói Vay Ngân Hàng</div>
+                                        <div class="fw-bold text-info" id="bankSectionTitle"><i
+                                                class="bi bi-bank me-1"></i>
+                                            Cấu hình gói vay ngân hàng</div>
                                         <span id="bankSectionBadge" class="badge fw-semibold"
                                             style="background:rgba(59,130,246,0.15); color:#60a5fa; border:1px solid rgba(96,165,250,0.4); font-size:0.75rem;">Vay
                                             70% | Lãi tham khảo 13%/năm</span>
@@ -6092,17 +6234,47 @@
                                         <div class="col-12 col-md-6">
                                             <label class="form-label">Thời hạn vay</label>
                                             <select id="loanTerm" class="form-select form-select-sm">
-                                                <option value="20" selected>20 năm</option>
+                                                <option value="1">1 năm</option>
+                                                <option value="2">2 năm</option>
+                                                <option value="3">3 năm</option>
+                                                <option value="4">4 năm</option>
                                                 <option value="5">5 năm</option>
+                                                <option value="6">6 năm</option>
+                                                <option value="7">7 năm</option>
+                                                <option value="8">8 năm</option>
+                                                <option value="9">9 năm</option>
                                                 <option value="10">10 năm</option>
+                                                <option value="11">11 năm</option>
+                                                <option value="12">12 năm</option>
+                                                <option value="13">13 năm</option>
+                                                <option value="14">14 năm</option>
                                                 <option value="15">15 năm</option>
+                                                <option value="16">16 năm</option>
+                                                <option value="17">17 năm</option>
+                                                <option value="18">18 năm</option>
+                                                <option value="19">19 năm</option>
+                                                <option value="20" selected>20 năm</option>
+                                                <option value="21">21 năm</option>
+                                                <option value="22">22 năm</option>
+                                                <option value="23">23 năm</option>
+                                                <option value="24">24 năm</option>
                                                 <option value="25">25 năm</option>
+                                                <option value="26">26 năm</option>
+                                                <option value="27">27 năm</option>
+                                                <option value="28">28 năm</option>
+                                                <option value="29">29 năm</option>
                                                 <option value="30">30 năm</option>
+                                                <option value="31">31 năm</option>
+                                                <option value="32">32 năm</option>
+                                                <option value="33">33 năm</option>
+                                                <option value="34">34 năm</option>
+                                                <option value="35">35 năm</option>
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label">Gói Hỗ Trợ Lãi Suất CĐT</label>
-                                            <select id="interestSupportPlan" class="form-select form-select-sm"></select>
+                                            <label class="form-label">Gói hỗ trợ lãi suất CĐT</label>
+                                            <select id="interestSupportPlan"
+                                                class="form-select form-select-sm"></select>
                                         </div>
                                     </div>
                                 </div>
@@ -6110,14 +6282,16 @@
                                 <!-- Mục Voucher Vinhomes -->
                                 <div class="mb-3">
                                     <div class="form-check m-0">
-                                        <input class="form-check-input" type="checkbox" id="promo_voucher" onchange="toggleVoucherInput()">
+                                        <input class="form-check-input" type="checkbox" id="promo_voucher"
+                                            onchange="toggleVoucherInput()">
                                         <label class="form-check-label" for="promo_voucher" style="font-size: 0.85rem;">
                                             Áp dụng Voucher Vinhomes (Trừ khi ký HĐMB)
                                         </label>
                                     </div>
                                     <div id="voucherInputWrap" class="mt-2 ms-4" style="display:none;">
                                         <label class="form-label small mb-1 text-muted">Mệnh giá Voucher (VNĐ):</label>
-                                        <input type="text" id="voucherAmount" class="form-control form-control-sm" placeholder="Ví dụ: 300.000.000" oninput="formatNumberInput(this)">
+                                        <input type="text" id="voucherAmount" class="form-control form-control-sm"
+                                            placeholder="Ví dụ: 300.000.000" oninput="formatNumberInput(this)">
                                     </div>
                                 </div>
 
@@ -6135,7 +6309,8 @@
 
                             <!-- Action Submit Button: TÍNH BÁO GIÁ CHI TIẾT -->
                             <div class="mt-3">
-                                <button type="button" class="btn btn-primary-custom w-100 py-3 text-uppercase fw-bold" onclick="calculate()">
+                                <button type="button" class="btn btn-primary-custom w-100 py-3 text-uppercase fw-bold"
+                                    onclick="calculate()">
                                     <i class="bi bi-calculator me-2"></i> TÍNH BÁO GIÁ CHI TIẾT
                                 </button>
                             </div>
@@ -6147,12 +6322,13 @@
                         <div class="card-custom h-100 mb-0 d-flex flex-column justify-content-between">
                             <div>
                                 <div class="card-title d-flex justify-content-between align-items-center mb-3">
-                                    <span><i class="bi bi-geo-alt-fill text-warning me-2"></i>Tra Cứu Vị Trí Căn</span>
+                                    <span><i class="bi bi-geo-alt-fill text-warning me-2"></i>Tra cứu vị trí căn</span>
                                 </div>
 
                                 <!-- Ô Tìm Kiếm Mã Căn Trực Tiếp Trên Card Vị Trí -->
                                 <div class="search-wrap mb-3">
-                                    <label class="form-label small fw-bold mb-1 unit-spotlight-label">Tra cứu vị trí &amp; sơ đồ theo mã căn:</label>
+                                    <label class="form-label small fw-bold mb-1 unit-spotlight-label">Tra cứu vị trí
+                                        &amp; sơ đồ theo mã căn:</label>
                                     <input type="text" id="spotlightSearchInput" class="form-control"
                                         placeholder="Ví dụ: ĐLCV1-39, TL10-53, AS60-42..."
                                         oninput="onSpotlightSearchInput(this.value)"
@@ -6161,26 +6337,38 @@
                                 </div>
 
                                 <!-- Trạng Thái Chưa Chọn Căn (Hiển thị sạch sẽ khi chưa chọn) -->
-                                <div id="spotlightEmptyState" class="p-3 rounded-3 text-center mb-3" style="background: rgba(255, 209, 102, 0.04); border: 1px dashed rgba(255, 209, 102, 0.25);">
-                                    <i class="bi bi-pin-map text-warning mb-2 d-inline-block" style="font-size: 2.2rem;"></i>
-                                    <h6 class="fw-bold mb-1 unit-spotlight-val" style="font-size: 0.95rem;">Chưa Chọn Mã Căn Tra Cứu</h6>
+                                <div id="spotlightEmptyState" class="p-3 rounded-3 text-center mb-3"
+                                    style="background: rgba(255, 209, 102, 0.04); border: 1px dashed rgba(255, 209, 102, 0.25);">
+                                    <i class="bi bi-pin-map text-warning mb-2 d-inline-block"
+                                        style="font-size: 2.2rem;"></i>
+                                    <h6 class="fw-bold mb-1 unit-spotlight-val" style="font-size: 0.95rem;">Chưa chọn mã
+                                        căn tra cứu</h6>
                                     <p class="small mb-0 unit-spotlight-label" style="font-size: 0.83rem;">
-                                        Gõ mã căn vào ô tìm kiếm ở trên để xem phân khu, mặt tiền đường, tiện ích và bản đồ 2D/3D.
+                                        Gõ mã căn vào ô tìm kiếm ở trên để xem phân khu, mặt tiền đường, tiện ích và bản
+                                        đồ 2D/3D.
                                     </p>
                                 </div>
 
                                 <!-- Box Thông Tin Vị Trí Căn Đang Chọn (Hiện khi đã chọn/nhập mã căn) -->
-                                <div id="spotlightUnitInfoBox" class="p-3 rounded-3 mb-3 unit-spotlight-preview-box" style="display: none;">
-                                    <div class="d-flex justify-content-between align-items-center mb-2.5 pb-2 border-bottom border-secondary border-opacity-25 flex-wrap gap-2">
-                                        <span class="small fw-bold unit-spotlight-header-label">VỊ TRÍ CĂN: <strong id="formUnitCode" class="fw-extrabold fs-5 ms-1" style="letter-spacing:0.5px;">--</strong></span>
-                                        <button type="button" class="btn btn-sm btn-warning fw-bold py-1 px-2.5 text-dark shadow-sm d-inline-flex align-items-center" onclick="applySpotlightToCalc()" style="font-size:0.78rem; border-radius:6px;">
+                                <div id="spotlightUnitInfoBox" class="p-3 rounded-3 mb-3 unit-spotlight-preview-box"
+                                    style="display: none;">
+                                    <div
+                                        class="d-flex justify-content-between align-items-center mb-2.5 pb-2 border-bottom border-secondary border-opacity-25 flex-wrap gap-2">
+                                        <span class="small fw-bold unit-spotlight-header-label">VỊ TRÍ CĂN: <strong
+                                                id="formUnitCode" class="fw-extrabold fs-5 ms-1"
+                                                style="letter-spacing:0.5px;">--</strong></span>
+                                        <button type="button"
+                                            class="btn btn-sm btn-warning fw-bold py-1 px-2.5 text-dark shadow-sm d-inline-flex align-items-center"
+                                            onclick="applySpotlightToCalc()"
+                                            style="font-size:0.78rem; border-radius:6px;">
                                             TÍNH GIÁ CĂN NÀY
                                         </button>
                                     </div>
 
                                     <div class="small mt-2.5 mb-1.5">
                                         <strong class="unit-spotlight-label">Phân khu: </strong>
-                                        <span id="formUnitZone" class="fw-bold unit-spotlight-val">Global Park (Khu 2)</span>
+                                        <span id="formUnitZone" class="fw-bold unit-spotlight-val">Global Park (Khu
+                                            2)</span>
                                     </div>
 
                                     <div class="small mb-1">
@@ -6188,13 +6376,17 @@
                                         <span id="formUnitRoad" class="fw-bold unit-spotlight-val">--</span>
                                     </div>
 
-                                    <div id="formUnitAmenities" class="small" style="font-size: 0.83rem; line-height: 1.5;">
+                                    <div id="formUnitAmenities" class="small"
+                                        style="font-size: 0.83rem; line-height: 1.5;">
                                         <!-- Dynamic amenities -->
                                     </div>
                                 </div>
 
                                 <!-- Action Button: Xem Vị Trí Chi Tiết / Spotlight -->
-                                <button type="button" id="btnFormSpotlight" class="btn btn-warning w-100 fw-bold py-2.5 text-dark shadow-sm" onclick="openLocationSpotlightFromInput()" style="border-radius: 12px; font-size: 0.92rem;">
+                                <button type="button" id="btnFormSpotlight"
+                                    class="btn btn-warning w-100 fw-bold py-2.5 text-dark shadow-sm"
+                                    onclick="openLocationSpotlightFromInput()"
+                                    style="border-radius: 12px; font-size: 0.92rem;">
                                     <i class="bi bi-pin-map-fill me-2"></i>Xem vị trí &amp; tiện ích căn
                                 </button>
                             </div>
@@ -6222,8 +6414,8 @@
             <div id="loanContent">
                 <div class="card-custom text-center py-5">
                     <i class="bi bi-bank mb-2 empty-state-icon" style="font-size:3.5rem;"></i>
-                    <h4 class="mt-2 fw-bold card-title-theme">Chưa chọn phương thức Vay Ngân Hàng</h4>
-                    <p class="sub-text mt-2" style="font-size:0.95rem;">Vui lòng chọn phương thức Vay ngân hàng ở Tab 1
+                    <h4 class="mt-2 fw-bold card-title-theme">Chưa chọn phương thức vay ngân hàng</h4>
+                    <p class="sub-text mt-2" style="font-size:0.95rem;">Vui lòng chọn phương thức vay ngân hàng ở Tab 1
                         để hiển thị lịch vay chi tiết.</p>
                 </div>
             </div>
@@ -6235,13 +6427,11 @@
                 <div class="card-title"><i class="bi bi-sliders me-2"></i>Chọn 2 căn để so sánh song song</div>
                 <div class="row g-3 align-items-end">
                     <div class="col-md-5">
-                        <label class="form-label fw-bold cmp-label-title">Căn Thứ 1 (Căn A)</label>
+                        <label class="form-label fw-bold cmp-label-title">Căn thứ 1 (Căn A)</label>
                         <div class="search-wrap mb-2">
-                            <input type="text" id="cmpApt1" class="form-control"
-                                placeholder="Mã căn A (ví dụ: AS72-24)" list="aptDatalist"
-                                oninput="onCmpAptInput(1, this.value)"
-                                onfocus="onCmpAptInput(1, this.value)"
-                                onchange="renderCompare2FullTab()"
+                            <input type="text" id="cmpApt1" class="form-control" placeholder="Mã căn A (ví dụ: AS72-24)"
+                                list="aptDatalist" oninput="onCmpAptInput(1, this.value)"
+                                onfocus="onCmpAptInput(1, this.value)" onchange="renderCompare2FullTab()"
                                 onkeyup="if(event.key==='Enter') renderCompare2FullTab()">
                             <div id="cmpApt1Dropdown" class="search-dropdown"></div>
                         </div>
@@ -6277,18 +6467,17 @@
                             </div>
                             <div id="cmpVoucherWrap1" class="mt-1" style="display:none;">
                                 <input type="text" id="cmpVoucherAmt1" class="form-control form-control-sm"
-                                    placeholder="Mệnh giá Voucher Căn A"
+                                    placeholder="Mệnh giá voucher Căn A"
                                     oninput="formatNumberInput(this); renderCompare2FullTab();">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <label class="form-label fw-bold cmp-label-title">Căn Thứ 2 (Căn B)</label>
+                        <label class="form-label fw-bold cmp-label-title">Căn thứ 2 (Căn B)</label>
                         <div class="search-wrap mb-2">
                             <input type="text" id="cmpApt2" class="form-control"
                                 placeholder="Mã căn B (ví dụ: ĐLCV2-08)" list="aptDatalist"
-                                oninput="onCmpAptInput(2, this.value)"
-                                onfocus="onCmpAptInput(2, this.value)"
+                                oninput="onCmpAptInput(2, this.value)" onfocus="onCmpAptInput(2, this.value)"
                                 onchange="renderCompare2FullTab()"
                                 onkeyup="if(event.key==='Enter') renderCompare2FullTab()">
                             <div id="cmpApt2Dropdown" class="search-dropdown"></div>
@@ -6325,7 +6514,7 @@
                             </div>
                             <div id="cmpVoucherWrap2" class="mt-1" style="display:none;">
                                 <input type="text" id="cmpVoucherAmt2" class="form-control form-control-sm"
-                                    placeholder="Mệnh giá Voucher Căn B"
+                                    placeholder="Mệnh giá voucher Căn B"
                                     oninput="formatNumberInput(this); renderCompare2FullTab();">
                             </div>
                         </div>
@@ -6333,7 +6522,7 @@
                     <div class="col-md-2 d-flex align-items-end">
                         <button class="btn btn-primary-custom w-100 py-3 fw-bold text-uppercase shadow"
                             onclick="renderCompare2FullTab()">
-                            <i class="bi bi-arrow-repeat me-1"></i> So Sánh
+                            <i class="bi bi-arrow-repeat me-1"></i> So sánh
                         </button>
                     </div>
                 </div>
@@ -6352,11 +6541,12 @@
             <div style="font-size: 0.70rem; color: #94a3b8; margin-bottom: 2px;">
                 Mã chính sách áp dụng: <span class="footer-highlight-text"
                     style="color:#ffd166; font-weight:600;">VH_GCS_VSP_TT_CDT_Gian xay_CSBH V09_KH_11092026</span> |
-                <span class="footer-highlight-text"
-                    style="color:#ffd166; font-weight:600;">VH_GCS_VSP_TT CDT_Tho&amp;HT_CSBH V08_KH_11092026</span>
+                <span class="footer-highlight-text" style="color:#ffd166; font-weight:600;">VH_GCS_VSP_TT
+                    CDT_Tho&amp;HT_CSBH V08_KH_11092026</span>
             </div>
             <div style="font-size: 0.70rem; margin-bottom: 4px; line-height: 1.35;">
-                <em>Lưu ý: Mọi số liệu trên hệ thống chỉ mang tính chất tham khảo, không phải là báo giá ràng buộc pháp lý chính thức. Khách hàng vui lòng xác nhận lại với CVKD trước khi ký kết hợp đồng.</em>
+                <em>Lưu ý: Mọi số liệu trên hệ thống chỉ mang tính chất tham khảo, không phải là báo giá ràng buộc pháp
+                    lý chính thức. Khách hàng vui lòng xác nhận lại với CVKD trước khi ký kết hợp đồng.</em>
             </div>
 
             <!-- Contact Info -->
@@ -6408,23 +6598,23 @@
             <button type="button" class="mobile-nav-item active" id="tab-overview-mobile-btn"
                 onclick="showTab('overview')">
                 <i class="bi bi-globe-americas"></i>
-                <span>Tổng Quan</span>
+                <span>Tổng quan</span>
             </button>
             <button type="button" class="mobile-nav-item" id="tab-input-mobile-btn" onclick="showTab('input')">
                 <i class="bi bi-sliders"></i>
-                <span>Tính Giá</span>
+                <span>Tra cứu &amp; báo giá</span>
             </button>
             <button type="button" class="mobile-nav-item" id="tab-result-mobile-btn" onclick="showTab('result')">
                 <i class="bi bi-table"></i>
-                <span>Kết Quả</span>
+                <span>Kết quả</span>
             </button>
             <button type="button" class="mobile-nav-item" id="tab-loan-mobile-btn" onclick="showTab('loan')">
                 <i class="bi bi-bank"></i>
-                <span>Lịch Vay</span>
+                <span>Lịch vay</span>
             </button>
             <button type="button" class="mobile-nav-item" id="tab-compare2-mobile-btn" onclick="showTab('compare2')">
                 <i class="bi bi-layout-split"></i>
-                <span>So Sánh</span>
+                <span>So sánh</span>
             </button>
         </nav>
 
@@ -6547,12 +6737,12 @@
     <script src="gallery_lightbox.js?v=20260829_1358"></script>
     <script src="data.js?v=20260911_POST1009"></script>
     <script src="config.js?v=20260911_CSBH_CLEAN"></script>
-    <script src="calculator.js?v=20260911_EXACT_CSBH_DISCOUNT_BASE"></script>
-    <script src="charts.js?v=20260911_BAR_LABEL_INSIDE_GREEN"></script>
-    <script src="export_card.js?v=20260911_REMOVE_CAN_HO_TERM"></script>
+    <script src="calculator.js?v=20260916_RENAME_BLNH_LABEL"></script>
+    <script src="charts.js?v=20260915_SPLIT_HEADER_2LINES"></script>
+    <script src="export_card.js?v=20260916_REMOVE_REDUNDANT_SALE_INFO_BAR"></script>
     <script src="map_coordinates.js?v=20260904_0914_TL1051_COORD"></script>
-    <script src="ui.js?v=20260911_REMOVE_CMP_AQUAFIELD"></script>
-    <script src="recommendation.js?v=20260911_REMOVE_CAN_HO_TERM"></script>
+    <script src="ui.js?v=20260916_RENAME_PROMO_TITLE_HEADER"></script>
+    <script src="recommendation.js?v=20260915_STICKY_BAR_BTN_SO_SANH"></script>
 
     <script>
         function activatePdfIframe() {

@@ -493,7 +493,7 @@ function renderMethodComparisonChart(canvasId, results) {
                     pointHoverRadius: 8.0
                 },
                 {
-                    label: 'Ngân Hàng Giải Ngân',
+                    label: 'Ngân hàng giải ngân',
                     data: bankPaysData,
                     borderColor: isLight ? '#059669' : '#F59E0B',
                     backgroundColor: isLight ? '#059669' : '#F59E0B',
@@ -507,7 +507,7 @@ function renderMethodComparisonChart(canvasId, results) {
                     pointHoverRadius: 8.0
                 },
                 {
-                    label: 'Tổng Chi Phí Thực Trả',
+                    label: 'Tổng chi phí thực trả',
                     data: totalCostData,
                     borderColor: isLight ? '#043d2c' : '#EAB308',
                     backgroundColor: isLight ? '#043d2c' : '#EAB308',
@@ -892,8 +892,8 @@ function renderRadarComparisonChart(canvasId, res1, res2) {
                     <thead>
                         <tr>
                             <th style="padding:11px 14px; font-size:0.8rem; font-weight:900; text-transform:uppercase; letter-spacing:0.5px; color:${thColor}; background:${thBg}; border-bottom:2px solid ${thBorder}; border-top-left-radius:8px; border-bottom-left-radius:8px;">HẠNG MỤC SO SÁNH</th>
-                            <th style="padding:11px 14px; font-size:0.8rem; font-weight:900; text-transform:uppercase; letter-spacing:0.5px; color:${thValColor}; background:${thBg}; border-bottom:2px solid ${thBorder}; text-align:center;">CĂN A (${codeA})</th>
-                            <th style="padding:11px 14px; font-size:0.8rem; font-weight:900; text-transform:uppercase; letter-spacing:0.5px; color:${thValColor}; background:${thBg}; border-bottom:2px solid ${thBorder}; text-align:center; border-top-right-radius:8px; border-bottom-right-radius:8px;">CĂN B (${codeB})</th>
+                            <th style="padding:11px 14px; font-size:0.8rem; font-weight:900; text-transform:uppercase; letter-spacing:0.5px; color:${thValColor}; background:${thBg}; border-bottom:2px solid ${thBorder}; text-align:center;">CĂN A<br><span style="font-size:0.75rem; font-weight:600; text-transform:none; opacity:0.9;">${codeA}</span></th>
+                            <th style="padding:11px 14px; font-size:0.8rem; font-weight:900; text-transform:uppercase; letter-spacing:0.5px; color:${thValColor}; background:${thBg}; border-bottom:2px solid ${thBorder}; text-align:center; border-top-right-radius:8px; border-bottom-right-radius:8px;">CĂN B<br><span style="font-size:0.75rem; font-weight:600; text-transform:none; opacity:0.9;">${codeB}</span></th>
                         </tr>
                     </thead>
                     <tbody>

@@ -429,7 +429,7 @@ function renderResult(stages, ckDetails, S, comparisonHTML = '') {
     if (paymentMethod === 'own-early') {
         methodDetailText = 'Thanh toán sớm';
     } else if (paymentMethod === 'own-normal') {
-        methodDetailText = 'Vốn tự có – Tiến độ chuẩn';
+        methodDetailText = 'Tiến độ chuẩn';
     } else {
         const plans = (PA && PA.p_const > 0) ? ((SALES_POLICY && SALES_POLICY.interestSupport && SALES_POLICY.interestSupport.roughAndGianXay) || []) : ((SALES_POLICY && SALES_POLICY.interestSupport && SALES_POLICY.interestSupport.finished) || []);
         const plan = (plans && plans.length > 0) ? (plans[S.supportPlanIdx || 0] || plans[0]) : null;
@@ -444,49 +444,62 @@ function renderResult(stages, ckDetails, S, comparisonHTML = '') {
         const isStage1 = (s.no === 1 || (s.label && s.label.toLowerCase().includes('đặt cọc')));
         const rowClass = isStage1 ? 'class="row-stage-deposit"' : (s.voucherApplied > 0 ? 'style="background:rgba(255,209,102,0.06);"' : '');
 
-        let subRowsHtml = '';
         if (s.subItems && s.subItems.length > 0) {
             let remV = s.voucherApplied || 0;
-            subRowsHtml = s.subItems.map((sub, idx) => {
+            return s.subItems.map((sub, idx) => {
                 const subVUse = Math.min(remV, sub.gross);
                 remV -= subVUse;
                 const subNet = Math.max(0, sub.gross - subVUse);
                 const subNetText = fmt(subNet);
 
-                const subNote = (sub.note && sub.note !== '—') ? sub.note : (idx === 1 ? 'CĐT trả lãi 9,5%/năm cho khoản TTĐC đảm bảo HĐMB (từ ngày nhận đủ cọc đến khi có TB nhận GCN, KH cá nhân chịu thuế TNCN)' : '—');
+                const subNote = sub.note || '—';
+                const subRatio = sub.ratioStr || (sub.label.includes('10%') ? '10% gồm VAT' : (sub.label.includes('5%') ? '5% chưa VAT' : (sub.label.includes('15%') ? '15% gồm VAT' : (sub.label.includes('25%') ? '25% gồm VAT' : (sub.label.includes('KPBT') ? '100% KPBT' : (sub.label.includes('VAT 5%') ? '5% VAT' : '—'))))));
 
-                return `
-<tr class="sub-stage-row" style="background:rgba(0,0,0,0.015); font-size:0.85rem;">
-    <td class="stage-col" style="padding-left:28px;"><span style="color:#f59e0b; font-weight:700; margin-right:4px;">└─</span>${sub.label}</td>
-    <td class="date-col text-muted text-center" style="opacity:0.6;">—</td>
-    <td class="net-amount text-end">${subNetText}</td>
-    <td style="font-size:0.78rem; opacity:0.85;">${subNote}</td>
+                const borderStyle = idx < s.subItems.length - 1 ? 'border-bottom: 1px solid rgba(255,255,255,0.06);' : '';
+
+                if (idx === 0) {
+                    return `
+<tr ${rowClass}>
+    <td class="stage-col" rowspan="${s.subItems.length}" style="vertical-align:middle;">Đợt ${s.no}&nbsp;${formatStageDisplay(s)}</td>
+    <td class="date-col text-center" rowspan="${s.subItems.length}" style="vertical-align:middle;">${s.dateLabel || fmtDate(s.date)}</td>
+    <td class="ratio-col text-center" style="font-weight:700; color:#f8d77f; vertical-align:middle; ${borderStyle}">${subRatio}</td>
+    <td class="net-amount text-end" style="vertical-align:middle; ${borderStyle}">${subNetText}</td>
+    <td style="font-size:0.78rem;color:var(--text-muted); vertical-align:middle; ${borderStyle}">${subNote}</td>
 </tr>`;
+                } else {
+                    return `
+<tr ${rowClass}>
+    <td class="ratio-col text-center" style="font-weight:700; color:#f8d77f; vertical-align:middle; ${borderStyle}">${subRatio}</td>
+    <td class="net-amount text-end" style="vertical-align:middle; ${borderStyle}">${subNetText}</td>
+    <td style="font-size:0.78rem;color:var(--text-muted); vertical-align:middle; ${borderStyle}">${subNote}</td>
+</tr>`;
+                }
             }).join('');
         }
 
         const netCashText = fmt(s.net);
         const noteText = s.note || '';
+        const mainRatio = (s.ratioStr && s.ratioStr !== '300 Tr') ? s.ratioStr : '—';
 
         return `
 <tr ${rowClass}>
     <td class="stage-col">Đợt ${s.no}&nbsp;${formatStageDisplay(s)}</td>
     <td class="date-col text-center">${s.dateLabel || fmtDate(s.date)}</td>
+    <td class="ratio-col text-center" style="font-weight:700; color:#f8d77f;">${mainRatio}</td>
     <td class="net-amount text-end">${netCashText}</td>
     <td style="font-size:0.78rem;color:var(--text-muted);">${noteText}</td>
-</tr>
-${subRowsHtml}`;
+</tr>`;
     };
 
     const stageRows = stages.isSplit
         ? `<tr class="split-stage-header" style="background:rgba(52,211,153,0.2); border-left:4px solid #34d399;">
-    <td colspan="4" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
+    <td colspan="5" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
         <i class="bi bi-geo-alt-fill me-2"></i>GIAI ĐOẠN 1: TIẾN ĐỘ THANH TOÁN TIỀN ĐẤT
     </td>
 </tr>
 ${stages.landStages.map(renderSingleRow).join('')}
 <tr class="split-stage-header" style="background:rgba(52,211,153,0.2); border-left:4px solid #34d399;">
-    <td colspan="4" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
+    <td colspan="5" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
         <i class="bi bi-tools me-2"></i>GIAI ĐOẠN 2: TIẾN ĐỘ THANH TOÁN XÂY DỰNG
     </td>
 </tr>
@@ -495,7 +508,7 @@ ${stages.constStages.map(renderSingleRow).join('')}`
 
     const cfRow = cfDiscount > 0 ? `
 <tr style="background:rgba(39,174,96,0.06);">
-    <td colspan="2" style="color:#5dd88a;font-style:italic;">
+    <td colspan="3" style="color:#5dd88a;font-style:italic;">
         <i class="bi bi-lightning-fill me-1"></i>CK dòng tiền 11%/năm <br>
         <span style="font-size:0.75rem;">(Chi tiết sớm: ${cfDetailsStr.join(', ')})</span>
     </td>
@@ -511,14 +524,14 @@ ${stages.constStages.map(renderSingleRow).join('')}`
 
     let html = `
 <tr class="row-subtotal">
-    <td colspan="2" style="color:#7ecfff;font-weight:700;">${subtotalLabel}</td>
+    <td colspan="3" style="color:#7ecfff;font-weight:700;">${subtotalLabel}</td>
     <td class="net-amount text-end">${fmt(totalKHtoCDT)}</td>
     <td style="font-size:0.78rem;color:var(--text-muted);">${subtotalNoteText}</td>
 </tr>`;
 
     const bankRow = loanData ? `
 <tr class="row-bank">
-    <td colspan="2" style="color:#85c1e9;font-weight:700;">
+    <td colspan="3" style="color:#85c1e9;font-weight:700;">
         <i class="bi bi-bank me-1"></i>Tổng trả nợ ngân hàng (gốc + lãi KH chịu)
         <span style="font-size:0.73rem;font-weight:400;color:var(--text-muted);">
             – ${loanData.annualRatePct}%/năm × ${loanData.termYears} năm
@@ -538,7 +551,7 @@ ${stages.constStages.map(renderSingleRow).join('')}`
 
     const grandRow = `
 <tr class="row-grand">
-    <td colspan="2" class="grand-title">
+    <td colspan="3" class="grand-title">
         ${grandLabelText}
     </td>
     <td class="net-amount text-end">
@@ -672,7 +685,7 @@ ${stages.constStages.map(renderSingleRow).join('')}`
         <div>
             <div class="widget-header-line">
                 <div>
-                    <div class="widget-title"><i class="bi bi-bar-chart-line-fill me-2" style="color:inherit;"></i>So Sánh Các Phương Thức Thanh Toán</div>
+                    <div class="widget-title"><i class="bi bi-bar-chart-line-fill me-2" style="color:inherit;"></i>So sánh các phương thức thanh toán</div>
                 </div>
             </div>
 
@@ -787,7 +800,7 @@ ${comparisonHTML || ''}
                 <tr class="row-summary-allin" style="background:linear-gradient(135deg, #0d2e26 0%, #174e40 100%); font-weight:800; border-top:2px solid #ffd166; border-bottom:2px solid #ffd166;">
                     <td style="font-size:0.95rem; font-weight:800; padding-left:10px;">TỔNG GIÁ GỒM VAT &amp; KPBT</td>
                     <td class="text-end">—</td>
-                    <td class="text-end allin-val" style="font-size:1.15rem; font-weight:900;">${fmt(grandTotal)} VNĐ</td>
+                    <td class="text-end allin-val" style="font-size:1.15rem; font-weight:900;">${fmt(PA ? PA.allin : (contractPrice || totalGross))} VNĐ</td>
                 </tr>
             </tbody>
         </table>
@@ -803,10 +816,11 @@ ${comparisonHTML || ''}
         <table class="result-table" style="width:100%;">
             <thead>
                 <tr>
-                    <th style="width:28%; min-width:190px;">Đợt / giai đoạn</th>
-                    <th class="text-center" style="width:16%; min-width:110px;">Ngày</th>
-                    <th class="text-end" style="width:26%; min-width:160px;">Số tiền (VNĐ)</th>
-                    <th style="width:30%; min-width:190px;">Ghi chú</th>
+                    <th style="width:25%; min-width:170px;">Đợt / giai đoạn</th>
+                    <th class="text-center" style="width:13%; min-width:95px;">Ngày</th>
+                    <th class="text-center" style="width:18%; min-width:125px;">Tỷ lệ thanh toán</th>
+                    <th class="text-end" style="width:22%; min-width:145px;">Số tiền (VNĐ)</th>
+                    <th style="width:22%; min-width:165px;">Ghi chú</th>
                 </tr>
             </thead>
             <tbody>
@@ -918,9 +932,9 @@ ${d.supportMonths > 0 ? `
 
             <!-- INTERACTIVE VIEW MODE BUTTONS -->
             <div class="chart-mode-pill-group ms-auto">
-                <button type="button" class="btn-chart-mode active" onclick="switchChartLoanMode('all', this)">Tất Cả</button>
-                <button type="button" class="btn-chart-mode" onclick="switchChartLoanMode('interest', this)">Chỉ Tiền Lãi</button>
-                <button type="button" class="btn-chart-mode" onclick="switchChartLoanMode('principal', this)">Chỉ Dư Nợ</button>
+                <button type="button" class="btn-chart-mode active" onclick="switchChartLoanMode('all', this)">Tất cả</button>
+                <button type="button" class="btn-chart-mode" onclick="switchChartLoanMode('interest', this)">Chỉ tiền lãi</button>
+                <button type="button" class="btn-chart-mode" onclick="switchChartLoanMode('principal', this)">Chỉ dư nợ</button>
             </div>
         </div>
 
@@ -1032,7 +1046,7 @@ function renderCompare2FullTab() {
                 container.innerHTML = `
                 <div class="card-custom text-center py-5">
                     <i class="bi bi-arrow-repeat mb-2 empty-state-icon" style="font-size:3.5rem;"></i>
-                    <h4 class="mt-2 fw-bold card-title-theme">So Sánh 2 Căn Song Song</h4>
+                    <h4 class="mt-2 fw-bold card-title-theme">So sánh 2 căn song song</h4>
                     <p class="sub-text mt-2" style="font-size:0.95rem;">Vui lòng nhập <strong>Mã Căn 1 (Căn A)</strong> và <strong>Mã Căn 2 (Căn B)</strong> ở trên, sau đó bấm nút <strong class="empty-state-highlight">"So Sánh"</strong></p>
                 </div>`;
             }
@@ -1224,12 +1238,12 @@ function renderCompare2FullTab() {
                 </div>
                 
                 <div class="mb-4">
-                    <div class="sec-heading-theme" style="font-weight:700; font-size:0.9rem; margin-bottom:8px;"><i class="bi bi-tag-fill me-1"></i>CHI TIẾT CHIẾT KHẤU &amp; QUÀ TẶNG</div>
+                    <div class="sec-heading-theme" style="font-weight:700; font-size:0.9rem; margin-bottom:8px;"><i class="bi bi-tag-fill me-1"></i>CHI TIẾT CHƯƠNG TRÌNH ƯU ĐÃI</div>
                     <div style="overflow-x:auto;">
                         <table class="result-table" style="font-size:0.78rem; width:100%; table-layout:fixed;">
                             <thead>
                                 <tr>
-                                    <th style="width:40%; text-align:left; padding:10px 6px;">Hạng mục chiết khấu</th>
+                                    <th style="width:40%; text-align:left; padding:10px 6px;">Hạng mục</th>
                                     <th style="width:15%; text-align:right; padding:10px 4px;">% CK</th>
                                     <th style="width:25%; text-align:right; padding:10px 4px;">Giá trị quy đổi</th>
                                     <th style="width:20%; text-align:center; padding:10px 4px;">Loại ưu đãi</th>
@@ -1282,6 +1296,8 @@ function renderCompare2FullTab() {
 
         let code1 = `${rawCode1} (${tag1})`;
         let code2 = `${rawCode2} (${tag2})`;
+
+        window.lastCompareMeta = { rawCode1, rawCode2, tag1, tag2 };
 
         if (res1 && res1.S) res1.S.displayName = code1;
         if (res2 && res2.S) res2.S.displayName = code2;
@@ -1388,12 +1404,12 @@ function renderCompare2FullTab() {
                 }
 
                 const cellA = s1 ? `
-                    <div class="${classA}" style="font-size:0.92rem;">${fmt(info1.selfCash)} VNĐ</div>
+                    <div class="${classA}" style="font-size:0.92rem; white-space:nowrap;">${fmt(info1.selfCash)} VNĐ</div>
                     ${info1.bankAmt > 0 ? `<div class="matrix-bank-note" style="font-size:0.73rem; margin-top:2px;">(KH trả)</div>` : ''}
                 ` : '—';
 
                 const cellB = s2 ? `
-                    <div class="${classB}" style="font-size:0.92rem;">${fmt(info2.selfCash)} VNĐ</div>
+                    <div class="${classB}" style="font-size:0.92rem; white-space:nowrap;">${fmt(info2.selfCash)} VNĐ</div>
                     ${info2.bankAmt > 0 ? `<div class="matrix-bank-note" style="font-size:0.73rem; margin-top:2px;">(KH trả)</div>` : ''}
                 ` : '—';
 
@@ -1443,7 +1459,7 @@ function renderCompare2FullTab() {
             <div class="card-custom mb-4" style="border: none !important;">
                 <div class="mb-3">
                     <h5 class="fw-bold mb-1 card-title-theme" style="font-size:1.1rem;">
-                        <i class="bi bi-calendar-range-fill me-2 section-title-icon"></i>MA TRẬN DÒNG TIỀN THANH TOÁN SONG SONG (${c1} vs ${c2})
+                        <i class="bi bi-calendar-range-fill me-2 section-title-icon"></i>DÒNG TIỀN THANH TOÁN SONG SONG (${c1} vs ${c2})
                     </h5>
                     <div class="sub-text" style="font-size:0.82rem;">Đối chiếu từng đợt thanh toán giữa 2 phương án</div>
                 </div>
@@ -1451,11 +1467,11 @@ function renderCompare2FullTab() {
                     <table class="result-table" style="font-size:0.85rem;">
                         <thead>
                             <tr>
-                                <th style="min-width:180px;">Đợt thanh toán</th>
-                                <th class="text-center" style="min-width:110px;">Mốc ngày</th>
-                                <th class="text-end matrix-header-a" style="min-width:155px;">Căn A (${c1})</th>
-                                <th class="text-end matrix-header-b" style="min-width:155px;">Căn B (${c2})</th>
-                                <th class="text-center" style="min-width:190px;">Chênh lệch đợt (VTC)</th>
+                                <th style="min-width:140px;">Đợt thanh toán</th>
+                                <th class="text-center" style="min-width:95px; white-space:nowrap;">Mốc ngày</th>
+                                <th class="text-end matrix-header-a" style="min-width:195px; white-space:nowrap;">CĂN A<br><span style="font-size:0.78rem; font-weight:600; opacity:0.9;">${c1}</span></th>
+                                <th class="text-end matrix-header-b" style="min-width:195px; white-space:nowrap;">CĂN B<br><span style="font-size:0.78rem; font-weight:600; opacity:0.9;">${c2}</span></th>
+                                <th class="text-center" style="min-width:160px;">Chênh lệch đợt (VTC)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1467,27 +1483,27 @@ function renderCompare2FullTab() {
                                     TỔNG VỐN TỰ CÓ KH CẦN BỎ RA
                                     <div class="matrix-sub-text" style="font-size:0.75rem; font-weight:400;">(Chưa tính phần Ngân hàng giải ngân)</div>
                                 </td>
-                                <td class="text-end ${selfClass1}" style="font-size:1.08rem; font-weight:${selfWeight1}; vertical-align:middle; ${selfGlow1}">${fmt(totalSelf1)} VNĐ</td>
-                                <td class="text-end ${selfClass2}" style="font-size:1.08rem; font-weight:${selfWeight2}; vertical-align:middle; ${selfGlow2}">${fmt(totalSelf2)} VNĐ</td>
+                                <td class="text-end ${selfClass1}" style="font-size:1.05rem; font-weight:${selfWeight1}; vertical-align:middle; white-space:nowrap; ${selfGlow1}">${fmt(totalSelf1)} VNĐ</td>
+                                <td class="text-end ${selfClass2}" style="font-size:1.05rem; font-weight:${selfWeight2}; vertical-align:middle; white-space:nowrap; ${selfGlow2}">${fmt(totalSelf2)} VNĐ</td>
                                 <td class="text-center" style="font-size:0.88rem; vertical-align:middle;">${selfBadge}</td>
                             </tr>
                             <!-- Hàng 2: Tổng giá trị tài sản (Net) -->
                             <tr class="matrix-summary-row" style="border-top:1px solid rgba(16,185,129,0.3);">
                                 <td colspan="2" class="matrix-summary-title" style="font-size:0.9rem; vertical-align:middle;">
-                                    TỔNG GIÁ TRỊ TÀI SẢN (TỔNG GIÁ NET)
+                                    TỔNG GIÁ TRỊ TÀI SẢN
                                     <div class="matrix-sub-text" style="font-size:0.75rem; font-weight:400;">(Gồm Vốn tự có + Ngân hàng giải ngân)</div>
                                 </td>
-                                <td class="text-end ${priceClass1}" style="font-size:1.08rem; font-weight:${priceWeight1}; vertical-align:middle; ${priceGlow1}">${fmt(price1)} VNĐ</td>
-                                <td class="text-end ${priceClass2}" style="font-size:1.08rem; font-weight:${priceWeight2}; vertical-align:middle; ${priceGlow2}">${fmt(price2)} VNĐ</td>
+                                <td class="text-end ${priceClass1}" style="font-size:1.05rem; font-weight:${priceWeight1}; vertical-align:middle; white-space:nowrap; ${priceGlow1}">${fmt(price1)} VNĐ</td>
+                                <td class="text-end ${priceClass2}" style="font-size:1.05rem; font-weight:${priceWeight2}; vertical-align:middle; white-space:nowrap; ${priceGlow2}">${fmt(price2)} VNĐ</td>
                                 <td class="text-center" style="font-size:0.88rem; vertical-align:middle;">${priceBadge}</td>
                             </tr>` : `
                             <!-- Hàng duy nhất: Tổng giá trị tài sản (Net) khi không có phương án vay -->
                             <tr class="matrix-summary-row" style="border-top:2px solid #10b981;">
                                 <td colspan="2" class="matrix-summary-title" style="font-size:0.9rem; vertical-align:middle;">
-                                    TỔNG GIÁ TRỊ TÀI SẢN (TỔNG GIÁ NET)
+                                    TỔNG GIÁ TRỊ TÀI SẢN
                                 </td>
-                                <td class="text-end ${priceClass1}" style="font-size:1.08rem; font-weight:${priceWeight1}; vertical-align:middle; ${priceGlow1}">${fmt(price1)} VNĐ</td>
-                                <td class="text-end ${priceClass2}" style="font-size:1.08rem; font-weight:${priceWeight2}; vertical-align:middle; ${priceGlow2}">${fmt(price2)} VNĐ</td>
+                                <td class="text-end ${priceClass1}" style="font-size:1.05rem; font-weight:${priceWeight1}; vertical-align:middle; white-space:nowrap; ${priceGlow1}">${fmt(price1)} VNĐ</td>
+                                <td class="text-end ${priceClass2}" style="font-size:1.05rem; font-weight:${priceWeight2}; vertical-align:middle; white-space:nowrap; ${priceGlow2}">${fmt(price2)} VNĐ</td>
                                 <td class="text-center" style="font-size:0.88rem; vertical-align:middle;">${priceBadge}</td>
                             </tr>`}
                         </tbody>
@@ -1767,7 +1783,7 @@ function showHistoryModal() {
     if (typeof Swal !== 'undefined') {
         const isMobile = window.innerWidth < 768;
         Swal.fire({
-            title: `<span style="color:#0d2e26; font-weight:800;"><i class="bi bi-clock-history me-2"></i>Lịch Sử Báo Giá</span>`,
+            title: `<span style="color:#0d2e26; font-weight:800;"><i class="bi bi-clock-history me-2"></i>Lịch sử báo giá</span>`,
             background: modalBg,
             color: modalTextColor,
             html: `<div id="historyTableWrap" style="
@@ -2080,10 +2096,10 @@ function getUnitSpotlightInfo(macan) {
             "Tái tạo năng lượng và tận hưởng nhịp sống năng động nhờ chuỗi công viên xanh mát đan xen hài hòa cùng <strong>tổ hợp sân TDTT lớn nhất miền nam</strong>."
         ];
         amenityTiles = [
-            { name: "Global Village 24/7", img: "assets/hero-overview.jpg" },
+            { name: "Global Village 24/7", img: "assets/global-village.png" },
             { name: "Vincom Mega Mall", img: "assets/vincom-mega-mall/a3.jpg" },
             { name: "Phố Little HongKong", img: "assets/little-hongkong/66793e6ddd38e.jpg" },
-            { name: "CV Thiên Văn Galaxy", img: "assets/zenpark.jpg" }
+            { name: "CV Thiên Văn Galaxy", img: "assets/galaxy-park.png" }
         ];
     } else if (code.startsWith('DLCV') || code.startsWith('ĐLCV')) {
         zoneName = "Global Park (Khu 2)";
@@ -2112,10 +2128,10 @@ function getUnitSpotlightInfo(macan) {
             "Tái tạo năng lượng và tận hưởng nhịp sống năng động nhờ chuỗi công viên xanh mát đan xen hài hòa cùng <strong>tổ hợp sân TDTT lớn nhất miền nam</strong>."
         ];
         amenityTiles = [
-            { name: "Global Village 24/7", img: "assets/hero-overview.jpg" },
+            { name: "Global Village 24/7", img: "assets/global-village.png" },
             { name: "Vincom Mega Mall", img: "assets/vincom-mega-mall/a3.jpg" },
             { name: "Phố Little HongKong", img: "assets/little-hongkong/66793e6ddd38e.jpg" },
-            { name: "CV Thiên Văn Galaxy", img: "assets/zenpark.jpg" }
+            { name: "CV Thiên Văn Galaxy", img: "assets/galaxy-park.png" }
         ];
     }
 
