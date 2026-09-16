@@ -6,6 +6,25 @@
 
 let selectedApt = null;
 
+// --- BỘ TẢI TRƯỚC ẢNH THÔNG MINH KHI CUỘN NHANH (SMART PRELOAD 1000PX MARGIN) ---
+document.addEventListener("DOMContentLoaded", function() {
+    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.removeAttribute('loading');
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '1000px 0px 1000px 0px'
+        });
+        lazyImages.forEach(img => imageObserver.observe(img));
+    }
+});
+
 function playYoutubeEmbedded(containerEl, videoId) {
     if (!containerEl) return;
     
@@ -22,13 +41,13 @@ function playYoutubeEmbedded(containerEl, videoId) {
     const originParam = origin ? `&origin=${origin}` : '';
 
     containerEl.innerHTML = `
-        <div class="position-relative w-100 rounded-4 overflow-hidden shadow-lg" style="aspect-ratio: 16/9; background:#000;">
+        <div class="position-relative w-100 h-100 rounded-4 overflow-hidden shadow-lg" style="aspect-ratio: 16/9; min-height: 100%; background:#000;">
             <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&cc_load_policy=0&cc_lang_pref=off&enablejsapi=1${originParam}"
                 title="Video Player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerpolicy="no-referrer-when-downgrade"
                 allowfullscreen
-                style="position: absolute; top: -52px; left: 0; width: 100%; height: calc(100% + 58px); border:none; pointer-events:auto;">
+                style="position: absolute; top: -12%; left: 0; width: 100%; height: 124%; border:none; pointer-events:auto;">
             </iframe>
         </div>`;
 }
@@ -96,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dateFormat: 'd/m/Y',
         locale: 'vn',
         allowInput: false,
+        disableMobile: true,
         yearSelectorType: 'dropdown'
     };
 
@@ -324,42 +344,41 @@ function selectApt(macan) {
     if (document.getElementById('searchApt')) document.getElementById('searchApt').value = apt.macan;
     if (document.getElementById('searchDropdown')) document.getElementById('searchDropdown').style.display = 'none';
 
+    if (document.getElementById('spotlightSearchInput')) document.getElementById('spotlightSearchInput').value = apt.macan;
+    if (document.getElementById('spotlightSearchDropdown')) document.getElementById('spotlightSearchDropdown').style.display = 'none';
+
     if (document.getElementById('manualPrice')) document.getElementById('manualPrice').value = fmt(apt.priceBeforeVat);
     if (document.getElementById('manualDtDat')) document.getElementById('manualDtDat').value = apt.dtDat;
     if (document.getElementById('manualDtXay')) document.getElementById('manualDtXay').value = apt.dtXay;
 
-    const typeLabel = { rough: 'Thô', finished: 'Hoàn thiện', gianXay: 'Giãn xây' };
-    if (document.getElementById('selectedCanLabel')) document.getElementById('selectedCanLabel').textContent = apt.macan;
-    let detail = `<span class="apt-meta-text">${typeLabel[apt.type] || 'Hoàn thiện'} &nbsp;|&nbsp; DT Đất: ${apt.dtDat} m² &nbsp;|&nbsp; DT Xây: ${apt.dtXay} m² &nbsp;|&nbsp; ${apt.daBan ? '<span class="badge bg-secondary fw-bold">Đã bán</span>' : '<span class="badge bg-success fw-bold">Đang mở bán</span>'}</span><br>`;
-    detail += `<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-1">`;
-    detail += `<div><span class="apt-price-label" style="font-size:0.9rem;">Giá trước VAT: </span><strong class="apt-price-val" style="font-size:1.15rem; font-weight:800;">${fmt(apt.priceBeforeVat)} VNĐ</strong></div>`;
-    detail += `<button type="button" class="btn btn-sm btn-warning fw-bold px-3 shadow-sm" onclick="openLocationSpotlight('${apt.macan}')"><i class="bi bi-pin-map-fill me-1"></i>Xem Vị Trí Căn Này</button>`;
-    detail += `</div>`;
-
-    if (document.getElementById('selectedCanDetail')) document.getElementById('selectedCanDetail').innerHTML = detail;
-    if (document.getElementById('propInfoBox')) document.getElementById('propInfoBox').style.display = 'block';
+    // Khi đã chọn Mã căn từ danh sách, ẩn các ô nhập thủ công để tránh nhầm lẫn
+    if (document.getElementById('manualInputWrap')) document.getElementById('manualInputWrap').style.display = 'none';
 
     const elType = document.getElementById('apartmentType');
     if (elType) {
         elType.value = apt.type;
-        elType.disabled = true; // Khóa chọn tính chất bàn giao khi đã chọn mã căn
+        elType.disabled = true;
     }
-
-    if (document.getElementById('manualInputWrap')) document.getElementById('manualInputWrap').style.display = 'none';
 
     onTypeChange();
     toggleBankFields();
+    updateFormLocationPreview(apt);
 }
 
 function clearSelected() {
     selectedApt = null;
+    window.selectedApt = null;
     if (document.getElementById('searchApt')) document.getElementById('searchApt').value = '';
-    if (document.getElementById('propInfoBox')) document.getElementById('propInfoBox').style.display = 'none';
+    if (document.getElementById('searchDropdown')) document.getElementById('searchDropdown').style.display = 'none';
+
+    // Hiện lại các ô nhập thủ công khi chưa chọn mã căn
     if (document.getElementById('manualInputWrap')) document.getElementById('manualInputWrap').style.display = 'block';
+
+    if (document.getElementById('manualPrice')) document.getElementById('manualPrice').value = '';
 
     const elType = document.getElementById('apartmentType');
     if (elType) {
-        elType.disabled = false; // Mở lại cho chọn khi ở chế độ nhập thủ công
+        elType.disabled = false;
     }
 
     onTypeChange();
@@ -432,7 +451,6 @@ function renderResult(stages, ckDetails, S, comparisonHTML = '') {
                 const subVUse = Math.min(remV, sub.gross);
                 remV -= subVUse;
                 const subNet = Math.max(0, sub.gross - subVUse);
-                const subVText = subVUse > 0 ? `<span style="color:#dc2626; font-weight:700;">– ${fmt(subVUse)}</span>` : '—';
                 const subNetText = fmt(subNet);
 
                 const subNote = (sub.note && sub.note !== '—') ? sub.note : (idx === 1 ? 'CĐT trả lãi 9,5%/năm cho khoản TTĐC đảm bảo HĐMB (từ ngày nhận đủ cọc đến khi có TB nhận GCN, KH cá nhân chịu thuế TNCN)' : '—');
@@ -440,18 +458,12 @@ function renderResult(stages, ckDetails, S, comparisonHTML = '') {
                 return `
 <tr class="sub-stage-row" style="background:rgba(0,0,0,0.015); font-size:0.85rem;">
     <td class="stage-col" style="padding-left:28px;"><span style="color:#f59e0b; font-weight:700; margin-right:4px;">└─</span>${sub.label}</td>
-    <td class="date-col text-muted" style="opacity:0.6;">—</td>
-    <td class="amount" style="font-weight:600;">${fmt(sub.gross)}</td>
-    <td class="discount">${subVText}</td>
-    <td class="net-amount">${subNetText}</td>
+    <td class="date-col text-muted text-center" style="opacity:0.6;">—</td>
+    <td class="net-amount text-end">${subNetText}</td>
     <td style="font-size:0.78rem; opacity:0.85;">${subNote}</td>
 </tr>`;
             }).join('');
         }
-
-        const discountText = (s.voucherApplied > 0)
-            ? `<span style="color:#dc2626; font-weight:700; font-size:0.92rem;">– ${fmt(s.voucherApplied)}</span>`
-            : (s.ck > 0 ? `<span style="color:#dc2626; font-weight:700;">– ${fmt(s.ck)}</span>` : '—');
 
         const netCashText = fmt(s.net);
         const noteText = s.note || '';
@@ -459,10 +471,8 @@ function renderResult(stages, ckDetails, S, comparisonHTML = '') {
         return `
 <tr ${rowClass}>
     <td class="stage-col">Đợt ${s.no}&nbsp;${formatStageDisplay(s)}</td>
-    <td class="date-col">${s.dateLabel || fmtDate(s.date)}</td>
-    <td class="amount">${fmt(s.gross)}</td>
-    <td class="discount" style="font-size:0.82rem;">${discountText}</td>
-    <td class="net-amount">${netCashText}</td>
+    <td class="date-col text-center">${s.dateLabel || fmtDate(s.date)}</td>
+    <td class="net-amount text-end">${netCashText}</td>
     <td style="font-size:0.78rem;color:var(--text-muted);">${noteText}</td>
 </tr>
 ${subRowsHtml}`;
@@ -470,13 +480,13 @@ ${subRowsHtml}`;
 
     const stageRows = stages.isSplit
         ? `<tr class="split-stage-header" style="background:rgba(52,211,153,0.2); border-left:4px solid #34d399;">
-    <td colspan="6" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
+    <td colspan="4" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
         <i class="bi bi-geo-alt-fill me-2"></i>GIAI ĐOẠN 1: TIẾN ĐỘ THANH TOÁN TIỀN ĐẤT
     </td>
 </tr>
 ${stages.landStages.map(renderSingleRow).join('')}
 <tr class="split-stage-header" style="background:rgba(52,211,153,0.2); border-left:4px solid #34d399;">
-    <td colspan="6" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
+    <td colspan="4" class="split-stage-title" style="color:#6ee7b7; font-weight:800; font-size:0.95rem; padding:12px 14px; letter-spacing:0.5px;">
         <i class="bi bi-tools me-2"></i>GIAI ĐOẠN 2: TIẾN ĐỘ THANH TOÁN XÂY DỰNG
     </td>
 </tr>
@@ -485,30 +495,24 @@ ${stages.constStages.map(renderSingleRow).join('')}`
 
     const cfRow = cfDiscount > 0 ? `
 <tr style="background:rgba(39,174,96,0.06);">
-    <td colspan="3" style="color:#5dd88a;font-style:italic;">
+    <td colspan="2" style="color:#5dd88a;font-style:italic;">
         <i class="bi bi-lightning-fill me-1"></i>CK dòng tiền 11%/năm <br>
         <span style="font-size:0.75rem;">(Chi tiết sớm: ${cfDetailsStr.join(', ')})</span>
     </td>
-    <td class="discount">–&nbsp;${fmt(cfDiscount)}</td>
-    <td class="net-amount" colspan="2"></td>
+    <td class="net-amount text-end">–&nbsp;${fmt(cfDiscount)}</td>
+    <td></td>
 </tr>` : '';
 
     const subtotalLabel = paymentMethod === 'bank'
         ? 'Vốn tự có KH thực trả CĐT'
         : 'Tổng KH trả cho CĐT';
 
-    const subtotalGrossDisplay = paymentMethod === 'bank' ? '—' : fmt(totalGross);
     const subtotalNoteText = paymentMethod === 'bank' ? '(NH giải ngân 70%)' : '';
-
-    const vSum = (totalVoucherApplied || appliedVoucher || stages.reduce((acc, s) => acc + (s.voucherApplied || 0) + (s.ck || 0), 0));
-    const displayDiscountSum = vSum + (cfDiscount || 0);
 
     let html = `
 <tr class="row-subtotal">
     <td colspan="2" style="color:#7ecfff;font-weight:700;">${subtotalLabel}</td>
-    <td class="amount">${subtotalGrossDisplay}</td>
-    <td class="discount">${displayDiscountSum > 0 ? '–&nbsp;' + fmt(displayDiscountSum) : '—'}</td>
-    <td class="net-amount">${fmt(totalKHtoCDT)}</td>
+    <td class="net-amount text-end">${fmt(totalKHtoCDT)}</td>
     <td style="font-size:0.78rem;color:var(--text-muted);">${subtotalNoteText}</td>
 </tr>`;
 
@@ -520,9 +524,7 @@ ${stages.constStages.map(renderSingleRow).join('')}`
             – ${loanData.annualRatePct}%/năm × ${loanData.termYears} năm
         </span>
     </td>
-    <td class="amount">${fmt(loanData.principal)}</td>
-    <td class="discount">—</td>
-    <td class="net-amount">${fmt(loanData.totalKHPays)}</td>
+    <td class="net-amount text-end">${fmt(loanData.totalKHPays)}</td>
     <td style="font-size:0.78rem;color:var(--text-muted);">KH trả dần ${loanData.termYears} năm</td>
 </tr>` : '';
 
@@ -536,15 +538,13 @@ ${stages.constStages.map(renderSingleRow).join('')}`
 
     const grandRow = `
 <tr class="row-grand">
-    <td colspan="4" class="grand-title">
+    <td colspan="2" class="grand-title">
         ${grandLabelText}
     </td>
     <td class="net-amount text-end">
         ${fmt(grandTotal)} VNĐ
     </td>
-    <td class="grand-note">
-        ${grandNoteHtml}
-    </td>
+    <td style="font-size:0.78rem;color:var(--text-muted);">${grandNoteHtml}</td>
 </tr>`;
 
     const deductTypeBadge = (d) => {
@@ -557,26 +557,20 @@ ${stages.constStages.map(renderSingleRow).join('')}`
 
     const ckRows = ckDetails.map(d => `
 <tr>
-    <td>${d.label}</td>
+    <td style="padding-left:28px;">${d.label} ${deductTypeBadge(d)}</td>
     <td class="text-end" style="color:${d.pct > 0 ? '#4ade80' : 'var(--text-muted)'};font-weight:700;">
         ${d.pct > 0 ? d.pct + '%' : '—'}
     </td>
-    <td class="text-end" style="color:${d.vnd > 0 ? '#4ade80' : 'var(--text-muted)'};font-weight:700;">
-        ${d.vnd > 0 ? fmt(d.vnd) + ' VNĐ' : '—'}
-    </td>
-    <td class="text-end" style="font-weight:800;color:#f3e5ab;">
+    <td class="text-end" style="font-weight:700;color:#f3e5ab;">
         ${fmt(d.vnd)} VNĐ
     </td>
-    <td class="text-center" style="white-space:nowrap;">${deductTypeBadge(d)}</td>
 </tr>`).join('');
 
     const cfCkRow = cfDiscount > 0 ? `
 <tr>
-    <td>CK dòng tiền 11%/năm (tính theo số ngày thực tế từng đợt)</td>
-    <td class="text-end" style="color:var(--text-muted);">—</td>
+    <td style="padding-left:28px;">CK dòng tiền 11%/năm (tính theo số ngày thực tế từng đợt)</td>
     <td class="text-end" style="color:var(--text-muted);">—</td>
     <td class="text-end" style="font-weight:700;color:#7ecfff;">${fmt(cfDiscount)} VNĐ</td>
-    <td></td>
 </tr>` : '';
 
     const elResult = document.getElementById('resultContent');
@@ -691,76 +685,109 @@ ${stages.constStages.map(renderSingleRow).join('')}`
 
 ${comparisonHTML || ''}
 
-${PA && PA.p_const > 0 ? `
-<!-- Bóc tách giá tiền đất & tiền xây -->
+<!-- Bảng Giá Trị Sau Khi Giảm Trừ & Ưu Đãi (Giống ảnh mẫu CĐT) -->
 <div class="card-custom mb-3">
-    <div class="card-title"><i class="bi bi-pie-chart-fill me-2"></i> BÓC TÁCH CHI TIẾT GIÁ (ĐẤT &amp; XÂY)</div>
-    <div class="row g-3">
-        <div class="col-md-6">
-            <div style="background:rgba(212,175,55,0.08); border:1px solid rgba(212,175,55,0.3); border-radius:12px; padding:16px;">
-                <div class="breakdown-header-land" style="font-weight:800; font-size:0.95rem; margin-bottom:10px;"><i class="bi bi-geo-alt-fill me-1"></i>PHẦN TIỀN ĐẤT</div>
-                <div class="d-flex justify-content-between mb-2" style="font-size:0.88rem;">
-                    <span>Giá đất (chưa VAT):</span>
-                    <strong style="font-weight:700;">${fmt(PA.p_land)} VNĐ</strong>
-                </div>
-                <div class="d-flex justify-content-between mb-2" style="font-size:0.88rem;">
-                    <span>VAT đất (10%):</span>
-                    <strong class="breakdown-vat-land" style="font-weight:700;">${fmt(PA.vat_land)} VNĐ</strong>
-                </div>
-                <div class="d-flex justify-content-between pt-2 mt-1" style="border-top:1.5px dashed rgba(212,175,55,0.4); font-size:0.92rem;">
-                    <span style="font-weight:800; text-transform:uppercase; letter-spacing:0.3px;">TỔNG TIỀN ĐẤT (gồm VAT):</span>
-                    <strong class="breakdown-total-land" style="font-size:1.1rem; font-weight:900;">${fmt(PA.land_total)} VNĐ</strong>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.3); border-radius:12px; padding:16px;">
-                <div class="breakdown-header-const" style="font-weight:800; font-size:0.95rem; margin-bottom:10px;"><i class="bi bi-tools me-1"></i>PHẦN TIỀN XÂY DỰNG</div>
-                <div class="d-flex justify-content-between mb-2" style="font-size:0.88rem;">
-                    <span>Giá xây dựng (chưa VAT):</span>
-                    <strong style="font-weight:700;">${fmt(PA.p_const)} VNĐ</strong>
-                </div>
-                <div class="d-flex justify-content-between mb-2" style="font-size:0.88rem;">
-                    <span>VAT xây dựng (10%):</span>
-                    <strong class="breakdown-vat-const" style="font-weight:700;">${fmt(PA.vat_const)} VNĐ</strong>
-                </div>
-                <div class="d-flex justify-content-between mb-2" style="font-size:0.88rem;">
-                    <span>Kinh phí bảo trì (KPBT 0.5%):</span>
-                    <strong class="breakdown-kpbt" style="font-weight:700;">${fmt(PA.kpbt)} VNĐ</strong>
-                </div>
-                <div class="d-flex justify-content-between pt-2 mt-1" style="border-top:1.5px dashed rgba(52,211,153,0.4); font-size:0.92rem;">
-                    <span style="font-weight:800; text-transform:uppercase; letter-spacing:0.3px;">TỔNG TIỀN XÂY + KPBT:</span>
-                    <strong class="breakdown-total-const" style="font-size:1.1rem; font-weight:900;">${fmt(PA.const_total + PA.kpbt)} VNĐ</strong>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-` : ''}
-
-<!-- Chi tiết chiết khấu -->
-<div class="card-custom">
-    <div class="card-title"><i class="bi bi-tag-fill me-2"></i>CHI TIẾT CHIẾT KHẤU &amp; KHUYẾN MÃI</div>
+    <div class="card-title"><i class="bi bi-calculator-fill me-2"></i>GIÁ TRỊ SAU KHI GIẢM TRỪ</div>
     <div style="overflow-x:auto;">
-        <table class="result-table">
+        <table class="result-table" style="width:100%;">
             <thead>
-                <tr>
-                    <th>Loại chiết khấu / khuyến mãi</th>
-                    <th class="text-end">% CK</th>
-                    <th class="text-end">Quà / Cố định</th>
-                    <th class="text-end">Giá trị quy đổi (VNĐ)</th>
-                    <th class="text-center">Loại ưu đãi</th>
+                <tr style="background:linear-gradient(135deg, #0d2e26 0%, #174e40 100%); color:#ffd166;">
+                    <th>HẠNG MỤC TÍNH GIÁ</th>
+                    <th style="width:120px;" class="text-end">% CK</th>
+                    <th style="width:230px;" class="text-end">GIÁ TRỊ (VNĐ)</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Section 1: Chương trình ưu đãi -->
+                <tr class="row-sec-header-1" style="background:rgba(245,158,11,0.12); font-weight:700;">
+                    <td style="font-weight:800; text-transform:uppercase; padding-left:10px;">CHƯƠNG TRÌNH ƯU ĐÃI &amp; CHIẾT KHẤU</td>
+                    <td class="text-end" colspan="2" style="font-size:1rem; font-weight:800;">– ${fmt(totalCkAll)} VNĐ</td>
+                </tr>
                 ${ckRows}
                 ${cfCkRow}
-                <tr style="background:rgba(16,185,129,0.22); font-weight:800; border-top: 2px solid #10b981;">
-                    <td style="color:#34d399; font-weight:800;">TỔNG CHIẾT KHẤU</td>
-                    <td class="text-end" style="color:#34d399; font-weight:800;">${ckPct.toFixed(1)}%</td>
-                    <td class="text-end" style="color:#34d399; font-weight:800;">${fmt(ckVnd)} VNĐ</td>
-                    <td class="text-end" style="color:#4ade80; font-size:1.05rem; font-weight:800;">${fmt(totalCkAll)} VNĐ</td>
-                    <td></td>
+                
+                <!-- Section 2: Giá trị sau khi giảm trừ -->
+                <tr class="row-sec-header-2" style="background:rgba(52,211,153,0.15); font-weight:700; border-top:2px solid rgba(52,211,153,0.3);">
+                    <td colspan="3" style="font-weight:800; text-transform:uppercase; padding-left:10px;">GIÁ TRỊ SAU KHI GIẢM TRỪ</td>
+                </tr>
+                ${(PA && PA.p_const > 0) ? `
+                <!-- 3.1 Phần Tiền Đất -->
+                <tr>
+                    <td style="padding-left:28px;">Giá Đất (CHƯA VAT) sau ưu đãi</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:600;">${fmt(PA.p_land)} VNĐ</td>
+                </tr>
+                <tr>
+                    <td style="padding-left:28px;">Thuế GTGT (tạm tính)</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:600;">${fmt(PA.vat_land)} VNĐ</td>
+                </tr>
+                <tr class="row-sub-highlight-land" style="background:rgba(212,175,55,0.12); font-weight:800;">
+                    <td style="padding-left:28px;">Giá Đất gồm VAT</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:800;">${fmt(PA.land_total)} VNĐ</td>
+                </tr>
+
+                <!-- 3.2 Phần Tiền Xây Dựng -->
+                <tr>
+                    <td style="padding-left:28px;">Giá XD (CHƯA VAT) sau ưu đãi</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:600;">${fmt(PA.p_const)} VNĐ</td>
+                </tr>
+                <tr>
+                    <td style="padding-left:28px;">Thuế GTGT (tạm tính)</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:600;">${fmt(PA.vat_const)} VNĐ</td>
+                </tr>
+                <tr class="row-sub-highlight-const" style="background:rgba(52,211,153,0.12); font-weight:800;">
+                    <td style="padding-left:28px;">Giá XD gồm VAT</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:800;">${fmt(PA.const_total)} VNĐ</td>
+                </tr>
+
+                <!-- 3.3 Tổng hợp Đất + XD & KPBT -->
+                <tr>
+                    <td style="padding-left:28px;">Tổng Giá Bán Đất + XD ( Chưa VAT )</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:600;">${fmt(PA.p_land + PA.p_const)} VNĐ</td>
+                </tr>
+                <tr>
+                    <td style="padding-left:28px;">KPBT</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:600;">${fmt(PA.kpbt)} VNĐ</td>
+                </tr>
+                <tr style="background:rgba(255,255,255,0.03); font-weight:700;">
+                    <td style="padding-left:28px;">Tổng giá gồm VAT (tạm tính)</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:700;">${fmt(PA.land_total + PA.const_total)} VNĐ</td>
+                </tr>
+                ` : `
+                <!-- Dành cho căn Thô & Hoàn thiện -->
+                <tr>
+                    <td style="padding-left:28px;">Tổng giá bán (CHƯA VAT) sau ưu đãi</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:600;">${fmt((PA ? (PA.p_land + PA.p_const) : propValue))} VNĐ</td>
+                </tr>
+                <tr>
+                    <td style="padding-left:28px;">Thuế GTGT (tạm tính)</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:600;">${fmt((PA ? (PA.vat_land + PA.vat_const) : 0))} VNĐ</td>
+                </tr>
+                <tr>
+                    <td style="padding-left:28px;">Kinh phí bảo trì (KPBT 0.5%)</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:600;">${fmt((PA ? PA.kpbt : 0))} VNĐ</td>
+                </tr>
+                <tr style="background:rgba(255,255,255,0.03); font-weight:700;">
+                    <td style="padding-left:28px;">Tổng giá gồm VAT (tạm tính)</td>
+                    <td class="text-end text-muted">—</td>
+                    <td class="text-end" style="font-weight:700;">${fmt((PA ? (PA.land_total + PA.const_total) : 0))} VNĐ</td>
+                </tr>
+                `}
+                <tr class="row-summary-allin" style="background:linear-gradient(135deg, #0d2e26 0%, #174e40 100%); font-weight:800; border-top:2px solid #ffd166; border-bottom:2px solid #ffd166;">
+                    <td style="font-size:0.95rem; font-weight:800; padding-left:10px;">TỔNG GIÁ GỒM VAT &amp; KPBT</td>
+                    <td class="text-end">—</td>
+                    <td class="text-end allin-val" style="font-size:1.15rem; font-weight:900;">${fmt(grandTotal)} VNĐ</td>
                 </tr>
             </tbody>
         </table>
@@ -773,15 +800,13 @@ ${PA && PA.p_const > 0 ? `
 <div class="card-custom">
     <div class="card-title"><i class="bi bi-list-check me-2"></i>LỊCH THANH TOÁN CHI TIẾT</div>
     <div style="overflow-x:auto;">
-        <table class="result-table">
+        <table class="result-table" style="width:100%;">
             <thead>
                 <tr>
-                    <th style="min-width:210px;">Đợt / giai đoạn</th>
-                    <th style="min-width:105px;">Ngày</th>
-                    <th class="text-end" style="min-width:145px;">Số tiền gốc (VNĐ)</th>
-                    <th class="text-end" style="min-width:140px;">Chiết khấu (VNĐ)</th>
-                    <th class="text-end" style="min-width:145px;">Thực trả (VNĐ)</th>
-                    <th style="min-width:220px;">Ghi chú</th>
+                    <th style="width:28%; min-width:190px;">Đợt / giai đoạn</th>
+                    <th class="text-center" style="width:16%; min-width:110px;">Ngày</th>
+                    <th class="text-end" style="width:26%; min-width:160px;">Số tiền (VNĐ)</th>
+                    <th style="width:30%; min-width:190px;">Ghi chú</th>
                 </tr>
             </thead>
             <tbody>
@@ -940,6 +965,57 @@ function initCompare2Tab() {
     } catch (e) { }
 }
 
+function onCmpAptInput(num, query) {
+    const dd = document.getElementById(`cmpApt${num}Dropdown`);
+    if (!dd) return;
+    const q = (query || '').trim().toUpperCase().replace(/\s+/g, '');
+
+    if (!q || typeof APARTMENT_DATA === 'undefined') {
+        dd.style.display = 'none';
+        return;
+    }
+
+    const data = APARTMENT_DATA || [];
+    const matches = data.filter(a =>
+        a.macan.toUpperCase().replace(/\s+/g, '').includes(q)
+    ).slice(0, 10);
+
+    if (!matches.length) {
+        dd.style.display = 'none';
+        return;
+    }
+
+    const typeLabelMap = { rough: 'Thô', finished: 'Hoàn thiện', gianXay: 'Giãn xây' };
+    dd.innerHTML = matches.map(a => `
+        <div class="search-item d-flex justify-content-between align-items-center" onclick="selectCmpApt(${num}, '${a.macan}')" style="cursor:pointer; padding:10px 14px; border-bottom:1px solid rgba(255,209,102,0.15);">
+            <span class="search-item-code" style="font-weight:800; font-size:0.95rem; color:#ffd166;">${a.macan}</span>
+            <span class="search-item-meta ms-2" style="font-size:0.78rem; color:#cbd5e1;">${typeLabelMap[a.type] || 'Khác'} &bull; ${fmt(a.priceBeforeVat)} VNĐ</span>
+        </div>
+    `).join('');
+    dd.style.display = 'block';
+}
+window.onCmpAptInput = onCmpAptInput;
+
+function selectCmpApt(num, macan) {
+    const input = document.getElementById(`cmpApt${num}`);
+    const dd = document.getElementById(`cmpApt${num}Dropdown`);
+    if (input) input.value = macan;
+    if (dd) dd.style.display = 'none';
+    renderCompare2FullTab();
+}
+window.selectCmpApt = selectCmpApt;
+
+document.addEventListener('click', (e) => {
+    [1, 2].forEach(num => {
+        const input = document.getElementById(`cmpApt${num}`);
+        const wrap = input ? input.closest('.search-wrap') : null;
+        const dd = document.getElementById(`cmpApt${num}Dropdown`);
+        if (dd && wrap && !wrap.contains(e.target)) {
+            dd.style.display = 'none';
+        }
+    });
+});
+
 function renderCompare2FullTab() {
     try {
         const tabEl = document.getElementById('tab-compare2');
@@ -1020,17 +1096,44 @@ function renderCompare2FullTab() {
 
         if (!res1 || !res2) return;
 
+        const getPtttTag = (mKey, res) => {
+            if (mKey === 'own-early') return 'TTS';
+            if (mKey === 'own-normal') return 'TĐC';
+            
+            const isBank = (mKey && mKey.startsWith('bank')) || (res && res.S && res.S.paymentMethod === 'bank');
+            if (isBank) {
+                let months = 18;
+                if (res && res.S) {
+                    if (res.S.loanData && res.S.loanData.supportMonths) {
+                        months = res.S.loanData.supportMonths;
+                    } else if (res.S.loanInfo && res.S.loanInfo.supportMonths) {
+                        months = res.S.loanInfo.supportMonths;
+                    } else if (res.S.supportPlanIdx !== undefined && res.S.supportPlanIdx !== null) {
+                        months = res.S.supportPlanIdx * 6 + 18;
+                    }
+                }
+                if (mKey && mKey.startsWith('bank_')) {
+                    const parsedIdx = parseInt(mKey.split('_')[1]);
+                    if (!isNaN(parsedIdx)) months = parsedIdx * 6 + 18;
+                }
+                return `Vay HTLS ${months}T`;
+            }
+            return 'TTS';
+        };
+
         const renderPanelHtml = (res, titleColor, titleLabel, rawCode) => {
             const S = res.S;
             const stages = res.stages;
             const ckDetails = res.ckDetails;
-            const displayCode = S.macan && S.macan !== 'Thủ công' ? S.macan : rawCode;
 
-            const methodLabelMap = {
-                'own-early': 'Thanh toán sớm',
-                'own-normal': 'Vốn tự có – Tiến độ chuẩn',
-                'bank': 'Vay ngân hàng (HTLS 0%)'
-            };
+            const ptttTag = getPtttTag(S.paymentMethod, res);
+            const rawDisplay = (S.macan && S.macan !== 'Thủ công') ? S.macan : rawCode;
+            const cleanCode = rawDisplay ? rawDisplay.replace(/\s*\([^)]*\)/, '').trim() : '';
+
+            let headerText = titleLabel;
+            if (cleanCode && cleanCode !== titleLabel && cleanCode !== 'CĂN A' && cleanCode !== 'CĂN B') {
+                headerText = `${titleLabel}: ${cleanCode}`;
+            }
 
             const isLight = document.body.classList.contains('light-theme');
             const renderTableRows = (arr) => arr.map(s => {
@@ -1042,15 +1145,11 @@ function renderCompare2FullTab() {
                             return `<tr ${rowClass}>
                                 <td class="stage-col" rowspan="${s.subItems.length}" style="padding:8px 8px; vertical-align:middle; line-height:1.3; overflow-wrap:break-word; word-break:normal;">Đợt ${s.no}&nbsp;${formatStageDisplay(s)}</td>
                                 <td class="date-col text-center" rowspan="${s.subItems.length}" style="padding:8px 6px; vertical-align:middle; white-space:nowrap;">${s.dateLabel || fmtDate(s.date)}</td>
-                                <td class="amount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">${fmt(item.gross)}</td>
-                                <td class="discount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">—</td>
-                                <td class="net-amount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">${fmt(item.gross)}</td>
+                                <td class="net-amount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">${fmt(item.net || item.gross)}</td>
                             </tr>`;
                         } else {
                             return `<tr ${rowClass}>
-                                <td class="amount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">${fmt(item.gross)}</td>
-                                <td class="discount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">—</td>
-                                <td class="net-amount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">${fmt(item.gross)}</td>
+                                <td class="net-amount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">${fmt(item.net || item.gross)}</td>
                             </tr>`;
                         }
                     }).join('');
@@ -1059,8 +1158,6 @@ function renderCompare2FullTab() {
                     return `<tr ${rowClass}>
                         <td class="stage-col" style="padding:8px 8px; vertical-align:middle; line-height:1.3; overflow-wrap:break-word; word-break:normal;">${labelCell}</td>
                         <td class="date-col text-center" style="padding:8px 6px; vertical-align:middle; white-space:nowrap;">${s.dateLabel || fmtDate(s.date)}</td>
-                        <td class="amount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">${fmt(s.gross)}</td>
-                        <td class="discount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">${(s.voucherApplied > 0) ? '–&nbsp;' + fmt(s.voucherApplied) : (s.ck > 0 ? '–&nbsp;' + fmt(s.ck) : '—')}</td>
                         <td class="net-amount text-end" style="padding:8px 8px; vertical-align:middle; white-space:nowrap;">${fmt(s.net)}</td>
                     </tr>`;
                 }
@@ -1069,9 +1166,9 @@ function renderCompare2FullTab() {
             let stagesHtml = '';
             if (stages.isSplit) {
                 stagesHtml = `
-                    <tr class="stage-section-header-land"><td colspan="5" style="font-weight:800;text-align:center;"><i class="bi bi-geo-alt-fill me-1"></i> TIẾN ĐỘ TIỀN ĐẤT</td></tr>
+                    <tr class="stage-section-header-land"><td colspan="3" style="font-weight:800;text-align:center;"><i class="bi bi-geo-alt-fill me-1"></i> TIẾN ĐỘ TIỀN ĐẤT</td></tr>
                     ${renderTableRows(stages.landStages)}
-                    <tr class="stage-section-header-const"><td colspan="5" style="font-weight:800;text-align:center;"><i class="bi bi-tools me-1"></i> TIẾN ĐỘ XÂY DỰNG</td></tr>
+                    <tr class="stage-section-header-const"><td colspan="3" style="font-weight:800;text-align:center;"><i class="bi bi-tools me-1"></i> TIẾN ĐỘ XÂY DỰNG</td></tr>
                     ${renderTableRows(stages.constStages)}
                 `;
             } else {
@@ -1095,8 +1192,8 @@ function renderCompare2FullTab() {
             return `
             <div class="card-custom p-3 mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="card-panel-title" style="color:${titleColor}; font-weight:800; margin:0;"><i class="bi bi-house-fill me-2"></i>${titleLabel}: ${displayCode}</h5>
-                    <div style="font-size:0.85rem; color:${isLight ? '#475569' : '#cbd5e1'}; font-weight:600; margin-top:4px;">${S.typeLabel} &bull; ${methodLabelMap[S.paymentMethod] || S.paymentMethod}</div>
+                    <h5 class="card-panel-title" style="color:${titleColor}; font-weight:800; margin:0;"><i class="bi bi-house-fill me-2"></i>${headerText}</h5>
+                    <div style="font-size:0.85rem; color:${isLight ? '#475569' : '#cbd5e1'}; font-weight:600; margin-top:4px;">${S.typeLabel} &bull; ${ptttTag}</div>
                 </div>
                 
                 <div class="row g-2 mb-3">
@@ -1157,19 +1254,15 @@ function renderCompare2FullTab() {
                         <table class="result-table" style="font-size:0.78rem; width:100%; table-layout:auto;">
                             <thead>
                                 <tr>
-                                    <th style="text-align:left; padding:10px 8px;">Đợt</th>
+                                    <th style="text-align:left; padding:10px 8px;">Đợt / Giai đoạn</th>
                                     <th style="text-align:center; padding:10px 6px; white-space:nowrap;">Ngày</th>
-                                    <th style="text-align:right; padding:10px 8px; white-space:nowrap;">Giá Gốc</th>
-                                    <th style="text-align:right; padding:10px 8px; white-space:nowrap;">Chiết Khấu</th>
-                                    <th style="text-align:right; padding:10px 8px; white-space:nowrap;">Thực Trả</th>
+                                    <th style="text-align:right; padding:10px 8px; white-space:nowrap;">Số tiền (VNĐ)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 ${stagesHtml}
                                 <tr style="background:${isLight ? 'rgba(16,185,129,0.15)' : 'rgba(16,185,129,0.18)'}; font-weight:800; border-top: 2px solid #10b981; border-bottom: 1px solid #10b981;">
-                                    <td colspan="2" style="color:${isLight ? '#0d2e26' : '#ffffff'}; text-align:left; padding:10px 8px; font-size:0.78rem; font-weight:800; white-space:nowrap;">TỔNG CỘNG KH TRẢ</td>
-                                    <td class="text-end" style="padding:10px 8px; font-size:0.78rem; font-weight:800; white-space:nowrap; border-right: 1px dashed rgba(16,185,129,0.3);">${fmt(S.totalGross)}</td>
-                                    <td class="text-end" style="color:${isLight ? '#059669' : '#34d399'}; padding:10px 8px; font-size:0.78rem; font-weight:800; white-space:nowrap; border-right: 1px dashed rgba(16,185,129,0.3);">${S.totalCkAll > 0 ? '– ' + fmt(S.totalCkAll) : '—'}</td>
+                                    <td colspan="2" style="color:${isLight ? '#0d2e26' : '#ffffff'}; text-align:left; padding:10px 8px; font-size:0.78rem; font-weight:800; white-space:nowrap;">TỔNG CỘNG KH TRẢ CĐT</td>
                                     <td class="text-end" style="color:${isLight ? '#059669' : '#4ade80'}; padding:10px 8px; font-size:0.84rem; font-weight:900; white-space:nowrap;">${fmt(S.totalKHtoCDT)}</td>
                                 </tr>
                             </tbody>
@@ -1184,25 +1277,6 @@ function renderCompare2FullTab() {
         const rawCode1 = apt1Obj ? apt1Obj.macan : val1;
         const rawCode2 = apt2Obj ? apt2Obj.macan : val2;
 
-        const getPtttTag = (mKey, res) => {
-            if (mKey === 'own-early') return 'TTS';
-            if (mKey === 'own-normal') return 'TĐC';
-            if (mKey && mKey.startsWith('bank')) {
-                const sup = res && res.S && res.S.loanInfo ? res.S.loanInfo.supportMonths : 0;
-                if (sup > 0) return `Vay HTLS ${sup}T`;
-                const bankMap = { 'bank_0': 'Vay HTLS 18T', 'bank_1': 'Vay HTLS 24T', 'bank_2': 'Vay HTLS 30T', 'bank_3': 'Vay HTLS 36T' };
-                if (bankMap[mKey]) return bankMap[mKey];
-                return 'Vay NH';
-            }
-            if (res && res.S && res.S.paymentMethod) {
-                const pm = res.S.paymentMethod;
-                if (pm === 'own-early') return 'TTS';
-                if (pm === 'own-normal') return 'TĐC';
-                if (pm === 'bank') return 'Vay NH';
-            }
-            return 'TTS';
-        };
-
         const tag1 = getPtttTag(mKey1, res1);
         const tag2 = getPtttTag(mKey2, res2);
 
@@ -1212,8 +1286,8 @@ function renderCompare2FullTab() {
         if (res1 && res1.S) res1.S.displayName = code1;
         if (res2 && res2.S) res2.S.displayName = code2;
 
-        const html1 = renderPanelHtml(res1, '#d97706', 'CĂN THỨ 1 (CĂN A)', code1);
-        const html2 = renderPanelHtml(res2, '#059669', 'CĂN THỨ 2 (CĂN B)', code2);
+        const html1 = renderPanelHtml(res1, '#d97706', 'CĂN A', code1);
+        const html2 = renderPanelHtml(res2, '#059669', 'CĂN B', code2);
 
         const totalSelf1 = res1.S.totalKHtoCDT;
         const totalSelf2 = res2.S.totalKHtoCDT;
@@ -1499,15 +1573,15 @@ function saveHistoryRecord(S) {
         depositDate: document.getElementById('depositDate') ? document.getElementById('depositDate').value : '',
         signDate: document.getElementById('signDate') ? document.getElementById('signDate').value : '',
         promo_earlyMoveIn: document.getElementById('promo_earlyMoveIn') ? document.getElementById('promo_earlyMoveIn').checked : false,
-        promo_noBlnh: document.getElementById('promo_noBlnh') ? document.getElementById('promo_noBlnh').checked : false,
-        promo_aquafield: document.getElementById('promo_aquafield') ? document.getElementById('promo_aquafield').checked : false,
+        promo_noBlnh: document.getElementById('promo_noBlnh') ? document.getElementById('promo_noBlnh').checked : true,
+        promo_aquafield: document.getElementById('promo_aquafield') ? document.getElementById('promo_aquafield').checked : true,
         promo_voucher: document.getElementById('promo_voucher') ? document.getElementById('promo_voucher').checked : false,
         voucherAmount: document.getElementById('voucherAmount') ? document.getElementById('voucherAmount').value : '',
         loanPct: document.getElementById('loanPct') ? document.getElementById('loanPct').value : '70',
         loanTerm: document.getElementById('loanTerm') ? document.getElementById('loanTerm').value : '20',
         interestRate: document.getElementById('interestRate') ? document.getElementById('interestRate').value : '13',
         interestSupportPlan: document.getElementById('interestSupportPlan') ? document.getElementById('interestSupportPlan').value : '0',
-        showBankSim: document.getElementById('showBankSim') ? document.getElementById('showBankSim').checked : true
+        showBankSim: true
     };
 
     const record = {
@@ -1622,8 +1696,17 @@ function restoreHistoryItem(id) {
 function showHistoryModal() {
     let hist = [];
     try { hist = JSON.parse(localStorage.getItem('vhp_history') || '[]'); } catch (e) { }
-    if (hist.length === 0) {
-        (typeof Swal !== 'undefined' ? Swal.fire : alert)('Lịch sử trống', 'Bạn chưa tính báo giá nào.', 'info');
+    if (!hist || hist.length === 0) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'info',
+                title: 'Lịch sử trống',
+                text: 'Bạn chưa thực hiện tính báo giá nào. Vui lòng chọn căn và bấm "TÍNH BÁO GIÁ CHI TIẾT" để lưu lịch sử.',
+                confirmButtonColor: '#ffd166'
+            });
+        } else {
+            alert('Lịch sử trống: Bạn chưa thực hiện tính báo giá nào.');
+        }
         return;
     }
 
@@ -1646,13 +1729,9 @@ function showHistoryModal() {
     const tableHeaderColor = '#0f172a';
     const rowBorderColor = '#e2e8f0';
     const timeColor = '#475569';
-    const macanColor = '#0d2e26';
-    const macanBg = '#fef3c7';
-    const priceColor = '#0f172a';
-    const totalColor = '#16a34a';
 
     const tbody = hist.map(r => {
-        let ptttText = methodLabelMap[r.paymentMethod] || r.paymentMethod;
+        let ptttText = methodLabelMap[r.paymentMethod] || r.paymentMethod || 'Thanh toán sớm';
         if (r.paymentMethod === 'bank') {
             const f = r.formState || {};
             const planIdx = (r.supportPlanIdx !== undefined && r.supportPlanIdx !== null) ? r.supportPlanIdx : (parseInt(f.interestSupportPlan || '0') || 0);
@@ -1660,21 +1739,24 @@ function showHistoryModal() {
             const htlsMonths = (planIdx === 1 ? 24 : planIdx === 2 ? 30 : planIdx === 3 ? 36 : 18);
             ptttText = `Vay NH (HTLS 0% ${htlsMonths} tháng - ${term} năm)`;
         }
+        const rMacan = (r.macan || (r.formState ? r.formState.macan : '')) || 'Thủ công';
+        const rTime = r.time || 'N/A';
+        const rId = r.id || '';
         return `
         <tr style="cursor:pointer; border-bottom: 1px solid ${rowBorderColor}; background: #ffffff;" 
-            onclick="restoreHistoryItem('${r.id}')" 
+            onclick="restoreHistoryItem('${rId}')" 
             title="Bấm để tải lại cấu hình căn này">
-            <td style="font-size:12px; color:${timeColor}; white-space:nowrap; padding:10px 12px;">${r.time}</td>
+            <td style="font-size:12px; color:${timeColor}; white-space:nowrap; padding:10px 12px;">${rTime}</td>
             <td style="padding:10px 12px; white-space:nowrap;">
-                <span class="badge-macan">
-                    ${r.macan}
+                <span class="badge-macan" style="background:#fef3c7; color:#0d2e26; padding:4px 8px; border-radius:6px; font-weight:700; font-size:12px;">
+                    ${rMacan}
                 </span>
             </td>
             <td style="font-size:12px; font-weight:600; color:${modalTextColor}; white-space:nowrap; padding:10px 12px;">${ptttText}</td>
             <td class="text-center" style="white-space:nowrap; padding:10px 12px;">
                 <button class="btn btn-sm py-1 px-2 fw-bold" 
                         style="font-size:11px; background:#0d2e26; color:#ffffff; border:none; border-radius:6px;" 
-                        onclick="event.stopPropagation(); restoreHistoryItem('${r.id}')">
+                        onclick="event.stopPropagation(); restoreHistoryItem('${rId}')">
                     <i class="bi bi-arrow-counterclockwise me-1"></i>Tải lại
                 </button>
             </td>
@@ -1683,13 +1765,14 @@ function showHistoryModal() {
     }).join('');
 
     if (typeof Swal !== 'undefined') {
+        const isMobile = window.innerWidth < 768;
         Swal.fire({
             title: `<span style="color:#0d2e26; font-weight:800;"><i class="bi bi-clock-history me-2"></i>Lịch Sử Báo Giá</span>`,
             background: modalBg,
             color: modalTextColor,
             html: `<div id="historyTableWrap" style="
                     width:100%;
-                    overflow-x:auto;
+                    overflow-x:${isMobile ? 'auto' : 'hidden'};
                     overflow-y:auto;
                     -webkit-overflow-scrolling:touch;
                     touch-action:pan-x pan-y;
@@ -1702,8 +1785,8 @@ function showHistoryModal() {
                     scrollbar-color:#0d2e26 #e2e8f0;
                 ">
                 <table id="historyTable" style="
-                    min-width:440px;
                     width:100%;
+                    ${isMobile ? 'min-width:520px;' : ''}
                     font-size:13px;
                     text-align:left;
                     background:#ffffff;
@@ -1713,19 +1796,19 @@ function showHistoryModal() {
                 ">
                     <thead style="position:sticky; top:0; background:${tableHeaderBg}; color:${tableHeaderColor}; z-index:2; border-bottom:2px solid #cbd5e1;">
                         <tr>
-                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Thời gian</th>
-                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">Mã Căn</th>
-                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap;">PTTT</th>
-                            <th style="padding:10px 12px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:center;">Thao tác</th>
+                            <th style="padding:10px 14px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; width:${isMobile ? 'auto' : '22%'};">Thời gian</th>
+                            <th style="padding:10px 14px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; width:${isMobile ? 'auto' : '15%'};">Mã Căn</th>
+                            <th style="padding:10px 14px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; width:${isMobile ? 'auto' : '45%'};">PTTT</th>
+                            <th style="padding:10px 14px; color:${tableHeaderColor}; font-weight:700; white-space:nowrap; text-align:center; width:${isMobile ? 'auto' : '18%'};">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody style="color:#0f172a; background:#ffffff;">${tbody}</tbody>
                 </table>
             </div>
-            <div id="historyScrollHint" style="font-size:11px; color:#475569; font-weight:600; margin-top:8px; text-align:center; display:none;">
+            <div id="historyScrollHint" style="font-size:11px; color:#475569; font-weight:600; margin-top:8px; text-align:center; display:${isMobile ? 'block' : 'none'};">
                 <i class="bi bi-arrows-expand-horizontal me-1" style="color:#2563eb;"></i>👉 Vuốt sang phải để xem thêm cột
             </div>`,
-            width: 620,
+            width: isMobile ? '95%' : '760px',
             allowTouchMove: false,
             showCancelButton: true,
             confirmButtonText: 'Đóng',
@@ -1733,22 +1816,23 @@ function showHistoryModal() {
             cancelButtonText: '🗑️ Xóa toàn bộ lịch sử',
             didOpen: () => {
                 const wrap = document.getElementById('historyTableWrap');
-                const hint = document.getElementById('historyScrollHint');
-                const isMobile = window.innerWidth < 768;
-
-                // Chỉ hiện hint và bật touch scroll trên mobile
-                if (isMobile) {
-                    if (hint) hint.style.display = 'block';
-                    if (wrap) {
-                        wrap.addEventListener('touchstart', (e) => { e._histTouchStartX = e.touches[0].clientX; }, { passive: true });
-                        wrap.addEventListener('touchmove', (e) => { e.stopPropagation(); }, { passive: true });
-                    }
+                if (isMobile && wrap) {
+                    wrap.addEventListener('touchstart', (e) => { e._histTouchStartX = e.touches[0].clientX; }, { passive: true });
+                    wrap.addEventListener('touchmove', (e) => { e.stopPropagation(); }, { passive: true });
                 }
             }
         }).then(res => {
-            if (res.dismiss === Swal.DismissReason.cancel) {
+            if (res && (res.dismiss === 'cancel' || (typeof Swal !== 'undefined' && Swal.DismissReason && res.dismiss === Swal.DismissReason.cancel))) {
                 localStorage.removeItem('vhp_history');
-                Swal.fire('Đã xóa', 'Lịch sử báo giá đã được xóa sạch.', 'success');
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã xóa',
+                        text: 'Lịch sử báo giá đã được xóa sạch.'
+                    });
+                } else {
+                    alert('Lịch sử báo giá đã được xóa sạch.');
+                }
             }
         });
     }
@@ -1849,16 +1933,13 @@ function selectAndCalculateUnit(macan, method, supportIdx) {
 }
 window.selectAndCalculateUnit = selectAndCalculateUnit;
 
-// Note: runFinancialMatcher is defined and managed in recommendation.js
-
-
-
 /* ==========================================================================
    TÍNH NĂNG 2: XEM VỊ TRÍ CĂN ULTRA-HD 300 DPI VỚI GHIM GIỌT NƯỚC VÀNG KIM 3D
    ========================================================================== */
 function openLocationSpotlightFromInput() {
+    const spotVal = document.getElementById('spotlightSearchInput') ? document.getElementById('spotlightSearchInput').value.trim() : '';
     const inputVal = document.getElementById('searchApt') ? document.getElementById('searchApt').value.trim() : '';
-    const code = (selectedApt && selectedApt.macan) ? selectedApt.macan : inputVal;
+    const code = spotVal || (selectedApt && selectedApt.macan) || inputVal;
     if (!code) {
         if (typeof Swal !== 'undefined') {
             Swal.fire({
@@ -1872,14 +1953,99 @@ function openLocationSpotlightFromInput() {
         }
         return;
     }
-    openLocationSpotlight(code);
+
+    const data = (typeof APARTMENT_DATA !== 'undefined' ? APARTMENT_DATA : []);
+    const clean = code.trim().toUpperCase().replace(/\s+/g, '');
+    const apt = data.find(a => a.macan.toUpperCase().replace(/\s+/g, '') === clean);
+
+    updateFormLocationPreview(apt || code);
+    openLocationSpotlight(apt ? apt.macan : code);
 }
+
+function previewSpotlightLocationOnly(macan) {
+    const data = (typeof APARTMENT_DATA !== 'undefined' ? APARTMENT_DATA : []);
+    const clean = (macan || '').trim().toUpperCase().replace(/\s+/g, '');
+    const apt = data.find(a => a.macan.toUpperCase().replace(/\s+/g, '') === clean || a.macan === macan);
+
+    if (document.getElementById('spotlightSearchInput')) {
+        document.getElementById('spotlightSearchInput').value = apt ? apt.macan : clean;
+    }
+    if (document.getElementById('spotlightSearchDropdown')) {
+        document.getElementById('spotlightSearchDropdown').style.display = 'none';
+    }
+
+    updateFormLocationPreview(apt || clean);
+}
+window.previewSpotlightLocationOnly = previewSpotlightLocationOnly;
+
+function applySpotlightToCalc() {
+    const elCode = document.getElementById('formUnitCode');
+    const code = elCode ? elCode.textContent.trim() : '';
+    if (code && code !== '--') {
+        selectApt(code);
+        if (typeof Swal !== 'undefined') {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+            Toast.fire({
+                icon: 'success',
+                title: `Đã nạp căn ${code} vào bảng tính giá!`
+            });
+        }
+    }
+}
+window.applySpotlightToCalc = applySpotlightToCalc;
+
+function onSpotlightSearchInput(query) {
+    const dd = document.getElementById('spotlightSearchDropdown');
+    const q = query.trim().toUpperCase().replace(/\s+/g, '');
+
+    if (!q || typeof APARTMENT_DATA === 'undefined') {
+        if (dd) dd.style.display = 'none';
+        if (!selectedApt) updateFormLocationPreview(null);
+        return;
+    }
+
+    const data = (typeof APARTMENT_DATA !== 'undefined' ? APARTMENT_DATA : []);
+    const exactMatch = data.find(a => a.macan.toUpperCase().replace(/\s+/g, '') === q);
+
+    if (exactMatch) {
+        previewSpotlightLocationOnly(exactMatch.macan);
+        if (dd) dd.style.display = 'none';
+        return;
+    }
+
+    const matches = data.filter(a =>
+        a.macan.toUpperCase().replace(/\s+/g, '').includes(q)
+    ).slice(0, 8);
+
+    if (!matches.length) {
+        if (dd) dd.style.display = 'none';
+        return;
+    }
+
+    const typeLabel = { rough: 'Thô', finished: 'Hoàn thiện', gianXay: 'Giãn xây' };
+    dd.innerHTML = matches.map(a => {
+        return `
+        <div class="search-item" onclick="previewSpotlightLocationOnly('${a.macan}')">
+            <span class="search-item-code" style="font-weight:800; font-size:0.95rem;">${a.macan}</span>
+            <span class="search-item-meta ms-2" style="font-size:0.8rem;">${typeLabel[a.type]} &bull; ${fmt(a.priceBeforeVat)} VNĐ</span>
+        </div>`;
+    }).join('');
+    dd.style.display = 'block';
+}
+window.onSpotlightSearchInput = onSpotlightSearchInput;
 
 function getUnitSpotlightInfo(macan) {
     const code = String(macan).toUpperCase();
     let zoneName = "Global Park (Khu 2)";
     let roadInfo = "Đường nội khu thoáng mát, kết nối trục chính";
     let amenities = [];
+    let amenityTiles = [];
 
     let apt = null;
     if (typeof APARTMENT_DATA !== 'undefined') {
@@ -1889,17 +2055,23 @@ function getUnitSpotlightInfo(macan) {
     if (code.startsWith('AS')) {
         zoneName = "Ivy Park (Khu 1)";
         const roadNum = code.split('-')[0].replace('AS', '');
-        roadInfo = `Mặt tiền đường Ánh Sáng ${roadNum} (Lộ giới 13m - 19m)`;
+        roadInfo = `Ánh Sáng ${roadNum} (Lộ giới 13m - 19m)`;
         amenities = [
             "Mở ra bệ phóng hoàn hảo cho thế hệ tương lai tại quần thể giáo dục đại học quốc tế & trong nước đa dạng cùng <strong>công viên tri thức Ivy Park</strong>.",
             "Trải nghiệm không gian mua sắm tại <strong>phố thời trang Vincom Collection</strong> và <strong>TTTM Vincom Mega Mall</strong>.",
             "Hòa mình vào nhịp sống sầm uất ngày đêm tại <strong>phố ẩm thực Little HongKong</strong>.",
             "An tâm tận hưởng dịch vụ chăm sóc sức khỏe toàn diện 24/7 tại <strong>Bệnh viện Đa khoa Quốc tế Vinmec 5 sao</strong>."
         ];
+        amenityTiles = [
+            { name: "CV Tri Thức Ivy Park", img: "assets/ivy-park-real.jpg" },
+            { name: "Vincom Collection", img: "assets/fashion-town.jpg" },
+            { name: "Phố Little HongKong", img: "assets/little-hongkong/66793e6ddd38e.jpg" },
+            { name: "Bệnh Viện Vinmec 5★", img: "assets/benh-vien-vinmec/20181207_112946_724325_Vinmec_6.max-1800x1800.jpg" }
+        ];
     } else if (code.startsWith('TL')) {
         zoneName = "Global Park (Khu 2)";
         const roadNum = code.split('-')[0].replace('TL', '');
-        roadInfo = `Mặt tiền đường Tương Lai ${roadNum} (Lộ giới 13m - 23m)`;
+        roadInfo = `Tương Lai ${roadNum} (Lộ giới 13m - 23m)`;
         amenities = [
             "Hòa mình vào nhịp sống sôi động tại <strong>Trung tâm Ẩm thực & Giải trí Quốc tế 24/7 Global Village</strong> và <strong>Phố Little HongKong</strong>.",
             "Tổ hợp <strong>Làng thời trang Trendy Fashion Town & Vincom Collection</strong> mở ra không gian mua sắm, vui chơi thời thượng.",
@@ -1907,16 +2079,28 @@ function getUnitSpotlightInfo(macan) {
             "Thỏa sức khám phá tại <strong>công viên thiên văn Galaxy Park</strong>.",
             "Tái tạo năng lượng và tận hưởng nhịp sống năng động nhờ chuỗi công viên xanh mát đan xen hài hòa cùng <strong>tổ hợp sân TDTT lớn nhất miền nam</strong>."
         ];
+        amenityTiles = [
+            { name: "Global Village 24/7", img: "assets/hero-overview.jpg" },
+            { name: "Vincom Mega Mall", img: "assets/vincom-mega-mall/a3.jpg" },
+            { name: "Phố Little HongKong", img: "assets/little-hongkong/66793e6ddd38e.jpg" },
+            { name: "CV Thiên Văn Galaxy", img: "assets/zenpark.jpg" }
+        ];
     } else if (code.startsWith('DLCV') || code.startsWith('ĐLCV')) {
         zoneName = "Global Park (Khu 2)";
         const roadNum = code.split('-')[0].replace('ĐLCV', '').replace('DLCV', '');
-        roadInfo = `Mặt tiền Đại Lộ Công Viên ${roadNum} (Lộ giới 32m - 40m)`;
+        roadInfo = `Đại Lộ Công Viên ${roadNum} (Lộ giới 32m - 40m)`;
         amenities = [
             "Hòa mình vào nhịp sống sôi động tại <strong>Trung tâm Ẩm thực & Giải trí Quốc tế 24/7 Global Village</strong> và <strong>Phố Little HongKong</strong>.",
             "Tổ hợp <strong>Làng thời trang Trendy Fashion Town & Vincom Collection</strong> mở ra không gian mua sắm, vui chơi thời thượng.",
             "Quy tụ mạng lưới trường học đa dạng từ <strong>Vinschool</strong> đến các cơ sở giáo dục công lập và tư thục chất lượng cao.",
             "Thỏa sức khám phá tại <strong>công viên thiên văn Galaxy Park</strong>.",
             "Tái tạo năng lượng và tận hưởng nhịp sống năng động nhờ chuỗi công viên xanh mát đan xen hài hòa cùng <strong>tổ hợp sân TDTT lớn nhất miền nam</strong>."
+        ];
+        amenityTiles = [
+            { name: "Đại Lộ Công Viên 40m", img: "assets/hero-overview.jpg" },
+            { name: "Vincom Collection", img: "assets/fashion-town.jpg" },
+            { name: "Phố Little HongKong", img: "assets/little-hongkong/66793e6ddd38e.jpg" },
+            { name: "Bệnh Viện Vinmec 5★", img: "assets/benh-vien-vinmec/20181207_112946_724325_Vinmec_6.max-1800x1800.jpg" }
         ];
     } else {
         zoneName = "Global Park (Khu 2)";
@@ -1927,18 +2111,85 @@ function getUnitSpotlightInfo(macan) {
             "Thỏa sức khám phá tại <strong>công viên thiên văn Galaxy Park</strong>.",
             "Tái tạo năng lượng và tận hưởng nhịp sống năng động nhờ chuỗi công viên xanh mát đan xen hài hòa cùng <strong>tổ hợp sân TDTT lớn nhất miền nam</strong>."
         ];
+        amenityTiles = [
+            { name: "Global Village 24/7", img: "assets/hero-overview.jpg" },
+            { name: "Vincom Mega Mall", img: "assets/vincom-mega-mall/a3.jpg" },
+            { name: "Phố Little HongKong", img: "assets/little-hongkong/66793e6ddd38e.jpg" },
+            { name: "CV Thiên Văn Galaxy", img: "assets/zenpark.jpg" }
+        ];
     }
 
     if (apt && apt.duong) {
-        roadInfo = apt.duong.startsWith('Mặt tiền') ? apt.duong : `Mặt tiền: ${apt.duong}`;
+        roadInfo = apt.duong.replace(/^Mặt tiền đường\s*/i, '').replace(/^Mặt tiền:\s*/i, '').replace(/^Mặt tiền\s*/i, '');
     }
     if (apt && apt.tienIch) {
         const customList = apt.tienIch.split(',').map(s => s.trim());
         amenities = customList.concat(amenities.slice(customList.length));
     }
 
-    return { zoneName, roadInfo, amenities };
+    return { zoneName, roadInfo, amenities, amenityTiles };
 }
+
+/* ==========================================================================
+   FORM UNIT LOCATION PREVIEW WIDGET
+   ========================================================================== */
+function updateFormLocationPreview(aptOrCode) {
+    const elCode = document.getElementById('formUnitCode');
+    const elZone = document.getElementById('formUnitZone');
+    const elRoad = document.getElementById('formUnitRoad');
+    const elAmen = document.getElementById('formUnitAmenities');
+    const btnSpot = document.getElementById('btnFormSpotlight');
+    const emptyState = document.getElementById('spotlightEmptyState');
+    const infoBox = document.getElementById('spotlightUnitInfoBox');
+    const spotlightInput = document.getElementById('spotlightSearchInput');
+
+    let macan = '';
+    if (typeof aptOrCode === 'string') {
+        macan = aptOrCode;
+    } else if (aptOrCode && aptOrCode.macan) {
+        macan = aptOrCode.macan;
+    }
+
+    if (!macan) {
+        if (emptyState) emptyState.style.display = 'block';
+        if (infoBox) infoBox.style.display = 'none';
+        if (spotlightInput && !selectedApt) spotlightInput.value = '';
+        if (btnSpot) btnSpot.innerHTML = '<i class="bi bi-pin-map-fill me-2"></i>Xem vị trí &amp; tiện ích căn';
+        return;
+    }
+
+    const cleanCode = macan.trim().toUpperCase();
+    if (spotlightInput && spotlightInput.value !== cleanCode) {
+        spotlightInput.value = cleanCode;
+    }
+
+    if (emptyState) emptyState.style.display = 'none';
+    if (infoBox) infoBox.style.display = 'block';
+    if (elCode) elCode.textContent = cleanCode;
+
+    const info = typeof getUnitSpotlightInfo === 'function' ? getUnitSpotlightInfo(cleanCode) : null;
+    if (info) {
+        if (elZone) elZone.textContent = info.zoneName || 'Global Park (Khu 2)';
+        if (elRoad) elRoad.textContent = info.roadInfo || 'Đường nội khu thoáng mát';
+        if (elAmen && info.amenities && info.amenities.length > 0) {
+            elAmen.innerHTML = `
+                <div class="mt-2">
+                    <div class="fw-bold mb-2 unit-spotlight-amenities-header" style="font-size: 0.9rem; letter-spacing: 0.2px;">
+                        Tiện Ích Nổi Bật Lân Cận:
+                    </div>
+                    <ul class="list-unstyled mb-0 ps-0 spotlight-amenities-form-list" style="line-height: 1.75; font-size: 0.85rem;">
+                        ${info.amenities.map(a => `<li class="mb-2.5 position-relative ps-3" style="line-height: 1.75;"><span class="spotlight-bullet">•</span> ${a}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+    }
+
+    if (btnSpot) {
+        btnSpot.innerHTML = `<i class="bi bi-pin-map-fill me-2"></i>Xem vị trí & tiện ích căn ${cleanCode}`;
+    }
+}
+window.updateFormLocationPreview = updateFormLocationPreview;
 
 function openLocationSpotlight(macan) {
     if (!macan) return;
@@ -1995,21 +2246,21 @@ function openLocationSpotlight(macan) {
         const info = getUnitSpotlightInfo(cleanCode);
 
         const tab2Content = hasCoords ? `
-            <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-2 rounded-3 border border-warning" style="background:#061e18;">
-                <div class="small text-warning fw-bold">
+            <div class="spotlight-toolbar-wrap mb-2 px-3 py-2 rounded-3 border border-warning" style="background:#061e18;">
+                <div class="spotlight-toolbar-title small text-warning fw-bold">
                     <i class="bi bi-geo-alt-fill me-1"></i>Sơ Đồ 2D Toàn Khu (Căn ${cleanCode})
                 </div>
-                <div class="btn-group btn-group-sm">
-                    <button type="button" class="btn btn-outline-warning fw-bold" onclick="zoomInteractiveCadMap(1.25)">
+                <div class="spotlight-toolbar-btns">
+                    <button type="button" class="btn btn-outline-warning fw-bold spotlight-btn" onclick="zoomInteractiveCadMap(1.25)">
                         <i class="bi bi-zoom-in me-1"></i>Phóng To
                     </button>
-                    <button type="button" class="btn btn-outline-warning fw-bold" onclick="zoomInteractiveCadMap(0.8)">
+                    <button type="button" class="btn btn-outline-warning fw-bold spotlight-btn" onclick="zoomInteractiveCadMap(0.8)">
                         <i class="bi bi-zoom-out me-1"></i>Thu Nhỏ
                     </button>
-                    <button type="button" class="btn btn-outline-warning fw-bold" onclick="scrollInteractiveCadMap(${coordX}, ${coordY})">
+                    <button type="button" class="btn btn-outline-warning fw-bold spotlight-btn" onclick="scrollInteractiveCadMap(${coordX}, ${coordY})">
                         <i class="bi bi-crosshair me-1"></i>Về Tâm Căn ${cleanCode}
                     </button>
-                    <button type="button" class="btn btn-warning text-dark fw-bold" onclick="showFullMasterplanZoom()">
+                    <button type="button" class="btn btn-warning text-dark fw-bold spotlight-btn" onclick="showFullMasterplanZoom()">
                         <i class="bi bi-arrows-fullscreen me-1"></i>Xem Toàn Sơ Đồ
                     </button>
                 </div>
@@ -2095,14 +2346,27 @@ function openLocationSpotlight(macan) {
                                     <ul class="list-unstyled small mb-3.5" style="line-height: 2.1; color: #f1f5f9;">
                                         <li class="mb-2"><span style="color: rgba(241,245,249,0.65);">Mã căn:</span> <strong style="color: #ffd166;" class="fs-6 ms-1">${cleanCode}</strong></li>
                                         <li class="mb-2"><span style="color: rgba(241,245,249,0.65);">Phân khu:</span> <strong style="color: #f1f5f9;" class="ms-1">${info.zoneName}</strong></li>
-                                        <li class="mb-2.5 d-flex align-items-start gap-1 flex-wrap"><span style="color: rgba(241,245,249,0.65); min-width: 45px;" class="mt-1">Vị trí:</span> <span style="color: #f1f5f9; background: rgba(255,209,102,0.12); padding: 5px 14px; border-radius: 10px; border: 1px solid rgba(255,209,102,0.35); display: inline-block; line-height: 1.5;" class="fw-semibold ms-1">${info.roadInfo}</span></li>
+                                        <li class="mb-2.5 d-flex align-items-start gap-1 flex-wrap"><span style="color: rgba(241,245,249,0.65);" class="mt-1">Mặt tiền đường:</span> <span style="color: #f1f5f9; background: rgba(255,209,102,0.12); padding: 5px 14px; border-radius: 10px; border: 1px solid rgba(255,209,102,0.35); display: inline-block; line-height: 1.5;" class="fw-semibold ms-1">${info.roadInfo}</span></li>
                                     </ul>
-                                    <h6 class="fw-bold mb-2.5 mt-2" style="color: #ffd166; font-size: 0.98rem; letter-spacing: 0.2px;">Tiện Ích Nổi Bật Lân Cận:</h6>
-                                    <ul class="list-unstyled small mb-0 spotlight-amenities-list" style="line-height: 1.6; color: #f1f5f9;">
-                                        ${info.amenities.map(a => `<li class="mb-2" style="position:relative; padding-left:14px;"><span style="position:absolute; left:0; color:#ffd166; font-weight:bold;">•</span> ${a}</li>`).join('')}
-                                    </ul>
+                                    <h6 class="fw-bold mb-2 mt-2 d-flex align-items-center justify-content-between" style="color: #ffd166; font-size: 0.95rem; letter-spacing: 0.2px;">
+                                        <span>Tiện Ích Nổi Bật Lân Cận:</span>
+                                    </h6>
+                                    <div class="row g-2 mb-1 spotlight-amenities-grid">
+                                        ${(info.amenityTiles || []).map(tile => `
+                                            <div class="col-6">
+                                                <div class="position-relative overflow-hidden rounded-3 border border-warning border-opacity-25 shadow-sm amenity-tile-card" style="height: 94px; background: #07201a; cursor: pointer;" onclick="openAmenityImageLightbox('${tile.img}', '${tile.name}')" title="Click xem phóng to: ${tile.name}">
+                                                    <img src="${tile.img}" class="w-100 h-100 object-fit-cover amenity-tile-img" alt="${tile.name}" onerror="this.onerror=null; this.src='assets/hero-overview.jpg';">
+                                                    <div class="position-absolute bottom-0 start-0 end-0 py-2 text-white" style="background: linear-gradient(0deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 70%, transparent 100%); line-height: 1.25; padding-left: 14px !important; padding-right: 12px !important;">
+                                                        <div class="fw-bold text-truncate" style="font-size: 0.78rem; color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.95); letter-spacing: 0.15px;">
+                                                            ${tile.name}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
                                 </div>
-                                <div class="alert alert-dark mb-0 py-2.5 px-3.5 small mt-4" style="background: rgba(255,209,102,0.08); border: 1px dashed rgba(255,209,102,0.35); color: #ffd166; border-radius: 12px; line-height: 1.5;">
+                                <div class="alert alert-dark mb-0 py-2 px-3 small mt-3" style="background: rgba(255,209,102,0.08); border: 1px dashed rgba(255,209,102,0.35); color: #ffd166; border-radius: 12px; line-height: 1.5; font-size: 0.8rem;">
                                     <i class="bi bi-info-circle me-1"></i> Chuyển sang Tab 2 để xem trực tiếp trên sơ đồ 2D toàn khu.
                                 </div>
                             </div>
@@ -2258,3 +2522,47 @@ function showFullMasterplanZoom() {
     viewport.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
 }
 
+// Auto-close search dropdowns when clicking outside
+document.addEventListener('click', function (e) {
+    const searchWrap1 = document.getElementById('searchApt')?.closest('.search-wrap');
+    const searchWrap2 = document.getElementById('spotlightSearchInput')?.closest('.search-wrap');
+    if (searchWrap1 && !searchWrap1.contains(e.target)) {
+        const dd1 = document.getElementById('searchDropdown');
+        if (dd1) dd1.style.display = 'none';
+    }
+    if (searchWrap2 && !searchWrap2.contains(e.target)) {
+        const dd2 = document.getElementById('spotlightSearchDropdown');
+        if (dd2) dd2.style.display = 'none';
+    }
+});
+
+function openAmenityImageLightbox(imgUrl, title) {
+    const titleText = title || 'Hình ảnh Tiện ích';
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: `<span style="color: #ffd166 !important; font-size: 1.25rem !important; font-weight: 800 !important; text-shadow: 0 1px 4px rgba(0,0,0,0.9);">${titleText}</span>`,
+            imageUrl: imgUrl,
+            imageAlt: titleText,
+            background: '#07201a',
+            color: '#ffd166',
+            confirmButtonColor: '#f59e0b',
+            confirmButtonText: 'Đóng',
+            heightAuto: false,
+            customClass: {
+                container: 'swal-amenity-lightbox-container',
+                popup: 'border border-warning rounded-4 shadow-lg'
+            },
+            willOpen: () => {
+                const el = Swal.getContainer();
+                if (el) el.style.zIndex = '999999';
+            },
+            didOpen: () => {
+                const el = Swal.getContainer();
+                if (el) el.style.zIndex = '999999';
+            }
+        });
+    } else {
+        window.open(imgUrl, '_blank');
+    }
+}
+window.openAmenityImageLightbox = openAmenityImageLightbox;
