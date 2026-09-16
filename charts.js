@@ -601,10 +601,36 @@ function renderLoanScheduleChart(canvasId, loanData) {
         yearly[year].count += 1;
     });
 
-    const labels = Object.keys(yearly).map(y => `Năm ${y}`);
-    const balanceData = Object.values(yearly).map(y => parseFloat((y.endBalance / 1e9).toFixed(2)));
-    const khInterestMonthlyData = Object.values(yearly).map(y => {
-        const avgMonthly = (y.khInterest / (y.count || 12)) / 1e6;
+    const isMobileScreen = (window.innerWidth < 768);
+
+    const allYears = Object.keys(yearly).map(Number).sort((a, b) => a - b);
+    const totalYears = allYears.length;
+
+    let selectedYears = allYears;
+    if (isMobileScreen && totalYears > 5) {
+        let step = 2;
+        if (totalYears > 20) {
+            step = 4;
+        } else if (totalYears > 12) {
+            step = 3;
+        } else {
+            step = 2;
+        }
+
+        selectedYears = [];
+        for (let i = 0; i < totalYears; i += step) {
+            selectedYears.push(allYears[i]);
+        }
+        const lastYear = allYears[totalYears - 1];
+        if (selectedYears[selectedYears.length - 1] !== lastYear) {
+            selectedYears.push(lastYear);
+        }
+    }
+
+    const labels = selectedYears.map(y => `Năm ${y}`);
+    const balanceData = selectedYears.map(y => parseFloat((yearly[y].endBalance / 1e9).toFixed(2)));
+    const khInterestMonthlyData = selectedYears.map(y => {
+        const avgMonthly = (yearly[y].khInterest / (yearly[y].count || 12)) / 1e6;
         return avgMonthly === 0 ? 0 : parseFloat(avgMonthly.toFixed(1));
     });
 
@@ -632,13 +658,9 @@ function renderLoanScheduleChart(canvasId, loanData) {
         gLineFill.addColorStop(0, 'rgba(255, 248, 219, 0.45)');
         gLineFill.addColorStop(0.40, 'rgba(245, 208, 97, 0.20)');
         gLineFill.addColorStop(0.75, 'rgba(197, 160, 89, 0.05)');
-        gLineFill.addColorStop(1, 'rgba(122, 88, 19, 0.0)');
     }
 
-    const isMobileScreen = (window.innerWidth < 768);
-
     activeChartInstances[canvasId] = new Chart(c, {
-        type: 'bar',
         data: {
             labels,
             datasets: [
@@ -729,9 +751,9 @@ function renderLoanScheduleChart(canvasId, loanData) {
                 x: {
                     ticks: {
                         color: isLight ? '#475569' : '#94A3B8',
-                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9 : 11, weight: '700' },
-                        maxRotation: isMobileScreen ? 50 : 45,
-                        minRotation: isMobileScreen ? 35 : 0
+                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9.5 : 11, weight: '700' },
+                        maxRotation: isMobileScreen ? 30 : 45,
+                        minRotation: 0
                     },
                     grid: { color: isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)' }
                 },
