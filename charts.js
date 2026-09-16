@@ -148,7 +148,7 @@ const customChartValuesPlugin = {
                 // Draw Bar Values (Dư Nợ Gốc) - ALWAYS INSIDE the green bar with white text
                 if (chart.isDatasetVisible(0) && (mode === 'all' || mode === 'principal')) {
                     const totalBars = metaBar.data.length;
-                    const barStep = (isMobileScreen && totalBars > 10) ? (totalBars > 16 ? 3 : 2) : 1;
+                    const barStep = (isMobileScreen && totalBars > 10) ? (totalBars > 18 ? 3 : 2) : 1;
 
                     metaBar.data.forEach((bar, i) => {
                         if (bar.hidden) return;
@@ -161,15 +161,15 @@ const customChartValuesPlugin = {
 
                         const textBar = numBar.toFixed(1);
                         const barHeight = chart.chartArea ? (chart.chartArea.bottom - bar.y) : 50;
-                        if (barHeight < 14) return;
+                        if (barHeight < 12) return;
 
-                        const fontSz = isMobileScreen ? 8.5 : 10;
+                        const fontSz = isMobileScreen ? 7.5 : 10;
                         ctx.font = `800 ${fontSz}px "Outfit", sans-serif`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
                         ctx.fillStyle = '#ffffff';
 
-                        const posY = bar.y + (barHeight >= 20 ? 10 : Math.max(4, barHeight / 2));
+                        const posY = bar.y + (barHeight >= 18 ? 8 : Math.max(3, barHeight / 2));
                         ctx.fillText(textBar, bar.x, posY);
                     });
                 }
@@ -177,7 +177,7 @@ const customChartValuesPlugin = {
                 // Draw Line Values (Lãi Vay Trả Hàng Tháng) - ABOVE line points cleanly with Glass Pill Badge
                 if (chart.isDatasetVisible(1) && (mode === 'all' || mode === 'interest')) {
                     const totalLinePts = metaLine.data.length;
-                    const lineStep = (isMobileScreen && totalLinePts > 10) ? (totalLinePts > 16 ? 3 : 2) : 1;
+                    const lineStep = (isMobileScreen && totalLinePts > 10) ? (totalLinePts > 18 ? 3 : 2) : 1;
 
                     metaLine.data.forEach((pt, i) => {
                         if (lineStep > 1 && i % lineStep !== 0 && i !== totalLinePts - 1) return;
@@ -186,18 +186,22 @@ const customChartValuesPlugin = {
                         if (valLine === undefined || valLine === null) return;
                         const textLine = (valLine === 0 || valLine === '0') ? '0 Tr' : `${valLine} Tr`;
 
-                        const fontSz = isMobileScreen ? 9 : 10.5;
+                        const fontSz = isMobileScreen ? 7.5 : 10.5;
                         ctx.font = `800 ${fontSz}px "Outfit", sans-serif`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
 
                         const textWidth = ctx.measureText(textLine).width;
                         const px = pt.x;
-                        const py = pt.y - (isMobileScreen ? 9 : 12);
 
-                        const padX = isMobileScreen ? 3 : 6;
+                        // Stagger Y offsets on mobile so adjacent glass pill badges don't collide
+                        const isStagger = isMobileScreen && totalLinePts > 10;
+                        const yDist = isStagger ? ((i / (lineStep > 1 ? lineStep : 1)) % 2 === 0 ? 8 : 17) : (isMobileScreen ? 8 : 12);
+                        const py = pt.y - yDist;
+
+                        const padX = isMobileScreen ? 2 : 6;
                         const rw = textWidth + padX * 2;
-                        const rh = isMobileScreen ? 13 : 16;
+                        const rh = isMobileScreen ? 11 : 16;
                         const rx = px - rw / 2;
                         const ry = py - rh / 2;
 
@@ -603,34 +607,10 @@ function renderLoanScheduleChart(canvasId, loanData) {
 
     const isMobileScreen = (window.innerWidth < 768);
 
-    const allYears = Object.keys(yearly).map(Number).sort((a, b) => a - b);
-    const totalYears = allYears.length;
-
-    let selectedYears = allYears;
-    if (isMobileScreen && totalYears > 5) {
-        let step = 2;
-        if (totalYears > 20) {
-            step = 4;
-        } else if (totalYears > 12) {
-            step = 3;
-        } else {
-            step = 2;
-        }
-
-        selectedYears = [];
-        for (let i = 0; i < totalYears; i += step) {
-            selectedYears.push(allYears[i]);
-        }
-        const lastYear = allYears[totalYears - 1];
-        if (selectedYears[selectedYears.length - 1] !== lastYear) {
-            selectedYears.push(lastYear);
-        }
-    }
-
-    const labels = selectedYears.map(y => `Năm ${y}`);
-    const balanceData = selectedYears.map(y => parseFloat((yearly[y].endBalance / 1e9).toFixed(2)));
-    const khInterestMonthlyData = selectedYears.map(y => {
-        const avgMonthly = (yearly[y].khInterest / (yearly[y].count || 12)) / 1e6;
+    const labels = Object.keys(yearly).map(y => `Năm ${y}`);
+    const balanceData = Object.values(yearly).map(y => parseFloat((y.endBalance / 1e9).toFixed(2)));
+    const khInterestMonthlyData = Object.values(yearly).map(y => {
+        const avgMonthly = (y.khInterest / (y.count || 12)) / 1e6;
         return avgMonthly === 0 ? 0 : parseFloat(avgMonthly.toFixed(1));
     });
 
@@ -671,8 +651,8 @@ function renderLoanScheduleChart(canvasId, loanData) {
                     backgroundColor: gBar,
                     borderColor: isLight ? '#062E1F' : '#FFF5C0',
                     borderWidth: 1,
-                    borderRadius: 6,
-                    maxBarThickness: 32,
+                    borderRadius: isMobileScreen ? 3 : 6,
+                    maxBarThickness: isMobileScreen ? 14 : 32,
                     yAxisID: 'y'
                 },
                 {
@@ -683,12 +663,12 @@ function renderLoanScheduleChart(canvasId, loanData) {
                     backgroundColor: gLineFill,
                     fill: true,
                     tension: 0.38,
-                    borderWidth: 3,
-                    pointRadius: 6,
+                    borderWidth: isMobileScreen ? 2 : 3,
+                    pointRadius: isMobileScreen ? 3.5 : 6,
                     pointBackgroundColor: isLight ? '#136F4E' : '#FFF099',
                     pointBorderColor: isLight ? '#062E1F' : '#F5D061',
-                    pointBorderWidth: 2.8,
-                    pointHoverRadius: 8.0,
+                    pointBorderWidth: isMobileScreen ? 1.5 : 2.8,
+                    pointHoverRadius: isMobileScreen ? 5.5 : 8.0,
                     yAxisID: 'y1'
                 }
             ]
@@ -700,9 +680,9 @@ function renderLoanScheduleChart(canvasId, loanData) {
             maintainAspectRatio: false,
             layout: {
                 padding: {
-                    left: isMobileScreen ? 2 : 18,
-                    right: isMobileScreen ? 2 : 18,
-                    top: isMobileScreen ? 14 : 4,
+                    left: isMobileScreen ? 1 : 18,
+                    right: isMobileScreen ? 1 : 18,
+                    top: isMobileScreen ? 22 : 4,
                     bottom: 5
                 }
             },
@@ -711,19 +691,17 @@ function renderLoanScheduleChart(canvasId, loanData) {
                     position: 'top',
                     labels: {
                         color: isLight ? '#1e293b' : '#E2E8F0',
-                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9.5 : 11, weight: '700' },
+                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 8.5 : 11, weight: '700' },
                         usePointStyle: true,
-                        padding: isMobileScreen ? 6 : 10,
+                        padding: isMobileScreen ? 4 : 10,
                         generateLabels: (chart) => {
                             const defaultLabels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
                             if (defaultLabels[0]) {
-                                // Cột Dư nợ gốc: Icon hình ô vuông bo góc màu Forest Green đậm / Vàng Đồng
                                 defaultLabels[0].pointStyle = 'rectRounded';
                                 defaultLabels[0].fillStyle = isLight ? '#0F5B3F' : '#C9A227';
                                 defaultLabels[0].strokeStyle = isLight ? '#062E1F' : '#F5D061';
                             }
                             if (defaultLabels[1]) {
-                                // Đường Lãi vay: Icon chấm tròn màu Forest Emerald / Vàng Sáng
                                 defaultLabels[1].pointStyle = 'circle';
                                 defaultLabels[1].fillStyle = isLight ? '#136F4E' : '#FFF099';
                                 defaultLabels[1].strokeStyle = isLight ? '#0F5B3F' : '#F5D061';
@@ -751,9 +729,9 @@ function renderLoanScheduleChart(canvasId, loanData) {
                 x: {
                     ticks: {
                         color: isLight ? '#475569' : '#94A3B8',
-                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9.5 : 11, weight: '700' },
-                        maxRotation: isMobileScreen ? 30 : 45,
-                        minRotation: 0
+                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 8.5 : 11, weight: '700' },
+                        maxRotation: isMobileScreen ? 55 : 45,
+                        minRotation: isMobileScreen ? 35 : 0
                     },
                     grid: { color: isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)' }
                 },

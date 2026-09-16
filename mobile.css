@@ -132,7 +132,7 @@
         bottom: 0 !important;
         left: 0 !important;
         right: 0 !important;
-        z-index: 9999 !important;
+        z-index: 1030 !important;
         height: 60px !important;
         background: rgba(8, 28, 22, 0.96) !important;
         border-top: 1.5px solid rgba(255, 209, 102, 0.5) !important;
@@ -141,6 +141,15 @@
         align-items: center !important;
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5) !important;
         padding: 0 4px !important;
+    }
+
+    /* Hide bottom nav bar & sticky compare bar when modal is active */
+    body.modal-open .mobile-bottom-nav,
+    body.modal-open #finCompareStickyBar,
+    .modal.show ~ .mobile-bottom-nav {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }
 
     body.light-theme .mobile-bottom-nav {
@@ -589,6 +598,11 @@ body.light-theme #finCompareStickyBar {
 /* ==========================================================================
    EXPORT MODAL RESPONSIVE SCALING (MOBILE & IPAD / TABLET)
    ========================================================================== */
+#exportCardModal,
+#exportCompareCardModal {
+    z-index: 1060 !important;
+}
+
 #exportCardModal .modal-dialog,
 #exportCompareCardModal .modal-dialog {
     max-width: 96% !important;
@@ -599,13 +613,26 @@ body.light-theme #finCompareStickyBar {
 #exportCardModal .modal-content,
 #exportCompareCardModal .modal-content {
     border-radius: 16px !important;
+    overflow: hidden !important;
 }
 
 #exportCardModal .modal-body,
 #exportCompareCardModal .modal-body {
     padding: 14px 10px !important;
-    max-height: 85vh !important;
+    max-height: 75vh !important;
     overflow-y: auto !important;
+}
+
+#exportCardModal .modal-footer,
+#exportCompareCardModal .modal-footer {
+    padding: 12px 14px !important;
+    position: sticky !important;
+    bottom: 0 !important;
+    background: #041c15 !important;
+    border-bottom-left-radius: 16px !important;
+    border-bottom-right-radius: 16px !important;
+    z-index: 1065 !important;
+    gap: 8px !important;
 }
 
 #quotationCardPreview,
