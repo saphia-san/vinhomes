@@ -257,7 +257,7 @@ function runFinancialMatcher() {
     const activePromos = {
         goldGift: getCheck('fin_promo_goldGift') || getCheck('promo_goldGift'),
         earlyMoveIn: getCheck('fin_promo_earlyMoveIn'),
-        noBlnh: getCheck('fin_promo_noBlnh') || getCheck('promo_noBlnh'),
+        noBlnh: true,
         aquafield: getCheck('fin_promo_aquafield') || getCheck('promo_aquafield'),
         voucher: getCheck('fin_promo_voucher') || getCheck('promo_voucher'),
         voucherAmount: getVal('fin_voucherAmount') || getVal('voucherAmount'),
@@ -363,7 +363,7 @@ function renderAllMatchedCards() {
     const container = document.getElementById('finMatcherResultsContainer');
     if (!container || !allMatchingResults) return;
 
-    const typeLabels = { rough: 'Bàn giao thô', finished: 'Hoàn thiện', gianXay: 'Giãn xây' };
+    const typeLabels = { rough: 'Thô', finished: 'Hoàn thiện', gianXay: 'Giãn xây' };
     const elM = document.getElementById('finMethod');
     const mVal = elM ? elM.value : 'all';
 
@@ -406,34 +406,34 @@ function renderAllMatchedCards() {
         return `
             <div class="col-12 col-md-6 col-lg-4 mb-3">
                 <div class="card-recommendation-item rounded-4 h-100 d-flex flex-column justify-content-between shadow position-relative"
-                     style="background: linear-gradient(160deg, #092e26 0%, #041a14 100%); border: 1.5px solid rgba(255, 209, 102, 0.35); border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.4); padding: 16px 18px;">
+                     style="background: linear-gradient(160deg, #092e26 0%, #041a14 100%); border: 1.5px solid rgba(255, 209, 102, 0.35); border-radius: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.4); padding: 14px 16px;">
                     <div>
-                        <!-- Header: Mã Căn & Match Score -->
-                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2.5 border-bottom border-secondary border-opacity-30">
-                            <div class="d-flex align-items-center gap-2">
-                                <h5 class="fw-extrabold mb-0 text-warning" style="font-size: 1.25rem; letter-spacing: 0.3px; text-shadow: 0 0 8px rgba(255,209,102,0.3);">${u.macan}</h5>
-                                <span class="badge type-badge ${u.type === 'gianXay' ? 'type-badge-gianxay' : (u.type === 'rough' ? 'type-badge-rough' : 'type-badge-finished')} px-2.5 py-1 fw-bold" style="font-size: 0.72rem; border-radius: 10px;">${typeLabels[u.type] || 'Bàn giao hoàn thiện'}</span>
+                        <!-- Header: Mã Căn & Match Score (Tối ưu giao diện Mobile) -->
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2 pb-2" style="border-bottom: 1px solid rgba(255, 209, 102, 0.25);">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="fw-extrabold text-warning fs-5 mb-0" style="letter-spacing: 0.3px; text-shadow: 0 0 8px rgba(255,209,102,0.3); line-height: 1.1;">${u.macan}</span>
+                                <span class="badge type-badge ${u.type === 'gianXay' ? 'type-badge-gianxay' : (u.type === 'rough' ? 'type-badge-rough' : 'type-badge-finished')} px-2 py-1 fw-bold" style="font-size: 0.72rem; border-radius: 8px;">${typeLabels[u.type] || 'Hoàn thiện'}</span>
                             </div>
-                            <span class="badge ${msBgColor} px-2.5 py-1 fw-bold shadow-sm" style="font-size: 0.8rem; border-radius: 10px;">
+                            <span class="badge ${msBgColor} px-2.5 py-1 fw-bold shadow-sm ms-auto" style="font-size: 0.78rem; border-radius: 8px; white-space: nowrap;">
                                 ${final_score}% Khớp
                             </span>
                         </div>
 
-                        <!-- Badges & Ô Tick So Sánh (Khoảng cách thoáng 100%, không bị chèn hay đè đường viền) -->
-                        <div class="d-flex justify-content-between align-items-center mb-3 mt-2 flex-wrap gap-2">
+                        <!-- Badges & Ô Tick So Sánh (Thoáng đẹp, không bị đè viền) -->
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2.5">
                             <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                                ${(u.daBan === true || u.status === 'daBan') ? '<span class="badge bg-secondary text-white px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;"><i class="bi bi-lock-fill me-1"></i>Đã bán</span>' : '<span class="badge bg-success bg-gradient text-white px-2.5 py-1" style="font-size: 0.72rem; border-radius: 10px;">Đang mở bán</span>'}
+                                ${(u.daBan === true || u.status === 'daBan') ? '<span class="badge bg-secondary text-white px-2 py-1" style="font-size: 0.7rem; border-radius: 8px;"><i class="bi bi-lock-fill me-1"></i>Đã bán</span>' : '<span class="badge bg-success bg-gradient text-white px-2 py-1" style="font-size: 0.7rem; border-radius: 8px;">Đang mở bán</span>'}
                                 ${goldBadge}
                                 ${vosBadge}
                             </div>
-                            <div class="form-check m-0 d-flex align-items-center gap-1.5 cursor-pointer py-1 px-2.5 rounded-3" style="background: rgba(255, 209, 102, 0.1); border: 1px solid rgba(255, 209, 102, 0.3); white-space: nowrap;">
+                            <label class="form-check m-0 d-flex align-items-center gap-1.5 cursor-pointer px-2 py-1 rounded-2 ms-auto" for="chk_cmp_${u.macan}" style="background: rgba(255, 209, 102, 0.08); border: 1px solid rgba(255, 209, 102, 0.28); white-space: nowrap; user-select: none;">
                                 <input class="form-check-input cursor-pointer m-0" type="checkbox" id="chk_cmp_${u.macan}" 
-                                       style="width: 1.05rem; height: 1.05rem; accent-color: #f59e0b;" 
+                                       style="width: 1rem; height: 1rem; accent-color: #f59e0b;" 
                                        onchange="toggleCompareUnit('${u.macan}')" ${isChecked ? 'checked' : ''}>
-                                <label class="form-check-label text-warning extra-small fw-bold mb-0 cursor-pointer" for="chk_cmp_${u.macan}" style="font-size: 0.8rem;">
+                                <span class="text-warning fw-bold mb-0 cursor-pointer" style="font-size: 0.78rem;">
                                     Tick so sánh
-                                </label>
-                            </div>
+                                </span>
+                            </label>
                         </div>
 
                         <!-- Info Box: gộp Spec + Financial -->
@@ -593,7 +593,7 @@ function goToSystemCompareTab() {
     const getCheck = (id) => { const el = document.getElementById(id); return el ? el.checked : false; };
     const pGold = true; // Luôn tự động bật Quà Vàng
     const pEarly = getCheck('fin_promo_earlyMoveIn');
-    const pNoBlnh = getCheck('fin_promo_noBlnh');
+    const pNoBlnh = true;
     const pAqua = getCheck('fin_promo_aquafield');
     const pVoucher = getCheck('fin_promo_voucher');
 

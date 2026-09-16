@@ -67,9 +67,9 @@ function updateQuotationPreview() {
         return d.toString();
     };
 
-    const methodLabel = S.paymentMethod === 'own-early' ? '💰 Thanh Toán Sớm 100%'
-        : S.paymentMethod === 'own-normal' ? '📋 Vốn Tự Có – Thanh Toán Theo Tiến Độ Chuẩn'
-            : '🏦 Vay Ngân Hàng Hỗ Trợ Lãi Suất 0%';
+    const methodLabel = S.paymentMethod === 'own-early' ? 'Thanh Toán Sớm 100%'
+        : S.paymentMethod === 'own-normal' ? 'Thanh Toán Theo Tiến Độ Chuẩn'
+            : 'Vay Ngân Hàng Hỗ Trợ Lãi Suất 0%';
 
     const isWhite = theme === 'white';
     const bgStyle = isWhite
@@ -93,23 +93,23 @@ function updateQuotationPreview() {
         breakdownHTML = `
         <div style="background:${cardBg}; border:${cardBorder}; border-radius:12px; padding:16px; margin-bottom:20px;">
             <div style="font-weight:800; font-size:0.95rem; color:${goldColor}; margin-bottom:12px;">
-                ❖ BÓC TÁCH CHI TIẾT GIÁ BẤT ĐỘNG SẢN (ĐẤT & XÂY DỰNG)
+                BÓC TÁCH CHI TIẾT GIÁ BẤT ĐỘNG SẢN (ĐẤT & XÂY DỰNG)
             </div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; font-size:0.85rem;">
                 <div style="background:${isWhite ? '#ffffff' : 'rgba(212,175,55,0.08)'}; padding:12px; border-radius:8px; border:${cardBorder};">
-                    <div style="font-weight:800; color:${isWhite ? '#b45309' : '#ffd166'}; margin-bottom:6px;">📍 PHẦN TIỀN ĐẤT</div>
+                    <div style="font-weight:800; color:${isWhite ? '#b45309' : '#ffd166'}; margin-bottom:6px;">PHẦN TIỀN ĐẤT</div>
                     <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Giá Đất (chưa VAT):</span><strong>${fmt(PA.p_land)} VNĐ</strong></div>
                     <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>VAT Đất (10%):</span><strong>${fmt(PA.vat_land)} VNĐ</strong></div>
                     <div style="display:flex; justify-content:space-between; border-top:1px dashed ${mutedColor}; padding-top:6px; font-weight:800; color:${isWhite ? '#b45309' : '#ffd166'};">
                         <span>TỔNG TIỀN ĐẤT (gồm VAT):</span><span>${fmt(PA.land_total)} VNĐ</span>
                     </div>
                 </div>
-                <div style="background:${isWhite ? '#ffffff' : 'rgba(52,211,153,0.08)'}; padding:12px; border-radius:8px; border:${cardBorder};">
-                    <div style="font-weight:800; color:${isWhite ? '#047857' : '#6ee7b7'}; margin-bottom:6px;">🛠️ PHẦN TIỀN XÂY DỰNG</div>
+                <div style="background:${isWhite ? '#ffffff' : 'rgba(248,215,127,0.08)'}; padding:12px; border-radius:8px; border:${cardBorder};">
+                    <div style="font-weight:800; color:${isWhite ? '#b45309' : '#f8d77f'}; margin-bottom:6px;">PHẦN TIỀN XÂY DỰNG</div>
                     <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Giá Xây dựng (chưa VAT):</span><strong>${fmt(PA.p_const)} VNĐ</strong></div>
                     <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>VAT Xây dựng (10%):</span><strong>${fmt(PA.vat_const)} VNĐ</strong></div>
                     <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>Kinh phí bảo trì (KPBT 0.5%):</span><strong>${fmt(PA.kpbt)} VNĐ</strong></div>
-                    <div style="display:flex; justify-content:space-between; border-top:1px dashed ${mutedColor}; padding-top:6px; font-weight:800; color:${isWhite ? '#047857' : '#6ee7b7'};">
+                    <div style="display:flex; justify-content:space-between; border-top:1px dashed ${mutedColor}; padding-top:6px; font-weight:800; color:${isWhite ? '#b45309' : '#f8d77f'};">
                         <span>TỔNG TIỀN XÂY + KPBT:</span><span>${fmt(PA.const_total + PA.kpbt)} VNĐ</span>
                     </div>
                 </div>
@@ -149,14 +149,16 @@ function updateQuotationPreview() {
     
     <!-- Header Banner Logo & Tên Dự Án -->
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid ${goldColor}; padding-bottom:18px; margin-bottom:20px;">
-        <div>
-            <div style="font-size:1.55rem; font-weight:900; color:${goldColor}; letter-spacing:1px; text-transform:uppercase;">VINHOMES SÀI GÒN PARK</div>
-            <div style="font-size:0.88rem; font-weight:700; color:${textColor}; margin-top:4px;">BẢNG PHƯƠNG ÁN TÀI CHÍNH MUA BẤT ĐỘNG SẢN CHÍNH THỨC</div>
-            <div style="font-size:0.78rem; color:${mutedColor}; margin-top:2px;">Áp dụng CSBH V09/V08 CĐT Vingroup · Ngày lập: ${todayStr}</div>
+        <div style="display:flex; align-items:center; gap:14px;">
+            <img src="logo-vinhomes-saigon-park-gold.jpg" alt="Logo Vinhomes Sài Gòn Park" style="height:48px; width:auto; border-radius:8px; object-fit:contain;" onerror="this.style.display='none';">
+            <div>
+                <div style="font-size:1.55rem; font-weight:900; color:${goldColor}; letter-spacing:1px; text-transform:uppercase;">VINHOMES SÀI GÒN PARK</div>
+                <div style="font-size:0.88rem; font-weight:700; color:${textColor}; margin-top:4px;">BẢNG PHƯƠNG ÁN TÀI CHÍNH MUA BẤT ĐỘNG SẢN CHÍNH THỨC</div>
+                <div style="font-size:0.78rem; color:${mutedColor}; margin-top:2px;">Áp dụng CSBH V09/V08 CĐT Vingroup · Ngày lập: ${todayStr}</div>
+            </div>
         </div>
-        <div style="background:linear-gradient(135deg, #ffd166 0%, #f3a83b 100%); color:#0d2e26; font-size:1.3rem; font-weight:900; padding:10px 22px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.3); text-align:center; white-space:nowrap; min-width:130px; flex-shrink:0;">
-            <div style="font-size:0.72rem; text-transform:uppercase; font-weight:800; opacity:0.85; letter-spacing:0.5px;">MÃ CĂN</div>
-            <div style="white-space:nowrap; font-weight:900;">${S.macan || 'AS72-24'}</div>
+        <div style="background:linear-gradient(135deg, #fff7d6 0%, #f8d77f 30%, #d99b26 70%, #fff0b8 100%); color:#041c15; font-size:1.4rem; font-weight:900; padding:10px 28px; border-radius:30px; box-shadow:0 4px 16px rgba(0,0,0,0.4); border:none; text-align:center; white-space:nowrap; flex-shrink:0; letter-spacing:0.6px; line-height:1;">
+            ${S.macan || 'AS72-24'}
         </div>
     </div>
 
@@ -169,14 +171,14 @@ function updateQuotationPreview() {
         <div style="background:${cardBg}; padding:14px 18px; border-radius:12px; border:${cardBorder}; border-left:4px solid #34d399;">
             <div style="font-size:0.78rem; color:${mutedColor}; text-transform:uppercase; font-weight:700;">CHUYÊN VIÊN TƯ VẤN BẤT ĐỘNG SẢN</div>
             <div style="font-size:1.05rem; font-weight:800; color:${textColor}; margin-top:2px;">${saleName}</div>
-            <div style="font-size:0.92rem; font-weight:700; color:${goldColor};">📞 Hotline: ${salePhone}</div>
+            <div style="font-size:0.92rem; font-weight:700; color:${goldColor};">Hotline: ${salePhone}</div>
         </div>
     </div>
 
     <!-- Thông Tin Sản Phẩm & Giá Niêm Yết -->
     <div style="background:${cardBg}; padding:18px; border-radius:12px; border:${cardBorder}; margin-bottom:20px;">
         <div style="font-size:0.95rem; font-weight:800; color:${goldColor}; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px;">
-            📌 THÔNG TIN CHI TIẾT THỬA ĐẤT / CĂN
+            THÔNG TIN CHI TIẾT THỬA ĐẤT / CĂN
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; font-size:0.88rem;">
             <div>Mã Căn: <strong style="color:${goldColor}; font-size:0.95rem; white-space:nowrap;">${S.macan}</strong></div>
@@ -188,10 +190,10 @@ function updateQuotationPreview() {
 
     ${breakdownHTML}
 
-    <!-- Tổng Hợp Ưu Đãi Chiết Khấu -->
+    <!-- CHƯƠNG TRÌNH ƯU ĐÃI -->
     <div style="background:${cardBg}; padding:18px; border-radius:12px; border:${cardBorder}; margin-bottom:20px;">
         <div style="font-size:0.95rem; font-weight:800; color:${goldColor}; margin-bottom:10px;">
-            🎁 CÁC KHOẢN CHIẾT KHẤU & ƯU ĐÃI ĐƯỢC HƯỞNG
+            CHƯƠNG TRÌNH ƯU ĐÃI
         </div>
         ${ckRowsHTML}
         <div style="display:flex; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1.5px solid ${goldColor}; font-size:0.95rem; font-weight:900;">
@@ -202,7 +204,7 @@ function updateQuotationPreview() {
 
     <!-- Tổng Báo Giá & Nộp Tiền -->
     <div style="background:linear-gradient(135deg, rgba(255,209,102,0.18) 0%, rgba(212,175,55,0.28) 100%); border:2px solid ${goldColor}; padding:20px; border-radius:14px; margin-bottom:24px; text-align:center;">
-        <div style="font-size:0.88rem; font-weight:800; color:${mutedColor}; text-transform:uppercase; letter-spacing:0.5px;">TỔNG GIÁ TRỊ HỢP ĐỒNG CUỐI CÙNG (GỒM VAT + KPBT)</div>
+        <div style="font-size:0.88rem; font-weight:800; color:${mutedColor}; text-transform:uppercase; letter-spacing:0.5px;">TỔNG GIÁ GỒM VAT (Gồm VAT+KPBT)</div>
         <div style="font-size:2.2rem; font-weight:900; color:${goldColor}; margin:8px 0; letter-spacing:1px; white-space:nowrap;">${fmt(S.grandTotal)} VNĐ</div>
         <div style="display:flex; justify-content:center; gap:24px; font-size:0.88rem; color:${textColor}; font-weight:700; margin-top:8px;">
             <div>• Vốn tự có trả CĐT: <span style="color:${goldColor}; white-space:nowrap;">${fmt(S.totalKHtoCDT)} VNĐ</span></div>
@@ -210,11 +212,11 @@ function updateQuotationPreview() {
         </div>
     </div>
 
-    <!-- Bảng Lịch Thanh Toán Chi Tiết Theo Đợt -->
+    <!-- BẢNG LỊCH THANH TOÁN TIẾN ĐỘ CHÍNH THỨC -->
     ${scheduleRowsHTML ? `
     <div style="background:${cardBg}; padding:18px; border-radius:12px; border:${cardBorder}; margin-bottom:24px;">
         <div style="font-size:0.95rem; font-weight:800; color:${goldColor}; margin-bottom:12px;">
-            📅 BẢNG LỊCH THANH TOÁN TIẾN ĐỘ CHÍNH THỨC
+            BẢNG LỊCH THANH TOÁN TIẾN ĐỘ CHÍNH THỨC
         </div>
         <table style="width:100%; border-collapse:collapse; text-align:left; table-layout:fixed;">
             <thead>
@@ -319,8 +321,8 @@ function createExportModalHTML() {
                     <div class="col-12">
                         <label class="form-label text-warning small font-weight-bold mb-1">Tone Màu Thẻ Báo Giá:</label>
                         <select id="exportTheme" class="form-select form-select-sm" onchange="updateQuotationPreview()">
-                            <option value="gold">🏆 Hoàng Gia Emerald Gold (Đen Tuyền & Vàng Kim - Khuyên Dùng)</option>
-                            <option value="white">⚪ Clean White (Nền Trắng Nổi Bật)</option>
+                            <option value="gold">Hoàng Gia Emerald Gold (Đen Tuyền & Vàng Kim - Khuyên Dùng)</option>
+                            <option value="white">Clean White (Nền Trắng Nổi Bật)</option>
                         </select>
                     </div>
                 </div>
@@ -416,7 +418,10 @@ function updateCompareQuotationPreview() {
         if (mKey && mKey.startsWith('bank')) {
             const bankMap = { 'bank_0': 'Vay HTLS 18T', 'bank_1': 'Vay HTLS 24T', 'bank_2': 'Vay HTLS 30T', 'bank_3': 'Vay HTLS 36T' };
             if (bankMap[mKey]) return bankMap[mKey];
-            return 'Vay NH';
+            const planEl = document.getElementById('interestSupportPlan');
+            const planIdx = planEl ? (parseInt(planEl.value) || 0) : 0;
+            const months = planIdx * 6 + 18;
+            return `Vay HTLS ${months}T`;
         }
         return 'TTS';
     };
@@ -456,7 +461,7 @@ function updateCompareQuotationPreview() {
         <div style="background:rgba(255,255,255,0.06); padding:12px 18px; border-radius:12px; border:1px solid rgba(255,209,102,0.3); border-left:4px solid #34d399;">
             <div style="font-size:0.75rem; color:#cbd5e1; text-transform:uppercase; font-weight:700;">CHUYÊN VIÊN TƯ VẤN BẤT ĐỘNG SẢN</div>
             <div style="font-size:1.05rem; font-weight:800; color:#ffffff; margin-top:2px;">${saleName}</div>
-            <div style="font-size:0.9rem; font-weight:700; color:#ffd166;">📞 Hotline: ${salePhone}</div>
+            <div style="font-size:0.9rem; font-weight:700; color:#ffd166;">Hotline: ${salePhone}</div>
         </div>
     </div>
 

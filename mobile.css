@@ -260,6 +260,11 @@
         height: auto !important;
     }
 
+    #startDate, #signDate, .flatpickr-input {
+        text-align: center !important;
+        font-weight: 600 !important;
+    }
+
     /* Calculator summary tables */
     .table-responsive {
         max-width: 100% !important;
@@ -326,6 +331,33 @@
     body.light-theme .badge-warning {
         background-color: #f59e0b !important;
         color: #ffffff !important;
+    }
+
+    /* High-DPI Crisp Canvas Rendering & Layout on Mobile (Eliminates Blur on Mobile Retina Displays) */
+    canvas,
+    .techno-donut-canvas,
+    #chart-breakdown-canvas,
+    #chart-methods-canvas,
+    #chart-loan-canvas,
+    #chart-radar-canvas {
+        transform: none !important;
+        -webkit-transform: none !important;
+        backface-visibility: visible !important;
+        image-rendering: -webkit-optimize-contrast !important;
+        image-rendering: crisp-edges !important;
+    }
+
+    .executive-split-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+        height: auto !important;
+    }
+
+    .split-left-area {
+        height: 240px !important;
+        width: 100% !important;
+        position: relative !important;
     }
 
     /* Chart legends and titles high contrast on mobile light theme */
@@ -600,3 +632,133 @@ body.light-theme #finCompareStickyBar {
         width: 92% !important;
     }
 }
+
+/* Fix Video Player & Thumbnail Container - Eliminate Bottom Black Bar Gap */
+[id^="yt-player-box"] {
+    background: #04180f !important;
+    border-radius: 1rem !important;
+    overflow: hidden !important;
+}
+
+[id^="yt-player-box"] .ratio,
+[id^="yt-player-box"] .ratio-16x9 {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow: hidden !important;
+}
+
+[id^="yt-player-box"] img {
+    object-fit: cover !important;
+    object-position: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+}
+
+[id^="yt-player-box"] iframe {
+    object-fit: cover !important;
+    border: none !important;
+}
+
+.video-play-btn {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
+}
+
+.video-play-btn:hover {
+    transform: scale(1.12) !important;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Footer Responsive Spacing - Eliminate Extra Bottom Gap */
+@media (min-width: 992px) {
+    body, html {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    footer {
+        padding-bottom: 2px !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+@media (max-width: 991.98px) {
+    body {
+        padding-bottom: 58px !important;
+    }
+    footer {
+        padding-bottom: 2px !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Spotlight Location Modal Mobile Optimization */
+    #spotlightModeTabs {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        width: 100% !important;
+        margin-bottom: 12px !important;
+    }
+    #spotlightModeTabs .nav-item {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 130px !important;
+        text-align: center !important;
+    }
+    #spotlightModeTabs .nav-item:last-child {
+        flex: 1 1 100% !important;
+    }
+    #spotlightModeTabs .nav-link,
+    #spotlightModeTabs .btn {
+        width: 100% !important;
+        padding: 8px 6px !important;
+        font-size: 0.8rem !important;
+        white-space: nowrap !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+    }
+
+    .spotlight-toolbar-wrap {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        padding: 10px 10px !important;
+    }
+    .spotlight-toolbar-title {
+        text-align: center !important;
+        font-size: 0.85rem !important;
+        margin-bottom: 2px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    .spotlight-toolbar-btns {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        width: 100% !important;
+    }
+    .spotlight-toolbar-btns .spotlight-btn {
+        width: 100% !important;
+        padding: 7px 4px !important;
+        font-size: 0.78rem !important;
+        white-space: nowrap !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1.2 !important;
+        margin-left: 0 !important;
+        text-align: center !important;
+    }
+    .spotlight-toolbar-btns .spotlight-btn i {
+        font-size: 0.85rem !important;
+    }
+}
+
+
+

@@ -89,16 +89,24 @@ const centerTextPlugin = {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        // Line 1: Subtitle Label (positioned safely above center)
-        ctx.font = '700 8.5px "Be Vietnam Pro", sans-serif';
-        ctx.fillStyle = isLight ? '#16653F' : '#E2C96E';
-        ctx.fillText('TỔNG GIÁ TRỊ', centerX, centerY - 13);
+        const chartWidth = chartArea.right - chartArea.left;
+        const chartHeight = chartArea.bottom - chartArea.top;
+        const minDim = Math.min(chartWidth, chartHeight);
+        
+        const labelSize = Math.max(9, Math.round(minDim * 0.052));
+        const valueSize = Math.max(18, Math.round(minDim * 0.11));
+        const gap = Math.round(valueSize * 0.55);
 
-        // Line 2: Large Value (positioned safely below center with 24px gap!)
-        ctx.font = '800 20px "Be Vietnam Pro", sans-serif';
+        // Line 1: Subtitle Label (positioned safely above center)
+        ctx.font = `700 ${labelSize}px "Be Vietnam Pro", sans-serif`;
+        ctx.fillStyle = isLight ? '#16653F' : '#E2C96E';
+        ctx.fillText('TỔNG GIÁ TRỊ', centerX, centerY - gap);
+
+        // Line 2: Large Value (positioned safely below center)
+        ctx.font = `800 ${valueSize}px "Be Vietnam Pro", sans-serif`;
         ctx.fillStyle = isLight ? '#0B3B24' : '#F5D061';
         ctx.shadowBlur = 0;
-        ctx.fillText(totalStr, centerX, centerY + 11);
+        ctx.fillText(totalStr, centerX, centerY + Math.round(valueSize * 0.45));
 
         ctx.restore();
     }
@@ -135,53 +143,68 @@ const customChartValuesPlugin = {
             const mode = window.chartLoanLabelMode || 'all';
 
             if (metaBar && metaBar.data && metaLine && metaLine.data) {
+                const isMobileScreen = chart.width < 500 || window.innerWidth < 768;
+
                 // Draw Bar Values (Dư Nợ Gốc) - ALWAYS INSIDE the green bar with white text
                 if (chart.isDatasetVisible(0) && (mode === 'all' || mode === 'principal')) {
+                    const totalBars = metaBar.data.length;
+                    const barStep = (isMobileScreen && totalBars > 10) ? (totalBars > 16 ? 3 : 2) : 1;
+
                     metaBar.data.forEach((bar, i) => {
                         if (bar.hidden) return;
+                        if (barStep > 1 && i % barStep !== 0 && i !== totalBars - 1) return;
+
                         const valBar = chart.data.datasets[0].data[i];
                         if (valBar === undefined || valBar === null) return;
                         const numBar = parseFloat(valBar);
                         if (isNaN(numBar) || numBar <= 0) return;
 
-                        const textBar = numBar.toFixed(2);
+                        const textBar = numBar.toFixed(1);
                         const barHeight = chart.chartArea ? (chart.chartArea.bottom - bar.y) : 50;
+                        if (barHeight < 14) return;
 
-                        ctx.font = '800 10px "Outfit", sans-serif';
+                        const fontSz = isMobileScreen ? 8.5 : 10;
+                        ctx.font = `800 ${fontSz}px "Outfit", sans-serif`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
                         ctx.fillStyle = '#ffffff';
 
-                        const posY = bar.y + (barHeight >= 20 ? 10 : Math.max(5, barHeight / 2));
+                        const posY = bar.y + (barHeight >= 20 ? 10 : Math.max(4, barHeight / 2));
                         ctx.fillText(textBar, bar.x, posY);
                     });
                 }
 
                 // Draw Line Values (Lãi Vay Trả Hàng Tháng) - ABOVE line points cleanly with Glass Pill Badge
                 if (chart.isDatasetVisible(1) && (mode === 'all' || mode === 'interest')) {
+                    const totalLinePts = metaLine.data.length;
+                    const lineStep = (isMobileScreen && totalLinePts > 10) ? (totalLinePts > 16 ? 3 : 2) : 1;
+
                     metaLine.data.forEach((pt, i) => {
+                        if (lineStep > 1 && i % lineStep !== 0 && i !== totalLinePts - 1) return;
+
                         const valLine = chart.data.datasets[1].data[i];
                         if (valLine === undefined || valLine === null) return;
                         const textLine = (valLine === 0 || valLine === '0') ? '0 Tr' : `${valLine} Tr`;
 
-                        ctx.font = '800 10.5px "Outfit", sans-serif';
+                        const fontSz = isMobileScreen ? 9 : 10.5;
+                        ctx.font = `800 ${fontSz}px "Outfit", sans-serif`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
 
                         const textWidth = ctx.measureText(textLine).width;
                         const px = pt.x;
-                        const py = pt.y - 12;
+                        const py = pt.y - (isMobileScreen ? 9 : 12);
 
-                        const padX = 6;
+                        const padX = isMobileScreen ? 3 : 6;
                         const rw = textWidth + padX * 2;
-                        const rh = 16;
+                        const rh = isMobileScreen ? 13 : 16;
                         const rx = px - rw / 2;
                         const ry = py - rh / 2;
 
                         ctx.save();
                         ctx.beginPath();
                         if (ctx.roundRect) {
-                            ctx.roundRect(rx, ry, rw, rh, 4);
+                            ctx.roundRect(rx, ry, rw, rh, 3);
                         } else {
                             ctx.rect(rx, ry, rw, rh);
                         }
@@ -380,7 +403,7 @@ function renderPriceBreakdownChart(canvasId, PA, S) {
         },
         options: {
             animation: false,
-            devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+            devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2.5),
             responsive: true,
             maintainAspectRatio: false,
             cutout: '66%',
@@ -501,7 +524,7 @@ function renderMethodComparisonChart(canvasId, results) {
         },
         options: {
             animation: false,
-            devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+            devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2.5),
             responsive: true,
             maintainAspectRatio: false,
             layout: {
@@ -612,6 +635,8 @@ function renderLoanScheduleChart(canvasId, loanData) {
         gLineFill.addColorStop(1, 'rgba(122, 88, 19, 0.0)');
     }
 
+    const isMobileScreen = (window.innerWidth < 768);
+
     activeChartInstances[canvasId] = new Chart(c, {
         type: 'bar',
         data: {
@@ -648,16 +673,25 @@ function renderLoanScheduleChart(canvasId, loanData) {
         },
         options: {
             animation: false,
-            devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+            devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2.5),
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: isMobileScreen ? 2 : 18,
+                    right: isMobileScreen ? 2 : 18,
+                    top: isMobileScreen ? 14 : 4,
+                    bottom: 5
+                }
+            },
             plugins: {
                 legend: {
                     position: 'top',
                     labels: {
                         color: isLight ? '#1e293b' : '#E2E8F0',
-                        font: { family: 'Be Vietnam Pro', size: 11, weight: '700' },
+                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9.5 : 11, weight: '700' },
                         usePointStyle: true,
+                        padding: isMobileScreen ? 6 : 10,
                         generateLabels: (chart) => {
                             const defaultLabels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
                             if (defaultLabels[0]) {
@@ -692,20 +726,38 @@ function renderLoanScheduleChart(canvasId, loanData) {
                 }
             },
             scales: {
-                x: { ticks: { color: isLight ? '#475569' : '#94A3B8', font: { family: 'Be Vietnam Pro', size: 11, weight: '700' } }, grid: { color: isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)' } },
+                x: {
+                    ticks: {
+                        color: isLight ? '#475569' : '#94A3B8',
+                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9 : 11, weight: '700' },
+                        maxRotation: isMobileScreen ? 50 : 45,
+                        minRotation: isMobileScreen ? 35 : 0
+                    },
+                    grid: { color: isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)' }
+                },
                 y: {
                     type: 'linear',
                     position: 'left',
-                    title: { display: true, text: 'Dư nợ gốc (Tỷ VNĐ)', color: isLight ? '#062E1F' : '#F5D061', font: { family: 'Be Vietnam Pro', size: 11, weight: '800' } },
-                    ticks: { color: isLight ? '#062E1F' : '#94A3B8', font: { family: 'Be Vietnam Pro', size: 10, weight: '700' } },
+                    title: {
+                        display: true,
+                        text: isMobileScreen ? 'Dư nợ (Tỷ)' : 'Dư nợ gốc (Tỷ VNĐ)',
+                        color: isLight ? '#062E1F' : '#F5D061',
+                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9.5 : 11, weight: '800' }
+                    },
+                    ticks: { color: isLight ? '#062E1F' : '#94A3B8', font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9 : 10, weight: '700' }, padding: isMobileScreen ? 2 : 8 },
                     grid: { color: isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)' },
                     min: 0
                 },
                 y1: {
                     type: 'linear',
                     position: 'right',
-                    title: { display: true, text: 'Lãi hàng tháng (Triệu VNĐ/tháng)', color: isLight ? '#0F5B3F' : '#FFF099', font: { family: 'Be Vietnam Pro', size: 11, weight: '800' } },
-                    ticks: { color: isLight ? '#0F5B3F' : '#FFF099', font: { family: 'Be Vietnam Pro', size: 10, weight: '700' } },
+                    title: {
+                        display: true,
+                        text: isMobileScreen ? 'Lãi (Tr/thg)' : 'Lãi hàng tháng (Triệu VNĐ/tháng)',
+                        color: isLight ? '#0F5B3F' : '#FFF099',
+                        font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9.5 : 11, weight: '800' }
+                    },
+                    ticks: { color: isLight ? '#0F5B3F' : '#FFF099', font: { family: 'Be Vietnam Pro', size: isMobileScreen ? 9 : 10, weight: '700' }, padding: isMobileScreen ? 2 : 8 },
                     grid: { drawOnChartArea: false },
                     min: 0
                 }
@@ -883,7 +935,7 @@ function renderRadarComparisonChart(canvasId, res1, res2) {
         },
         options: {
             animation: false,
-            devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+            devicePixelRatio: Math.max(window.devicePixelRatio || 1, 2.5),
             _rawValues1: rawVals1,
             _rawValues2: rawVals2,
             responsive: true,

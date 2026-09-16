@@ -64,7 +64,7 @@ const UNIT_CONST_PRICE = 8_500_000;   // VNĐ/m2 xây (Giãn xây)
 
 function breakdownPrice(currentLandPrice, dtDat, dtXay, type, tienSDĐ, fixedKpbt) {
     const p_const = (type === 'gianXay') ? Math.round(UNIT_CONST_PRICE * dtXay) : 0;
-    const kpbt = Math.round((currentLandPrice + p_const) * 0.005);
+    const kpbt = (fixedKpbt && fixedKpbt > 0) ? fixedKpbt : Math.round((currentLandPrice + p_const) * 0.005);
     const landFee = tienSDĐ > 0 ? tienSDĐ : Math.round(UNIT_LAND_FEE * dtDat);
 
     if (type === 'gianXay') {
@@ -212,8 +212,8 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
 
     const isVosApt = !!(apt && (apt.macan === 'TL10-22' || apt.macan === 'TL10-53' || apt.vos === true));
     const promoEarlyMoveIn = (overridePromos && overridePromos.earlyMoveIn !== undefined) ? (!!overridePromos.earlyMoveIn && isVosApt) : isVosApt;
-    const promoAquafield = (overridePromos && overridePromos.aquafield !== undefined) ? !!overridePromos.aquafield : (doc && doc.getElementById('promo_aquafield') ? doc.getElementById('promo_aquafield').checked : false);
-    const promoNoBlnh = (overridePromos && overridePromos.noBlnh !== undefined) ? !!overridePromos.noBlnh : (doc && doc.getElementById('promo_noBlnh') ? doc.getElementById('promo_noBlnh').checked : false);
+    const promoAquafield = (overridePromos && overridePromos.aquafield !== undefined) ? !!overridePromos.aquafield : (doc && doc.getElementById('promo_aquafield') ? doc.getElementById('promo_aquafield').checked : true);
+    const promoNoBlnh = (overridePromos && overridePromos.noBlnh !== undefined) ? !!overridePromos.noBlnh : true;
 
     const useCashFlow = false;
     const actualPaymentDate = startDate;
@@ -221,7 +221,7 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
     const interestRate = (doc && doc.getElementById('interestRate')) ? (parseFloat(doc.getElementById('interestRate').value) || 13) : 13;
     const loanTermYears = (overrideLoanTerm !== null && overrideLoanTerm !== undefined) ? overrideLoanTerm : ((doc && doc.getElementById('loanTerm')) ? (parseInt(doc.getElementById('loanTerm').value) || 20) : 20);
     const supportPlanIdx = (overrideSupportIdx !== null && overrideSupportIdx !== undefined) ? overrideSupportIdx : (doc && doc.getElementById('interestSupportPlan') ? (parseInt(doc.getElementById('interestSupportPlan').value) || 0) : 0);
-    const showBankSim = doc && doc.getElementById('showBankSim') ? doc.getElementById('showBankSim').checked : true;
+    const showBankSim = true;
 
     const SP = SALES_POLICY;
     const typeLabel = { rough: 'Thô', finished: 'Hoàn thiện', gianXay: 'Giãn xây' }[apt.type] || 'Thô';
@@ -254,7 +254,7 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
         const ckAmt = Math.round(baseP * (pct / 100));
         currentLandPrice -= ckAmt;
         totalCkVnd += ckAmt;
-        ckDetails.push({ label: `Thanh toán sớm ${pct}% (${typeLabel})`, pct, vnd: ckAmt, deductType: 'price' });
+        ckDetails.push({ label: 'Thanh toán sớm', pct, vnd: ckAmt, deductType: 'price' });
     } else if (paymentMethod === 'own-normal') {
         const pct = SP.ownCapital.normalProgress;
         if (pct > 0) {
@@ -283,7 +283,7 @@ function calculate(silent = false, returnOnly = false, overrideMethod = null, ov
 
     if (promoNoBlnh) {
         const noBlnhPct = 0.5;
-        const ckAmt = Math.round(baseP * (noBlnhPct / 100));
+        const ckAmt = Math.round(currentLandPrice * (noBlnhPct / 100));
         currentLandPrice -= ckAmt;
         totalCkVnd += ckAmt;
         ckDetails.push({ label: 'Từ chối bảo lãnh ngân hàng (0.5%)', pct: noBlnhPct, vnd: ckAmt, deductType: 'price' });
